@@ -13,7 +13,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	terminal = unixTerminal(&unixWinSize)
+	terminal = unixTerminal(*unixWinSize)
 }
 
 func (t unixTerminal) Width() int {
