@@ -1,10 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"go-vt100/terminal"
+	"go-vt100/table"
 )
 
 func main() {
-	fmt.Printf("width %v\n", terminal.Stdout().Width())
+	t := table.Table{
+		Col:        2,
+		Row:        2,
+		CellWidth:  4,
+		CellHeight: 1,
+	}
+	t.Draw()
 }
