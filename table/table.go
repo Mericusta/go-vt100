@@ -10,6 +10,7 @@ type Table struct {
 	Row        int
 	CellWidth  int
 	CellHeight int
+	Content    []byte
 	pos        Position
 }
 
@@ -75,7 +76,7 @@ func (t Table) Draw() {
 				case drawHeightIndex == 0 || drawHeightIndex == tableHeight-1 || drawHeightIndex%(t.CellHeight+1) == 0:
 					lineRuneSlice[drawWidthIndex] = tab.HL()
 				default:
-					lineRuneSlice[drawWidthIndex] = ' '
+					lineRuneSlice[drawWidthIndex] = rune(t.Content[drawWidthIndex%(t.CellWidth+1)-1])
 				}
 			}
 		}
