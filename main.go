@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	s := "example"
+	s := "standard out"
 
 	t := table.Table{
 		Col:        2,
