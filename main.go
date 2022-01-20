@@ -5,14 +5,16 @@ import (
 )
 
 func main() {
-	s := "standard out"
+	var t table.Table
+	// t = table.NewFixedTable("standard out")
+	// t.Draw()
 
-	t := table.Table{
-		Col:        2,
-		Row:        2,
-		CellWidth:  len(s),
-		CellHeight: 1,
-		Content:    []byte(s),
+	head := []string{"ID", "Value", "Desc"}
+	value := [][]string{
+		{"1", "202201201529", "Date"},
+		{"2", "Hello World", "Msg"},
+		{"3", "Mericustar", "Author"},
 	}
+	t = table.NewAdaptiveTable(head, value)
 	t.Draw()
 }
