@@ -1,7 +1,7 @@
 package table
 
 import (
-	"fmt"
+	"go-vt100/tab"
 	"strings"
 )
 
@@ -38,7 +38,20 @@ func NewDecoratedTable(headSlice []string, lineContentSlice [][]string, decorati
 		}
 	}
 
-	fmt.Printf("t.contentMap = %v\n", t.contentMap)
-
 	return t
+}
+
+func (t DecoratedTable) calculateTableHeight() int {
+	return (1+t.d.HeightPadding*2)*t.Row + tab.Width()*(t.Row+1)
+}
+
+func (t DecoratedTable) calculateCellHeightEndIndex(rowRelativeIndex int) (int, int, int) {
+	cellHeightStartInRow := 1
+	for index, length := range t.rowMaxHeightMap {
+		if cellHeightStartInRow <= rowRelativeIndex && rowRelativeIndex <= cellHeightStartInRow+1+t.d.HeightPadding*2 {
+			return index, cellHeightStartInRow, length
+		}
+		cellHeightStartInRow += length + 1 + t.d.HeightPadding*2
+	}
+	return -1, -1, 0
 }

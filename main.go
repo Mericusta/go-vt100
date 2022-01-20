@@ -7,7 +7,7 @@ import (
 func main() {
 	var t table.Table
 	// t = table.NewFixedTable("standard out")
-	// t.Draw()
+	// table.Draw(t)
 
 	head := []string{"ID", "Value", "Desc"}
 	value := [][]string{
@@ -16,11 +16,11 @@ func main() {
 		{"3", "Mericustar", "Author"},
 	}
 	t = table.NewAdaptiveTable(head, value)
-	t.Draw()
+	table.Draw(t)
 
 	t = table.NewDecoratedTable(head, value, &table.TableDecoration{
 		WidthPadding:  1,
-		HeightPadding: 0,
+		HeightPadding: 1,
 	})
-	t.Draw()
+	table.Draw(t)
 }

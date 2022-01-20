@@ -1,7 +1,6 @@
 package table
 
 import (
-	"fmt"
 	"go-vt100/tab"
 )
 
@@ -40,83 +39,6 @@ func NewAdaptiveTable(headSlice []string, lineContentSlice [][]string) *Adaptive
 	return t
 }
 
-func (t AdaptiveTable) drawWithOneLoop() {
-	tableWidth := t.calculateTableWidth()
-	tableHeight := t.calculateTableHeight()
-	totalPoints := tableWidth * tableHeight
-	lineRuneSlice := make([]rune, totalPoints)
-	for index := 0; index != totalPoints; index++ {
-		colRelativeIndex := index % tableWidth
-		rowRelativeIndex := index / tableWidth
-		cellX, cellWidthStartIndex, cellWidth := t.calculateCellWidthEndIndex(colRelativeIndex)
-		cellY, cellHeightStartIndex, cellHeight := t.calculateCellHeightEndIndex(rowRelativeIndex)
-		// fmt.Printf("cellX = %v, cellWidthStartIndex = %v, cellWidth = %v\n", cellX, cellWidthStartIndex, cellWidth)
-		// fmt.Printf("cellY = %v, cellHeightStartIndex = %v, cellHeight = %v\n", cellY, cellHeightStartIndex, cellHeight)
-		// fmt.Printf("colRelativeIndex = %v, rowRelativeIndex = %v\n", colRelativeIndex, rowRelativeIndex)
-		switch {
-		case colRelativeIndex == 0:
-			switch {
-			case rowRelativeIndex == 0:
-				// left top
-				lineRuneSlice[index] = tab.TL()
-			case rowRelativeIndex == tableHeight-1:
-				// left bottom
-				lineRuneSlice[index] = tab.BL()
-			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
-				// left T
-				lineRuneSlice[index] = tab.LT()
-			default:
-				lineRuneSlice[index] = tab.VL()
-			}
-		case colRelativeIndex == tableWidth-2:
-			switch {
-			case rowRelativeIndex == 0:
-				// right top
-				lineRuneSlice[index] = tab.TR()
-			case rowRelativeIndex == tableHeight-1:
-				// right bottom
-				lineRuneSlice[index] = tab.BR()
-			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
-				// right T
-				lineRuneSlice[index] = tab.RT()
-			default:
-				lineRuneSlice[index] = tab.VL()
-			}
-			index++
-			lineRuneSlice[index] = '\n'
-			// fmt.Printf("\n%v", string(lineRuneSlice))
-		case colRelativeIndex == cellWidthStartIndex+cellWidth:
-			switch {
-			case rowRelativeIndex == 0:
-				// top T
-				lineRuneSlice[index] = tab.TT()
-			case rowRelativeIndex == tableHeight-1:
-				// bottom T
-				lineRuneSlice[index] = tab.BT()
-			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
-				// center T
-				lineRuneSlice[index] = tab.CT()
-			default:
-				lineRuneSlice[index] = tab.VL()
-			}
-		default:
-			switch {
-			case rowRelativeIndex == 0 || rowRelativeIndex == tableHeight-1 || rowRelativeIndex == cellHeightStartIndex+cellHeight:
-				lineRuneSlice[index] = tab.HL()
-			default:
-				content := t.contentMap[cellY][cellX]
-				if colRelativeIndex-cellWidthStartIndex >= len(content) {
-					lineRuneSlice[index] = ' '
-				} else {
-					// fmt.Printf("content := t.contentMap[cellY][cellX] = %v, contentRune = %v\n", content, string(content[colRelativeIndex-cellWidthStartIndex]))
-					lineRuneSlice[index] = rune(content[colRelativeIndex-cellWidthStartIndex])
-				}
-			}
-		}
-	}
-	fmt.Printf("%v", string(lineRuneSlice))
-}
-
 func (t AdaptiveTable) calculateTableWidth() int {
 	tableWidth := 0
 	for _, columnWidth := range t.colMaxWidthMap {
@@ -151,6 +73,10 @@ func (t AdaptiveTable) calculateCellHeightEndIndex(rowRelativeIndex int) (int, i
 	return -1, -1, 0
 }
 
-func (t AdaptiveTable) Draw() {
-	t.drawWithOneLoop()
+func (t AdaptiveTable) calculateCellContentRune(cellX, cellY, contentIndex int) rune {
+	content := t.contentMap[cellY][cellX]
+	if contentIndex < len(content) {
+		return rune(content[contentIndex])
+	}
+	return ' '
 }
