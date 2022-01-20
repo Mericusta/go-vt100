@@ -16,9 +16,9 @@ type AdaptiveTable struct {
 func NewAdaptiveTable(headSlice []string, lineContentSlice [][]string) *AdaptiveTable {
 	t := &AdaptiveTable{}
 	t.Col = len(headSlice)
-	t.Row = len(lineContentSlice)
-	t.contentMap = make([][]string, 1+t.Row)
-	t.rowMaxHeightMap = make([]int, 1+t.Row)
+	t.Row = 1 + len(lineContentSlice)
+	t.contentMap = make([][]string, t.Row)
+	t.rowMaxHeightMap = make([]int, t.Row)
 	t.colMaxWidthMap = make([]int, t.Col)
 	for index, head := range headSlice {
 		t.colMaxWidthMap[index] = len(head)
@@ -84,6 +84,7 @@ func (t AdaptiveTable) drawWithOneLoop() {
 			}
 			index++
 			lineRuneSlice[index] = '\n'
+			// fmt.Printf("\n%v", string(lineRuneSlice))
 		case colRelativeIndex == cellWidthStartIndex+cellWidth:
 			switch {
 			case rowRelativeIndex == 0:
