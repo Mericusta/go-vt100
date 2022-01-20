@@ -6,8 +6,8 @@ import (
 
 func main() {
 	var t table.Table
-	t = table.NewFixedCellTable(2, 2, "standard out")
-	table.Draw(t)
+	// t = table.NewFixedCellTable(2, 2, "standard out")
+	// table.Draw(t)
 
 	head := []string{"ID", "Value", "Desc"}
 	value := [][]string{
@@ -15,12 +15,12 @@ func main() {
 		{"2", "Hello World", "Msg"},
 		{"3", "Mericustar", "Author"},
 	}
-	t = table.NewAdaptiveCellTable(head, value)
-	table.Draw(t)
-
-	// t = table.NewDecoratedTable(head, value, &table.TableDecoration{
-	// 	WidthPadding:  1,
-	// 	HeightPadding: 1,
-	// })
+	// t = table.NewAdaptiveCellTable(head, value)
 	// table.Draw(t)
+
+	t = table.NewDecoratedTable(head, value, &table.TableDecoration{
+		WidthPadding:  1,
+		HeightPadding: 1,
+	})
+	table.Draw(t)
 }

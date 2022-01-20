@@ -73,10 +73,10 @@ func (t AdaptiveCellTable) calculateCellHeightInfo(rowRelativeIndex int) (int, i
 	return -1, -1, 0
 }
 
-func (t AdaptiveCellTable) calculateCellContentRune(cellX, cellY, contentIndex int) rune {
+func (t AdaptiveCellTable) calculateCellContentRune(cellX, cellY, contentColIndex, contentRowIndex int) rune {
 	content := t.contentMap[cellY][cellX]
-	if contentIndex < len(content) {
-		return rune(content[contentIndex])
+	if contentColIndex < len(content) {
+		return rune(content[contentColIndex])
 	}
 	return ' '
 }

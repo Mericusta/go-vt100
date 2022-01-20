@@ -55,6 +55,6 @@ func (t FixedCellTable) calculateCellHeightInfo(rowRelativeIndex int) (int, int,
 	return -1, -1, 0
 }
 
-func (t FixedCellTable) calculateCellContentRune(cellX, cellY, contentIndex int) rune {
-	return rune(t.Content[contentIndex])
+func (t FixedCellTable) calculateCellContentRune(cellX, cellY, contentColIndex, contentRowIndex int) rune {
+	return rune(t.Content[contentRowIndex])
 }

@@ -2,12 +2,11 @@ package table
 
 import (
 	"go-vt100/tab"
-	"strings"
 )
 
 type DecoratedTable struct {
 	*AdaptiveCellTable
-	d *TableDecoration
+	*TableDecoration
 }
 
 type TableDecoration struct {
@@ -18,40 +17,36 @@ type TableDecoration struct {
 func NewDecoratedTable(headSlice []string, lineContentSlice [][]string, decoration *TableDecoration) *DecoratedTable {
 	t := &DecoratedTable{}
 	t.AdaptiveCellTable = NewAdaptiveCellTable(headSlice, lineContentSlice)
-	t.d = decoration
+	t.TableDecoration = decoration
 	for index := range t.colMaxWidthMap {
-		t.colMaxWidthMap[index] += t.d.WidthPadding * 2
-	}
-
-	builder := strings.Builder{}
-	for cellY, contentSlice := range t.contentMap {
-		for cellX, content := range contentSlice {
-			builder.Reset()
-			for index := 0; index != t.d.WidthPadding; index++ {
-				builder.WriteRune(' ')
-			}
-			builder.WriteString(content)
-			for index := 0; index != t.d.WidthPadding; index++ {
-				builder.WriteRune(' ')
-			}
-			t.contentMap[cellY][cellX] = builder.String()
-		}
+		t.colMaxWidthMap[index] += t.WidthPadding * 2
 	}
 
 	return t
 }
 
 func (t DecoratedTable) calculateTableHeight() int {
-	return (1+t.d.HeightPadding*2)*t.row + tab.Width()*(t.row+1)
+	return (1+t.HeightPadding*2)*t.row + tab.Width()*(t.row+1)
 }
 
 func (t DecoratedTable) calculateCellHeightInfo(rowRelativeIndex int) (int, int, int) {
 	cellHeightStartInRow := 1
 	for index, length := range t.rowMaxHeightMap {
-		if cellHeightStartInRow <= rowRelativeIndex && rowRelativeIndex <= cellHeightStartInRow+1+t.d.HeightPadding*2 {
-			return index, cellHeightStartInRow, length
+		if cellHeightStartInRow <= rowRelativeIndex && rowRelativeIndex <= cellHeightStartInRow+1+t.HeightPadding*2 {
+			return index, cellHeightStartInRow, length + t.HeightPadding*2
 		}
-		cellHeightStartInRow += length + 1 + t.d.HeightPadding*2
+		cellHeightStartInRow += length + 1 + t.HeightPadding*2
 	}
 	return -1, -1, 0
+}
+
+func (t DecoratedTable) calculateCellContentRune(cellX, cellY, contentColIndex, contentRowIndex int) rune {
+	content := t.contentMap[cellY][cellX]
+	contentLength := len(content)
+	if contentColIndex < t.WidthPadding || t.WidthPadding+contentLength <= contentColIndex {
+		return ' '
+	} else if contentRowIndex < t.HeightPadding || t.HeightPadding+1 <= contentRowIndex {
+		return ' '
+	}
+	return rune(content[contentColIndex-t.WidthPadding])
 }

@@ -10,7 +10,7 @@ type Table interface {
 	calculateTableHeight() int
 	calculateCellWidthInfo(int) (int, int, int)
 	calculateCellHeightInfo(int) (int, int, int)
-	calculateCellContentRune(int, int, int) rune
+	calculateCellContentRune(int, int, int, int) rune
 }
 
 func Draw(t Table) {
@@ -23,9 +23,6 @@ func Draw(t Table) {
 		rowRelativeIndex := index / tableWidth
 		cellX, cellWidthStartIndex, cellWidth := t.calculateCellWidthInfo(colRelativeIndex)
 		cellY, cellHeightStartIndex, cellHeight := t.calculateCellHeightInfo(rowRelativeIndex)
-		// fmt.Printf("cellX = %v, cellWidthStartIndex = %v, cellWidth = %v\n", cellX, cellWidthStartIndex, cellWidth)
-		// fmt.Printf("cellY = %v, cellHeightStartIndex = %v, cellHeight = %v\n", cellY, cellHeightStartIndex, cellHeight)
-		// fmt.Printf("colRelativeIndex = %v, rowRelativeIndex = %v\n", colRelativeIndex, rowRelativeIndex)
 		switch {
 		case colRelativeIndex == 0:
 			switch {
@@ -77,9 +74,10 @@ func Draw(t Table) {
 			case rowRelativeIndex == 0 || rowRelativeIndex == tableHeight-1 || rowRelativeIndex == cellHeightStartIndex+cellHeight:
 				lineRuneSlice[index] = tab.HL()
 			default:
-				lineRuneSlice[index] = t.calculateCellContentRune(cellX, cellY, colRelativeIndex-cellWidthStartIndex)
+				lineRuneSlice[index] = t.calculateCellContentRune(cellX, cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)
 			}
 		}
+		// fmt.Printf("index %v, rune %v\n", index, string(lineRuneSlice[index]))
 	}
 	fmt.Printf("%v", string(lineRuneSlice))
 }
