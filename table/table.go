@@ -8,8 +8,8 @@ import (
 type Table interface {
 	calculateTableWidth() int
 	calculateTableHeight() int
-	calculateCellWidthEndIndex(int) (int, int, int)
-	calculateCellHeightEndIndex(int) (int, int, int)
+	calculateCellWidthInfo(int) (int, int, int)
+	calculateCellHeightInfo(int) (int, int, int)
 	calculateCellContentRune(int, int, int) rune
 }
 
@@ -21,8 +21,8 @@ func Draw(t Table) {
 	for index := 0; index != totalPoints; index++ {
 		colRelativeIndex := index % tableWidth
 		rowRelativeIndex := index / tableWidth
-		cellX, cellWidthStartIndex, cellWidth := t.calculateCellWidthEndIndex(colRelativeIndex)
-		cellY, cellHeightStartIndex, cellHeight := t.calculateCellHeightEndIndex(rowRelativeIndex)
+		cellX, cellWidthStartIndex, cellWidth := t.calculateCellWidthInfo(colRelativeIndex)
+		cellY, cellHeightStartIndex, cellHeight := t.calculateCellHeightInfo(rowRelativeIndex)
 		// fmt.Printf("cellX = %v, cellWidthStartIndex = %v, cellWidth = %v\n", cellX, cellWidthStartIndex, cellWidth)
 		// fmt.Printf("cellY = %v, cellHeightStartIndex = %v, cellHeight = %v\n", cellY, cellHeightStartIndex, cellHeight)
 		// fmt.Printf("colRelativeIndex = %v, rowRelativeIndex = %v\n", colRelativeIndex, rowRelativeIndex)

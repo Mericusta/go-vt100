@@ -6,7 +6,7 @@ import (
 )
 
 type DecoratedTable struct {
-	*AdaptiveTable
+	*AdaptiveCellTable
 	d *TableDecoration
 }
 
@@ -17,7 +17,7 @@ type TableDecoration struct {
 
 func NewDecoratedTable(headSlice []string, lineContentSlice [][]string, decoration *TableDecoration) *DecoratedTable {
 	t := &DecoratedTable{}
-	t.AdaptiveTable = NewAdaptiveTable(headSlice, lineContentSlice)
+	t.AdaptiveCellTable = NewAdaptiveCellTable(headSlice, lineContentSlice)
 	t.d = decoration
 	for index := range t.colMaxWidthMap {
 		t.colMaxWidthMap[index] += t.d.WidthPadding * 2
@@ -42,10 +42,10 @@ func NewDecoratedTable(headSlice []string, lineContentSlice [][]string, decorati
 }
 
 func (t DecoratedTable) calculateTableHeight() int {
-	return (1+t.d.HeightPadding*2)*t.Row + tab.Width()*(t.Row+1)
+	return (1+t.d.HeightPadding*2)*t.row + tab.Width()*(t.row+1)
 }
 
-func (t DecoratedTable) calculateCellHeightEndIndex(rowRelativeIndex int) (int, int, int) {
+func (t DecoratedTable) calculateCellHeightInfo(rowRelativeIndex int) (int, int, int) {
 	cellHeightStartInRow := 1
 	for index, length := range t.rowMaxHeightMap {
 		if cellHeightStartInRow <= rowRelativeIndex && rowRelativeIndex <= cellHeightStartInRow+1+t.d.HeightPadding*2 {

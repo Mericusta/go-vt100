@@ -4,33 +4,33 @@ import (
 	"go-vt100/tab"
 )
 
-type AdaptiveTable struct {
-	Col             int
-	Row             int
+type AdaptiveCellTable struct {
+	col             int
+	row             int
 	colMaxWidthMap  []int
 	rowMaxHeightMap []int
 	contentMap      [][]string
 }
 
-func NewAdaptiveTable(headSlice []string, lineContentSlice [][]string) *AdaptiveTable {
-	t := &AdaptiveTable{}
-	t.Col = len(headSlice)
-	t.Row = 1 + len(lineContentSlice)
-	t.contentMap = make([][]string, t.Row)
-	t.rowMaxHeightMap = make([]int, t.Row)
-	t.colMaxWidthMap = make([]int, t.Col)
+func NewAdaptiveCellTable(headSlice []string, lineContentSlice [][]string) *AdaptiveCellTable {
+	t := &AdaptiveCellTable{}
+	t.col = len(headSlice)
+	t.row = 1 + len(lineContentSlice)
+	t.contentMap = make([][]string, t.row)
+	t.rowMaxHeightMap = make([]int, t.row)
+	t.colMaxWidthMap = make([]int, t.col)
 	for index, head := range headSlice {
 		t.colMaxWidthMap[index] = len(head)
 	}
 	t.contentMap[0] = headSlice
 	t.rowMaxHeightMap[0] = 1
 	for rowIndex, lineContent := range lineContentSlice {
-		for colindex, content := range lineContent {
-			if colindex >= t.Col {
+		for coliIndex, content := range lineContent {
+			if coliIndex >= t.col {
 				continue
 			}
-			if contentLength := len(content); t.colMaxWidthMap[colindex] < contentLength {
-				t.colMaxWidthMap[colindex] = contentLength
+			if contentLength := len(content); t.colMaxWidthMap[coliIndex] < contentLength {
+				t.colMaxWidthMap[coliIndex] = contentLength
 			}
 		}
 		t.contentMap[rowIndex+1] = lineContent
@@ -39,19 +39,19 @@ func NewAdaptiveTable(headSlice []string, lineContentSlice [][]string) *Adaptive
 	return t
 }
 
-func (t AdaptiveTable) calculateTableWidth() int {
+func (t AdaptiveCellTable) calculateTableWidth() int {
 	tableWidth := 0
 	for _, columnWidth := range t.colMaxWidthMap {
 		tableWidth += columnWidth
 	}
-	return tableWidth + tab.Width()*(t.Col+1) + 1
+	return tableWidth + tab.Width()*(t.col+1) + 1
 }
 
-func (t AdaptiveTable) calculateTableHeight() int {
-	return 1*t.Row + tab.Width()*(t.Row+1)
+func (t AdaptiveCellTable) calculateTableHeight() int {
+	return 1*t.row + tab.Width()*(t.row+1)
 }
 
-func (t AdaptiveTable) calculateCellWidthEndIndex(colRelativeIndex int) (int, int, int) {
+func (t AdaptiveCellTable) calculateCellWidthInfo(colRelativeIndex int) (int, int, int) {
 	cellWidthStartInCol := 1
 	for index, length := range t.colMaxWidthMap {
 		if cellWidthStartInCol <= colRelativeIndex && colRelativeIndex <= cellWidthStartInCol+length {
@@ -62,7 +62,7 @@ func (t AdaptiveTable) calculateCellWidthEndIndex(colRelativeIndex int) (int, in
 	return -1, -1, 0
 }
 
-func (t AdaptiveTable) calculateCellHeightEndIndex(rowRelativeIndex int) (int, int, int) {
+func (t AdaptiveCellTable) calculateCellHeightInfo(rowRelativeIndex int) (int, int, int) {
 	cellHeightStartInRow := 1
 	for index, length := range t.rowMaxHeightMap {
 		if cellHeightStartInRow <= rowRelativeIndex && rowRelativeIndex <= cellHeightStartInRow+1 {
@@ -73,7 +73,7 @@ func (t AdaptiveTable) calculateCellHeightEndIndex(rowRelativeIndex int) (int, i
 	return -1, -1, 0
 }
 
-func (t AdaptiveTable) calculateCellContentRune(cellX, cellY, contentIndex int) rune {
+func (t AdaptiveCellTable) calculateCellContentRune(cellX, cellY, contentIndex int) rune {
 	content := t.contentMap[cellY][cellX]
 	if contentIndex < len(content) {
 		return rune(content[contentIndex])
