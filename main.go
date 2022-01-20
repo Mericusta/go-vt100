@@ -17,4 +17,10 @@ func main() {
 	}
 	t = table.NewAdaptiveTable(head, value)
 	t.Draw()
+
+	t = table.NewDecoratedTable(head, value, &table.TableDecoration{
+		WidthPadding:  1,
+		HeightPadding: 0,
+	})
+	t.Draw()
 }

@@ -135,7 +135,7 @@ func (t AdaptiveTable) calculateCellWidthEndIndex(colRelativeIndex int) (int, in
 		if cellWidthStartInCol <= colRelativeIndex && colRelativeIndex <= cellWidthStartInCol+length {
 			return index, cellWidthStartInCol, length
 		}
-		cellWidthStartInCol += (length + 1)
+		cellWidthStartInCol += length + 1
 	}
 	return -1, -1, 0
 }
@@ -146,7 +146,7 @@ func (t AdaptiveTable) calculateCellHeightEndIndex(rowRelativeIndex int) (int, i
 		if cellHeightStartInRow <= rowRelativeIndex && rowRelativeIndex <= cellHeightStartInRow+1 {
 			return index, cellHeightStartInRow, length
 		}
-		cellHeightStartInRow += (length + 1)
+		cellHeightStartInRow += length + 1
 	}
 	return -1, -1, 0
 }
