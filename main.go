@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-vt100/table"
+	"go-vt100/tree"
 )
 
 func main() {
@@ -23,4 +24,7 @@ func main() {
 		HeightPadding: 1,
 	})
 	table.Draw(t)
+
+	n := tree.NewTree()
+	tree.Draw(n)
 }
