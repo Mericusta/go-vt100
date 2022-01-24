@@ -21,52 +21,120 @@ func Draw(root Tree) {
 	fmt.Printf("treeMaxDepth = %v, treeMaxWidth = %v\n", treeMaxDepth, treeMaxWidth)
 	bft(root, func(t Tree) bool {
 		if nodeDepthMap[t] < 1 {
-			fmt.Printf("%v", t.Value().Show())
+			fmt.Printf("%v, node tree:\n", t.Value().Show())
 			if len(t.Children()) > 0 {
-				printBranch(t, 1)
+				printNode(t, 1)
 			}
 		}
 		return true
 	})
 }
 
-func printBranch(n Tree) [][]rune {
-	childrenCount := len(n.Children())
-	if childrenCount > 0 {
+func printNode(n Tree, margin int) []rune {
+	childrenCount := 0
+	rootCellContent := n.Value().Show()
+	rootCellWidthStartIndex := 0
+	rootCellWidth := len(n.Value().Show())
+	childCellMaxWidth := 0
+	for _, child := range n.Children() {
+		if childCellMaxWidth < len(child.Value().Show()) {
+			childCellMaxWidth = len(child.Value().Show())
+		}
+		childrenCount++
+	}
+	if childrenCount == 0 {
 		return nil
 	}
-	// 2*space width + tab width
-	branchWidth := ((tab.Width() * 2) + tab.Width())
-	isOdd := childrenCount%2 == 1
+
+	// |  ┌─ |    |  ┌─ |
+	// | ─┼─ | or | ─│  |
+	// |  └─ |    |  └─ |
+	branchWidth := tab.Width()*2 + tab.Width()*margin*2 + tab.Width() + tab.Width()
 	branchHeight := childrenCount
+	isOdd := childrenCount%2 == 1
 	var splitterRune rune
 	if isOdd {
-		// |b┌s|
-		// |s┼s|
-		// |b└s|
+		// |                ┌─ Iron magazine|
+		// |Steel magazine ─┼─ Steel plate  |
+		// |                └─ Copper plate |
 		splitterRune = tab.CT()
 	} else {
-		// |b┌s|
-		// |s┤b|
-		// |b└s|
+		// |      ┌─ child|
+		// |root ─│       |
+		// |      └─ child|
 		childrenCount++
 		splitterRune = tab.RT()
 	}
 
-	totalPoints := branchWidth * branchHeight
-	branchesRuneSlice := make([]rune, totalPoints)
-	splitterColRelativeIndex := branchWidth / 2
+	nodeWidth := rootCellWidth + branchWidth + childCellMaxWidth
+	nodeHeight := childrenCount
+	totalPoints := nodeWidth * nodeHeight
+	nodeRuneSlice := make([]rune, totalPoints)
+	splitterColRelativeIndex := branchWidth/2 + rootCellWidth
 	splitterRowRelativeIndex := branchHeight / 2
-	// splitterIndex := canvas.TransformMatrixCoordinatesToArrayIndex(splitterColRelativeIndex, splitterRowRelativeIndex, branchWidth, branchHeight)
-	// branchesRuneSlice[splitterIndex] = splitterRune
+	fmt.Printf("totalPoints = %v\n", totalPoints)
+	fmt.Printf("splitterColRelativeIndex = %v\n", splitterColRelativeIndex)
+	fmt.Printf("splitterRowRelativeIndex = %v\n", splitterRowRelativeIndex)
 	for index := 0; index != totalPoints; index++ {
-		colRelativeIndex, rowRelativeIndex := canvas.TransformArrayIndexToMatrixCoordinates(index, branchWidth, branchHeight)
+		colRelativeIndex, rowRelativeIndex := canvas.TransformArrayIndexToMatrixCoordinates(index, nodeWidth, nodeHeight)
 		switch {
-		case colRelativeIndex < splitterColRelativeIndex:
-			branchesRuneSlice[index] = tab.Space()
+		case colRelativeIndex < splitterColRelativeIndex-tab.Width()-tab.Width():
+			if rowRelativeIndex == splitterRowRelativeIndex && colRelativeIndex-rootCellWidthStartIndex < rootCellWidth {
+				nodeRuneSlice[index] = rune(rootCellContent[colRelativeIndex-rootCellWidthStartIndex])
+			} else {
+				nodeRuneSlice[index] = tab.Space()
+			}
+		case colRelativeIndex == splitterColRelativeIndex-1:
+			if rowRelativeIndex == splitterRowRelativeIndex {
+				nodeRuneSlice[index] = tab.HL()
+			} else {
+				nodeRuneSlice[index] = tab.Space()
+			}
+		case colRelativeIndex == splitterColRelativeIndex:
+			switch {
+			case rowRelativeIndex == 0:
+				nodeRuneSlice[index] = tab.TL()
+			case rowRelativeIndex == splitterRowRelativeIndex:
+				nodeRuneSlice[index] = splitterRune
+			case rowRelativeIndex == nodeHeight-1:
+				nodeRuneSlice[index] = tab.BL()
+			default:
+				nodeRuneSlice[index] = tab.LT()
+			}
+		case colRelativeIndex == splitterColRelativeIndex+1:
+			switch {
+			case rowRelativeIndex == splitterRowRelativeIndex:
+				if isOdd {
+					nodeRuneSlice[index] = tab.HL()
+				} else {
+					nodeRuneSlice[index] = tab.Space()
+				}
+			default:
+				nodeRuneSlice[index] = tab.HL()
+			}
+		case colRelativeIndex == nodeWidth-1:
+			nodeRuneSlice[index] = tab.EndLine()
+		case colRelativeIndex > splitterColRelativeIndex+1:
+			if rowRelativeIndex == splitterRowRelativeIndex && isOdd {
+				nodeRuneSlice[index] = tab.Space()
+			} else {
+				childIndex := rowRelativeIndex
+				if rowRelativeIndex > splitterRowRelativeIndex && !isOdd {
+					childIndex--
+				}
+				childCellContent := n.Children()[childIndex].Value().Show()
+				fmt.Printf("child index = %v, child content = %v\n", childIndex, childCellContent)
+				if cellContentIndex := colRelativeIndex - splitterColRelativeIndex; cellContentIndex < len(childCellContent) {
+					nodeRuneSlice[index] = rune(childCellContent[cellContentIndex])
+				} else {
+					nodeRuneSlice[index] = tab.Space()
+				}
+			}
 		}
 	}
-	return nil
+
+	fmt.Printf("%v", string(nodeRuneSlice))
+	return nodeRuneSlice
 }
 
 func bft(root Tree, f func(Tree) bool) {

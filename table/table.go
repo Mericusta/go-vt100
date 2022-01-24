@@ -18,7 +18,7 @@ func Draw(t Table) {
 	tableWidth := t.calculateTableWidth()
 	tableHeight := t.calculateTableHeight()
 	totalPoints := tableWidth * tableHeight
-	lineRuneSlice := make([]rune, totalPoints)
+	tableRuneSlice := make([]rune, totalPoints)
 	for index := 0; index != totalPoints; index++ {
 		colRelativeIndex, rowRelativeIndex := canvas.TransformArrayIndexToMatrixCoordinates(index, tableWidth, tableHeight)
 		cellX, cellWidthStartIndex, cellWidth := t.calculateCellWidthInfo(colRelativeIndex)
@@ -28,56 +28,56 @@ func Draw(t Table) {
 			switch {
 			case rowRelativeIndex == 0:
 				// left top
-				lineRuneSlice[index] = tab.TL()
+				tableRuneSlice[index] = tab.TL()
 			case rowRelativeIndex == tableHeight-1:
 				// left bottom
-				lineRuneSlice[index] = tab.BL()
+				tableRuneSlice[index] = tab.BL()
 			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 				// left T
-				lineRuneSlice[index] = tab.LT()
+				tableRuneSlice[index] = tab.LT()
 			default:
-				lineRuneSlice[index] = tab.VL()
+				tableRuneSlice[index] = tab.VL()
 			}
 		case colRelativeIndex == tableWidth-2:
 			switch {
 			case rowRelativeIndex == 0:
 				// right top
-				lineRuneSlice[index] = tab.TR()
+				tableRuneSlice[index] = tab.TR()
 			case rowRelativeIndex == tableHeight-1:
 				// right bottom
-				lineRuneSlice[index] = tab.BR()
+				tableRuneSlice[index] = tab.BR()
 			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 				// right T
-				lineRuneSlice[index] = tab.RT()
+				tableRuneSlice[index] = tab.RT()
 			default:
-				lineRuneSlice[index] = tab.VL()
+				tableRuneSlice[index] = tab.VL()
 			}
 			index++
-			lineRuneSlice[index] = '\n'
-			// fmt.Printf("\n%v", string(lineRuneSlice))
+			tableRuneSlice[index] = tab.EndLine()
+			// fmt.Printf("\n%v", string(tableRuneSlice))
 		case colRelativeIndex == cellWidthStartIndex+cellWidth:
 			switch {
 			case rowRelativeIndex == 0:
 				// top T
-				lineRuneSlice[index] = tab.TT()
+				tableRuneSlice[index] = tab.TT()
 			case rowRelativeIndex == tableHeight-1:
 				// bottom T
-				lineRuneSlice[index] = tab.BT()
+				tableRuneSlice[index] = tab.BT()
 			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 				// center T
-				lineRuneSlice[index] = tab.CT()
+				tableRuneSlice[index] = tab.CT()
 			default:
-				lineRuneSlice[index] = tab.VL()
+				tableRuneSlice[index] = tab.VL()
 			}
 		default:
 			switch {
 			case rowRelativeIndex == 0 || rowRelativeIndex == tableHeight-1 || rowRelativeIndex == cellHeightStartIndex+cellHeight:
-				lineRuneSlice[index] = tab.HL()
+				tableRuneSlice[index] = tab.HL()
 			default:
-				lineRuneSlice[index] = t.calculateCellContentRune(cellX, cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)
+				tableRuneSlice[index] = t.calculateCellContentRune(cellX, cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)
 			}
 		}
-		// fmt.Printf("index %v, rune %v\n", index, string(lineRuneSlice[index]))
+		// fmt.Printf("index %v, rune %v\n", index, string(tableRuneSlice[index]))
 	}
-	fmt.Printf("%v", string(lineRuneSlice))
+	fmt.Printf("%v", string(tableRuneSlice))
 }

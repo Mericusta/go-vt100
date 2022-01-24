@@ -39,7 +39,11 @@ func LT() rune { return '├' }
 // RT '┤'
 func RT() rune { return '┤' }
 
+// Space ' '
 func Space() rune { return ' ' }
+
+// EndLine
+func EndLine() rune { return '\n' }
 
 func Width() int {
 	return 1
