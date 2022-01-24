@@ -2,6 +2,7 @@ package table
 
 import (
 	"fmt"
+	"go-vt100/canvas"
 	"go-vt100/tab"
 )
 
@@ -19,8 +20,7 @@ func Draw(t Table) {
 	totalPoints := tableWidth * tableHeight
 	lineRuneSlice := make([]rune, totalPoints)
 	for index := 0; index != totalPoints; index++ {
-		colRelativeIndex := index % tableWidth
-		rowRelativeIndex := index / tableWidth
+		colRelativeIndex, rowRelativeIndex := canvas.TransformArrayIndexToMatrixCoordinates(index, tableWidth, tableHeight)
 		cellX, cellWidthStartIndex, cellWidth := t.calculateCellWidthInfo(colRelativeIndex)
 		cellY, cellHeightStartIndex, cellHeight := t.calculateCellHeightInfo(rowRelativeIndex)
 		switch {

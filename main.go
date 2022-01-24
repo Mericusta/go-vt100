@@ -25,6 +25,6 @@ func main() {
 	})
 	table.Draw(t)
 
-	n := tree.NewTree()
+	n := tree.NewFactorioTree()
 	tree.Draw(n)
 }

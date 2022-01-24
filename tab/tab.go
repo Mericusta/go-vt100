@@ -39,6 +39,8 @@ func LT() rune { return '├' }
 // RT '┤'
 func RT() rune { return '┤' }
 
+func Space() rune { return ' ' }
+
 func Width() int {
 	return 1
 }
