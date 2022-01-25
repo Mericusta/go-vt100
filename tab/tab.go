@@ -45,10 +45,6 @@ func Space() rune { return ' ' }
 // EndLine
 func EndLine() rune { return '\n' }
 
-func Width() int {
-	return 1
-}
+func Width() int { return 1 }
 
-func Height() int {
-	return 1
-}
+func Height() int { return 1 }

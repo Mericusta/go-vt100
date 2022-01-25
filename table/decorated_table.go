@@ -21,7 +21,6 @@ func NewDecoratedTable(headSlice []string, lineContentSlice [][]string, decorati
 	for index := range t.colMaxWidthMap {
 		t.colMaxWidthMap[index] += t.WidthPadding * 2
 	}
-
 	return t
 }
 
@@ -44,9 +43,9 @@ func (t DecoratedTable) calculateCellContentRune(cellX, cellY, contentColIndex, 
 	content := t.contentMap[cellY][cellX]
 	contentLength := len(content)
 	if contentColIndex < t.WidthPadding || t.WidthPadding+contentLength <= contentColIndex {
-		return ' '
+		return tab.Space()
 	} else if contentRowIndex < t.HeightPadding || t.HeightPadding+1 <= contentRowIndex {
-		return ' '
+		return tab.Space()
 	}
 	return rune(content[contentColIndex-t.WidthPadding])
 }

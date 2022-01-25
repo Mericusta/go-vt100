@@ -78,5 +78,5 @@ func (t AdaptiveCellTable) calculateCellContentRune(cellX, cellY, contentColInde
 	if contentColIndex < len(content) {
 		return rune(content[contentColIndex])
 	}
-	return ' '
+	return tab.Space()
 }
