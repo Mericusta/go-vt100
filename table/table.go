@@ -3,10 +3,13 @@ package table
 import (
 	"fmt"
 	"go-vt100/canvas"
+	"go-vt100/color"
+	"go-vt100/size"
 	"go-vt100/tab"
+	"go-vt100/vt100"
 )
 
-type Table interface {
+type tableInterface interface {
 	calculateTableWidth() int
 	calculateTableHeight() int
 	calculateCellWidthInfo(int) (int, int, int)
@@ -14,7 +17,80 @@ type Table interface {
 	calculateCellContentRune(int, int, int, int) rune
 }
 
-func Draw(t Table) {
+type Table struct {
+	s  size.Size
+	i  tableInterface
+	fc color.Color
+	bc color.Color
+}
+
+func (t Table) Draw(x, y int) {
+	vt100.SetForegroundColor(t.fc)
+	vt100.SetBackgroundColor(t.bc)
+	for _y := y; _y < y+t.s.Height; _y++ {
+		for _x := x; _x < x+t.s.Width; _x++ {
+			colRelativeIndex, rowRelativeIndex := x-_x, y-_y
+			_, cellWidthStartIndex, cellWidth := t.i.calculateCellWidthInfo(colRelativeIndex)
+			_, cellHeightStartIndex, cellHeight := t.i.calculateCellHeightInfo(rowRelativeIndex)
+			switch {
+			case colRelativeIndex == 0:
+				switch {
+				case rowRelativeIndex == 0:
+					// left top
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.TL()))
+				case rowRelativeIndex == t.s.Height-1:
+					// left bottom
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.BL()))
+				case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
+					// left T
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.LT()))
+				default:
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.VL()))
+				}
+			case colRelativeIndex == t.s.Width-2:
+				switch {
+				case rowRelativeIndex == 0:
+					// right top
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.TR()))
+				case rowRelativeIndex == t.s.Height-1:
+					// right bottom
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.BR()))
+				case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
+					// right T
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.RT()))
+				default:
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.VL()))
+				}
+			case colRelativeIndex == cellWidthStartIndex+cellWidth:
+				switch {
+				case rowRelativeIndex == 0:
+					// top T
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.TT()))
+				case rowRelativeIndex == t.s.Height-1:
+					// bottom T
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.BT()))
+				case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
+					// center T
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.CT()))
+				default:
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.VL()))
+				}
+			default:
+				switch {
+				case rowRelativeIndex == 0 || rowRelativeIndex == t.s.Height-1 || rowRelativeIndex == cellHeightStartIndex+cellHeight:
+					vt100.MoveCursorToAndPrint(_x, _y, string(tab.HL()))
+				default:
+					// stringvt100.MoveCursorToAndPrint(_x, _y(, t.calculateCellContentRune(cellX),) cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)
+					vt100.MoveCursorToAndPrint(_x, _y, " ")
+				}
+			}
+		}
+	}
+	vt100.ClearForegroundColor()
+	vt100.ClearBackgroundColor()
+}
+
+func Draw(t tableInterface) {
 	tableWidth := t.calculateTableWidth()
 	tableHeight := t.calculateTableHeight()
 	totalPoints := tableWidth * tableHeight

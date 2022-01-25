@@ -4,6 +4,7 @@ import (
 	"go-vt100/canvas"
 	"go-vt100/color"
 	"go-vt100/shape/matrix"
+	"go-vt100/table"
 	"go-vt100/vt100"
 	"os"
 	"os/signal"
@@ -23,8 +24,11 @@ func main() {
 	c.Clear()
 
 	c.AddLayerObject(5, 5, matrix.NewMatrix(6, 3, color.White))
-	c.Draw()
 
+	t := table.NewFixedCellTable(2, 2, "standard out", color.Red, color.Yellow)
+	c.AddLayerObject(20, 5, t)
+
+	c.Draw()
 	// var t table.Table
 	// t = table.NewFixedCellTable(2, 2, "standard out")
 	// table.Draw(t)

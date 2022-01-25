@@ -1,10 +1,12 @@
 package table
 
 import (
+	"go-vt100/color"
 	"go-vt100/tab"
 )
 
 type FixedCellTable struct {
+	Table
 	col        int
 	row        int
 	CellWidth  int
@@ -12,17 +14,25 @@ type FixedCellTable struct {
 	Content    []byte
 }
 
-func NewFixedCellTable(row, col int, content string) *FixedCellTable {
+func NewFixedCellTable(row, col int, content string, fc, bc color.Color) *FixedCellTable {
 	if len(content) == 0 {
 		content = "fixed cell table"
 	}
-	return &FixedCellTable{
-		col:        row,
-		row:        col,
+	t := &FixedCellTable{
+		Table: Table{
+			fc: fc,
+			bc: bc,
+		},
+		col:        col,
+		row:        row,
 		CellWidth:  len(content),
 		CellHeight: 1,
 		Content:    []byte(content),
 	}
+	t.i = t
+	t.Table.s.Width = t.calculateTableWidth()
+	t.Table.s.Height = t.calculateTableHeight()
+	return t
 }
 
 func (t FixedCellTable) calculateTableWidth() int {
