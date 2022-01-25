@@ -2,21 +2,27 @@ package main
 
 import (
 	"go-vt100/canvas"
-	"go-vt100/shape/point"
+	"go-vt100/color"
+	"go-vt100/shape/matrix"
+	"go-vt100/vt100"
 	"os"
 	"os/signal"
 )
 
 func main() {
-	c := canvas.NewCanvasWithBoundary(10, 5)
+	c := canvas.NewVSCodeTerminalCanvas(true)
 	for y := 1; y <= 5; y++ {
 		for x := 1; x <= 10; x++ {
 			if y == x {
-				c.AddLayerObject(x, y, point.NewPoint('*'))
+				// c.AddLayerObject(x, y, point.NewPoint('*'))
 			}
 		}
 	}
+	c.SetBackgroundColor(color.Black)
+	c.Draw()
+	c.Clear()
 
+	c.AddLayerObject(5, 5, matrix.NewMatrix(6, 3, color.White))
 	c.Draw()
 
 	// var t table.Table
@@ -45,4 +51,6 @@ func main() {
 	e := make(chan os.Signal)
 	signal.Notify(e, os.Interrupt)
 	<-e
+	vt100.MoveCursorToLine(0)
+	vt100.ClearScreen()
 }

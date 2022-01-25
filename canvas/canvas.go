@@ -1,18 +1,20 @@
 package canvas
 
 import (
+	"go-vt100/color"
 	"go-vt100/object"
 	"go-vt100/shape"
 	"go-vt100/size"
 	"go-vt100/tab"
+	"go-vt100/terminal"
 	"go-vt100/vt100"
 )
 
 type Canvas struct {
-	S              size.Size
-	withBoundary   bool
-	backgroundRune rune
-	layerObjects   []object.Object
+	S               size.Size
+	withBoundary    bool
+	backgroundColor color.Color
+	layerObjects    []object.Object
 }
 
 func NewCanvas(width, height int) Canvas {
@@ -30,8 +32,18 @@ func NewCanvasWithBoundary(width, height int) Canvas {
 	return c
 }
 
-func (c *Canvas) SetBackground(r rune) {
-	c.backgroundRune = r
+func NewVSCodeTerminalCanvas(withBoundary bool) Canvas {
+	return Canvas{
+		S: size.Size{
+			Width:  terminal.Stdout().Width(),
+			Height: terminal.Stdout().Height() - 3,
+		},
+		withBoundary: withBoundary,
+	}
+}
+
+func (c *Canvas) SetBackgroundColor(bc color.Color) {
+	c.backgroundColor = bc
 }
 
 func (c *Canvas) AddLayerObject(x, y int, d shape.Drawable) {
@@ -46,7 +58,7 @@ func (c *Canvas) AddLayerObject(x, y int, d shape.Drawable) {
 func (c Canvas) Draw() {
 	vt100.ClearScreen()
 
-	if c.backgroundRune != 0 {
+	if c.backgroundColor != 0 {
 		c.drawBackground()
 	}
 
@@ -61,12 +73,19 @@ func (c Canvas) Draw() {
 	vt100.MoveCursorToLine(c.S.Height)
 }
 
+func (c Canvas) Clear() {
+	c.layerObjects = nil
+	c.Draw()
+}
+
 func (c Canvas) drawBackground() {
+	vt100.SetBackgroundColor(c.backgroundColor)
 	for y := 1; y <= c.S.Height; y++ {
 		for x := 1; x <= c.S.Width; x++ {
-			vt100.MoveCursorToAndPrint(x, y, string(c.backgroundRune))
+			vt100.MoveCursorToAndPrint(x, y, string(tab.Space()))
 		}
 	}
+	vt100.ClearBackgroundColor()
 }
 
 func (c Canvas) drawBoundary() {
