@@ -1,7 +1,5 @@
 package tree
 
-import "fmt"
-
 type FactorioMaterial struct {
 	v string
 }
@@ -123,12 +121,23 @@ func align(root Tree) (int, int, map[Tree]int) {
 		falldownNodes = falldownNodes[1:]
 	}
 
-	fmt.Printf("tree max depth: %v\n", treeMaxDepth)
-	fmt.Printf("tree max width: %v\n", treeMaxWidth)
-	bft(root, func(t Tree) bool {
-		fmt.Printf("depth %v, tree node %v, %v\n", nodeDepthMap[t], t.(*FactorioTree).tag, t.Value().Show())
-		return true
-	})
+	// fmt.Printf("tree max depth: %v\n", treeMaxDepth)
+	// fmt.Printf("tree max width: %v\n", treeMaxWidth)
+	// bft(root, func(t Tree) bool {
+	// 	fmt.Printf("depth %v, tree node %v, %v\n", nodeDepthMap[t], t.(*FactorioTree).tag, t.Value().Show())
+	// 	return true
+	// })
 
 	return treeMaxDepth, treeMaxWidth, nodeDepthMap
 }
+
+// |                  ┌─ H0|
+// |    ┌─ B0 ─── E0 ─┤    |
+// |    │             └─ G2|
+// |    │             ┌─ H1|
+// |    │      ┌─ E1 ─┤    |
+// |A0 ─┼─ C0 ─┤      └─ G3|
+// |    │      └──────── G0|
+// |    │             ┌─ F0|
+// |    └──────── D0 ─┤    |
+// |                  └─ G1|
