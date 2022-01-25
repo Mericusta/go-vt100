@@ -2,12 +2,21 @@ package main
 
 import (
 	"go-vt100/canvas"
+	"go-vt100/shape/point"
 	"os"
 	"os/signal"
 )
 
 func main() {
 	c := canvas.NewCanvasWithBoundary(10, 5)
+	for y := 1; y <= 5; y++ {
+		for x := 1; x <= 10; x++ {
+			if y == x {
+				c.AddLayerObject(x, y, point.NewPoint('*'))
+			}
+		}
+	}
+
 	c.Draw()
 
 	// var t table.Table
