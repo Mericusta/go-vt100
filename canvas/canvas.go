@@ -6,7 +6,6 @@ import (
 	"go-vt100/shape"
 	"go-vt100/size"
 	"go-vt100/tab"
-	"go-vt100/terminal"
 	"go-vt100/vt100"
 )
 
@@ -34,9 +33,10 @@ func NewCanvasWithBoundary(width, height int) Canvas {
 
 func NewVSCodeTerminalCanvas(withBoundary bool) Canvas {
 	return Canvas{
+		// stdout is invalid in Debug
 		S: size.Size{
-			Width:  terminal.Stdout().Width(),
-			Height: terminal.Stdout().Height() - 3,
+			// Width:  terminal.Stdout().Width(),
+			// Height: terminal.Stdout().Height() - 3,
 		},
 		withBoundary: withBoundary,
 	}

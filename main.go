@@ -11,14 +11,15 @@ import (
 )
 
 func main() {
-	c := canvas.NewVSCodeTerminalCanvas(true)
-	for y := 1; y <= 5; y++ {
-		for x := 1; x <= 10; x++ {
-			if y == x {
-				// c.AddLayerObject(x, y, point.NewPoint('*'))
-			}
-		}
-	}
+	// c := canvas.NewVSCodeTerminalCanvas(true)
+	c := canvas.NewCanvasWithBoundary(120, 30)
+	// for y := 1; y <= 5; y++ {
+	// 	for x := 1; x <= 10; x++ {
+	// 		if y == x {
+	// 			c.AddLayerObject(x, y, point.NewPoint('*'))
+	// 		}
+	// 	}
+	// }
 	c.SetBackgroundColor(color.Black)
 	c.Draw()
 	c.Clear()

@@ -29,9 +29,9 @@ func (t Table) Draw(x, y int) {
 	vt100.SetBackgroundColor(t.bc)
 	for _y := y; _y < y+t.s.Height; _y++ {
 		for _x := x; _x < x+t.s.Width; _x++ {
-			colRelativeIndex, rowRelativeIndex := x-_x, y-_y
-			_, cellWidthStartIndex, cellWidth := t.i.calculateCellWidthInfo(colRelativeIndex)
-			_, cellHeightStartIndex, cellHeight := t.i.calculateCellHeightInfo(rowRelativeIndex)
+			colRelativeIndex, rowRelativeIndex := _x-x, _y-y
+			cellX, cellWidthStartIndex, cellWidth := t.i.calculateCellWidthInfo(colRelativeIndex)
+			cellY, cellHeightStartIndex, cellHeight := t.i.calculateCellHeightInfo(rowRelativeIndex)
 			switch {
 			case colRelativeIndex == 0:
 				switch {
@@ -47,7 +47,7 @@ func (t Table) Draw(x, y int) {
 				default:
 					vt100.MoveCursorToAndPrint(_x, _y, string(tab.VL()))
 				}
-			case colRelativeIndex == t.s.Width-2:
+			case colRelativeIndex == t.s.Width-1:
 				switch {
 				case rowRelativeIndex == 0:
 					// right top
@@ -80,8 +80,8 @@ func (t Table) Draw(x, y int) {
 				case rowRelativeIndex == 0 || rowRelativeIndex == t.s.Height-1 || rowRelativeIndex == cellHeightStartIndex+cellHeight:
 					vt100.MoveCursorToAndPrint(_x, _y, string(tab.HL()))
 				default:
-					// stringvt100.MoveCursorToAndPrint(_x, _y(, t.calculateCellContentRune(cellX),) cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)
-					vt100.MoveCursorToAndPrint(_x, _y, " ")
+					vt100.MoveCursorToAndPrint(_x, _y, string(t.i.calculateCellContentRune(cellX, cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)))
+					// vt100.MoveCursorToAndPrint(_x, _y, " ")
 				}
 			}
 		}

@@ -36,7 +36,7 @@ func NewFixedCellTable(row, col int, content string, fc, bc color.Color) *FixedC
 }
 
 func (t FixedCellTable) calculateTableWidth() int {
-	return t.CellWidth*t.col + tab.Width()*(t.col+1) + 1
+	return t.CellWidth*t.col + tab.Width()*(t.col+1)
 }
 
 func (t FixedCellTable) calculateTableHeight() int {
@@ -66,5 +66,5 @@ func (t FixedCellTable) calculateCellHeightInfo(rowRelativeIndex int) (int, int,
 }
 
 func (t FixedCellTable) calculateCellContentRune(cellX, cellY, contentColIndex, contentRowIndex int) rune {
-	return rune(t.Content[contentRowIndex])
+	return rune(t.Content[contentColIndex])
 }
