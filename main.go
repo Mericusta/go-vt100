@@ -53,8 +53,8 @@ func main() {
 	c.Clear()
 
 	dt := table.NewDecoratedTable(head, value, &table.TableDecoration{
-		WidthPadding:  1,
-		HeightPadding: 0,
+		CellWidthPadding:  1,
+		CellHeightPadding: 0,
 	}, color.Red, color.Yellow)
 	c.AddLayerObject(20, 1, dt)
 	c.Draw()
