@@ -15,8 +15,7 @@ func main() {
 	controlSignal := make(chan os.Signal)
 	signal.Notify(controlSignal, os.Interrupt)
 
-	// c := canvas.NewVSCodeTerminalCanvas(true)
-	c := canvas.NewCanvasWithBoundary(200, 50)
+	c := canvas.NewStdoutCanvas(true)
 	for y := 1; y <= 5; y++ {
 		for x := 1; x <= 10; x++ {
 			if y == x {
@@ -55,7 +54,7 @@ func main() {
 
 	dt := table.NewDecoratedTable(head, value, &table.TableDecoration{
 		WidthPadding:  1,
-		HeightPadding: 1,
+		HeightPadding: 0,
 	}, color.Red, color.Yellow)
 	c.AddLayerObject(20, 1, dt)
 	c.Draw()
@@ -69,4 +68,6 @@ func main() {
 	<-controlSignal
 	vt100.MoveCursorToLine(0)
 	vt100.ClearScreen()
+	vt100.CursorVisible()
+	vt100.Reset()
 }

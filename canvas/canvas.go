@@ -6,11 +6,13 @@ import (
 	"go-vt100/shape"
 	"go-vt100/size"
 	"go-vt100/tab"
+	"go-vt100/terminal"
 	"go-vt100/vt100"
 )
 
 type Canvas struct {
 	S               size.Size
+	cursorVisible   bool
 	withBoundary    bool
 	backgroundColor color.Color
 	layerObjects    []object.Object
@@ -31,14 +33,23 @@ func NewCanvasWithBoundary(width, height int) Canvas {
 	return c
 }
 
-func NewVSCodeTerminalCanvas(withBoundary bool) Canvas {
+func NewStdoutCanvas(withBoundary bool) Canvas {
 	return Canvas{
 		// stdout is invalid in Debug
 		S: size.Size{
-			// Width:  terminal.Stdout().Width(),
-			// Height: terminal.Stdout().Height() - 3,
+			Width:  terminal.Stdout().Width(),
+			Height: terminal.Stdout().Height(),
 		},
 		withBoundary: withBoundary,
+	}
+}
+
+func (c *Canvas) SetCursorVisible(visible bool) {
+	c.cursorVisible = visible
+	if c.cursorVisible {
+		vt100.CursorVisible()
+	} else {
+		vt100.CursorInvisible()
 	}
 }
 
@@ -56,6 +67,12 @@ func (c *Canvas) AddLayerObject(x, y int, d shape.Drawable) {
 
 // has some bug on vscode terminal with git - bash at sometime
 func (c Canvas) Draw() {
+	if c.cursorVisible {
+		vt100.CursorVisible()
+	} else {
+		vt100.CursorInvisible()
+	}
+
 	vt100.ClearScreen()
 
 	if c.backgroundColor != 0 {
@@ -69,8 +86,6 @@ func (c Canvas) Draw() {
 	for _, object := range c.layerObjects {
 		object.Draw()
 	}
-
-	vt100.MoveCursorToLine(c.S.Height)
 }
 
 func (c *Canvas) Clear() {
