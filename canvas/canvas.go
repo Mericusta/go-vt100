@@ -36,7 +36,7 @@ func NewStdoutCanvas(withBoundary bool) Canvas {
 	return Canvas{
 		// stdout is invalid in Debug
 		S: size.Size{
-			Width:  terminal.Stdout().Width(),
+			Width:  terminal.Stdout().Width() - 1,
 			Height: terminal.Stdout().Height(),
 		},
 		withBoundary: withBoundary,
@@ -73,6 +73,7 @@ func (c Canvas) Draw() {
 	}
 
 	vt100.ClearScreen()
+	vt100.MoveCursorToHome()
 
 	if c.backgroundColor != 0 {
 		c.drawBackground()
@@ -85,6 +86,8 @@ func (c Canvas) Draw() {
 	for _, object := range c.layerObjects {
 		object.Draw()
 	}
+
+	vt100.MoveCursorToHome()
 }
 
 func (c *Canvas) Clear() {

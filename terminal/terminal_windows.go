@@ -9,8 +9,24 @@ type windowsTerminal windows.ConsoleScreenBufferInfo
 var csbInfo windows.ConsoleScreenBufferInfo
 
 func init() {
-	err := windows.GetConsoleScreenBufferInfo(windows.Stdout, &csbInfo)
-	if err != nil {
+	var stdoutMode, stdinMode uint32
+	if err := windows.GetConsoleMode(windows.Stdout, &stdoutMode); err != nil {
+		panic(err)
+	}
+	if err := windows.GetConsoleMode(windows.Stdin, &stdinMode); err != nil {
+		panic(err)
+	}
+	newStdoutMode := windows.ENABLE_VIRTUAL_TERMINAL_PROCESSING | windows.DISABLE_NEWLINE_AUTO_RETURN | stdoutMode
+	newStdinMode := windows.ENABLE_VIRTUAL_TERMINAL_INPUT | stdinMode
+
+	if err := windows.SetConsoleMode(windows.Stdout, newStdoutMode); err != nil {
+		panic(err)
+	}
+	if err := windows.SetConsoleMode(windows.Stdin, newStdinMode); err != nil {
+		panic(err)
+	}
+
+	if err := windows.GetConsoleScreenBufferInfo(windows.Stdout, &csbInfo); err != nil {
 		panic(err)
 	}
 	terminal = windowsTerminal(csbInfo)

@@ -1,4 +1,4 @@
-package tree
+package treeInterface
 
 type FactorioMaterial struct {
 	v string
@@ -9,10 +9,11 @@ func (m FactorioMaterial) Show() string {
 }
 
 type FactorioTree struct {
-	v        Value
+	Tree
+	v        valueInterface
 	tag      string
-	parent   Tree
-	children []Tree
+	parent   treeInterface
+	children []treeInterface
 }
 
 func NewFactorioTree() *FactorioTree {
@@ -55,27 +56,28 @@ func NewFactorioTree() *FactorioTree {
 	// rule 2: no-subnode element
 	// rule 3: the element which its subnode satisfied rule2
 
+	nodeA0.i = nodeA0
 	return nodeA0
 }
 
-func (t *FactorioTree) Value() Value {
+func (t *FactorioTree) Value() valueInterface {
 	return t.v
 }
 
-func (t *FactorioTree) Children() []Tree {
+func (t *FactorioTree) Children() []treeInterface {
 	return t.children
 }
 
-func (t *FactorioTree) Parent() Tree {
+func (t *FactorioTree) Parent() treeInterface {
 	return t.parent
 }
 
-func align(root Tree) (int, int, map[Tree]int) {
+func align(root treeInterface) (int, int, map[treeInterface]int) {
 	treeMaxDepth := 0
-	nodeDepthMap := make(map[Tree]int)
+	nodeDepthMap := make(map[treeInterface]int)
 	nodeDepthMap[root] = 0
-	noSubNodeSlice := make([]Tree, 0)
-	bft(root, func(t Tree) bool {
+	noSubNodeSlice := make([]treeInterface, 0)
+	bft(root, func(t treeInterface) bool {
 		if len(t.Children()) == 0 {
 			noSubNodeSlice = append(noSubNodeSlice, t)
 		} else {
@@ -91,7 +93,7 @@ func align(root Tree) (int, int, map[Tree]int) {
 
 	// leaf node falldown to max depth
 	treeMaxWidth := len(noSubNodeSlice)
-	falldownNodes := make([]Tree, 0, treeMaxWidth)
+	falldownNodes := make([]treeInterface, 0, treeMaxWidth)
 	for _, noSubNode := range noSubNodeSlice {
 		if depth := nodeDepthMap[noSubNode]; depth < treeMaxDepth {
 			nodeDepthMap[noSubNode] = treeMaxDepth
@@ -121,10 +123,10 @@ func align(root Tree) (int, int, map[Tree]int) {
 		falldownNodes = falldownNodes[1:]
 	}
 
-	// fmt.Printf("tree max depth: %v\n", treeMaxDepth)
-	// fmt.Printf("tree max width: %v\n", treeMaxWidth)
+	// fmt.Printf("treeInterface max depth: %v\n", treeMaxDepth)
+	// fmt.Printf("treeInterface max width: %v\n", treeMaxWidth)
 	// bft(root, func(t Tree) bool {
-	// 	fmt.Printf("depth %v, tree node %v, %v\n", nodeDepthMap[t], t.(*FactorioTree).tag, t.Value().Show())
+	// 	fmt.Printf("depth %v, treeInterface node %v, %v\n", nodeDepthMap[t], t.(*FactorioTree).tag, t.Value().Show())
 	// 	return true
 	// })
 

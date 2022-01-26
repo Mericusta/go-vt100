@@ -1,44 +1,66 @@
-package tree
+package treeInterface
 
 import (
 	"fmt"
 	"go-vt100/canvas"
+	"go-vt100/color"
+	"go-vt100/size"
 	"go-vt100/tab"
+	"go-vt100/vt100"
 )
 
-type Value interface {
+type valueInterface interface {
 	Show() string
 }
 
-type Tree interface {
-	Value() Value
-	Children() []Tree
-	Parent() Tree
+type treeInterface interface {
+	Value() valueInterface
+	Children() []treeInterface
+	Parent() treeInterface
 }
 
-func Draw(root Tree) {
-	treeMaxDepth, treeMaxWidth, nodeDepthMap := align(root)
-	nodeCanvansMap := make(map[Tree][]rune)
-	fmt.Printf("treeMaxDepth = %v, treeMaxWidth = %v\n", treeMaxDepth, treeMaxWidth)
-	bft(root, func(t Tree) bool {
-		// fmt.Printf("%v, node tree:\n", t.Value().Show())
-		if len(t.Children()) > 0 {
-			nodeCanvansMap[t] = drawNodeCanvas(t, 1)
-		}
-		return true
-	})
+type Tree struct {
+	s  size.Size
+	i  treeInterface
+	fc color.Color
+	bc color.Color
+}
 
-	mergeNodeCanvas(root, nodeDepthMap, nodeCanvansMap)
+func (t Tree) Draw(x, y int) {
+	// treeMaxDepth, treeMaxWidth, nodeDepthMap := align(t.i)
+	// nodeCanvansMap := make(map[treeInterface][]rune)
+	// fmt.Printf("treeMaxDepth = %v, treeMaxWidth = %v\n", treeMaxDepth, treeMaxWidth)
+	// bft(root, func(t treeInterface) bool {
+	// 	// fmt.Printf("%v, node treeInterface:\n", t.Value().Show())
+	// 	if len(t.Children()) > 0 {
+	// 		nodeCanvansMap[t] = drawNodeCanvas(t, 1)
+	// 	}
+	// 	return true
+	// })
 
-	// depthNodeMap := make(map[int][]Tree)
+	// mergeNodeCanvas(root, nodeDepthMap, nodeCanvansMap)
+
+	// depthNodeMap := make(map[int][]treeInterface)
 	// for node, depth := range nodeDepthMap {
 	// 	depthNodeMap[depth] = append(depthNodeMap[depth], node)
 	// }
 
 	// printTree(root, treeMaxDepth, treeMaxWidth, depthNodeMap)
+
+	vt100.SetForegroundColor(t.fc)
+	vt100.SetBackgroundColor(t.bc)
+
+	for _y := y; _y < y+t.s.Height; _y++ {
+		for _x := x; _x < x+t.s.Width; _x++ {
+			// fmt.Print
+		}
+	}
+
+	vt100.ClearForegroundColor()
+	vt100.ClearBackgroundColor()
 }
 
-func mergeNodeCanvas(node Tree, nodeDepthMap map[Tree]int, nodeCanvasMap map[Tree][]rune) []rune {
+func mergeNodeCanvas(node treeInterface, nodeDepthMap map[treeInterface]int, nodeCanvasMap map[treeInterface][]rune) []rune {
 	nodeCanvas := nodeCanvasMap[node]
 	if len(node.Children()) == 0 {
 		return nil
@@ -55,7 +77,7 @@ func mergeNodeCanvas(node Tree, nodeDepthMap map[Tree]int, nodeCanvasMap map[Tre
 	return nodeCanvas
 }
 
-func drawNodeCanvas(n Tree, margin int) []rune {
+func drawNodeCanvas(n treeInterface, margin int) []rune {
 	childrenCount := 0
 	rootCellContent := n.Value().Show()
 	rootCellWidthStartIndex := 0
@@ -176,8 +198,8 @@ func drawNodeCanvas(n Tree, margin int) []rune {
 	return nodeRuneSlice
 }
 
-func bft(root Tree, f func(Tree) bool) {
-	nodeSlice := append(make([]Tree, 0), root)
+func bft(root treeInterface, f func(treeInterface) bool) {
+	nodeSlice := append(make([]treeInterface, 0), root)
 	for len(nodeSlice) != 0 {
 		nodeSlice = append(nodeSlice, nodeSlice[0].Children()...)
 		if !f(nodeSlice[0]) {
