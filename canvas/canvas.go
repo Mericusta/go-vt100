@@ -73,7 +73,7 @@ func (c Canvas) Draw() {
 	vt100.MoveCursorToLine(c.S.Height)
 }
 
-func (c Canvas) Clear() {
+func (c *Canvas) Clear() {
 	c.layerObjects = nil
 	c.Draw()
 }
