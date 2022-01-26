@@ -6,7 +6,6 @@ import (
 )
 
 type DecoratedTable struct {
-	Table
 	*AdaptiveCellTable
 	*TableDecoration
 }
