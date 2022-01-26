@@ -44,8 +44,6 @@ func NewAdaptiveCellTable(headSlice []string, lineContentSlice [][]string, fc, b
 		t.rowMaxHeightMap[rowIndex+1] = 1
 	}
 	t.i = t
-	t.Table.s.Width = t.calculateTableWidth()
-	t.Table.s.Height = t.calculateTableHeight()
 	return t
 }
 

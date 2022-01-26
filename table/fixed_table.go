@@ -30,8 +30,6 @@ func NewFixedCellTable(row, col int, content string, fc, bc color.Color) *FixedC
 		Content:    []byte(content),
 	}
 	t.i = t
-	t.Table.s.Width = t.calculateTableWidth()
-	t.Table.s.Height = t.calculateTableHeight()
 	return t
 }
 

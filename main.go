@@ -4,6 +4,7 @@ import (
 	"go-vt100/canvas"
 	"go-vt100/color"
 	"go-vt100/shape/matrix"
+	"go-vt100/shape/point"
 	"go-vt100/table"
 	"go-vt100/vt100"
 	"os"
@@ -15,14 +16,18 @@ func main() {
 	signal.Notify(controlSignal, os.Interrupt)
 
 	// c := canvas.NewVSCodeTerminalCanvas(true)
-	c := canvas.NewCanvasWithBoundary(120, 30)
-	// for y := 1; y <= 5; y++ {
-	// 	for x := 1; x <= 10; x++ {
-	// 		if y == x {
-	// 			c.AddLayerObject(x, y, point.NewPoint('*'))
-	// 		}
-	// 	}
-	// }
+	c := canvas.NewCanvasWithBoundary(200, 50)
+	for y := 1; y <= 5; y++ {
+		for x := 1; x <= 10; x++ {
+			if y == x {
+				c.AddLayerObject(x, y, point.NewPoint('*'))
+			}
+		}
+	}
+	c.Draw()
+	<-controlSignal
+	c.Clear()
+
 	c.SetBackgroundColor(color.Black)
 
 	c.AddLayerObject(5, 5, matrix.NewMatrix(6, 3, color.White))
@@ -48,11 +53,14 @@ func main() {
 	<-controlSignal
 	c.Clear()
 
-	// t = table.NewDecoratedTable(head, value, &table.TableDecoration{
-	// 	WidthPadding:  1,
-	// 	HeightPadding: 1,
-	// })
-	// table.Draw(t)
+	dt := table.NewDecoratedTable(head, value, &table.TableDecoration{
+		WidthPadding:  1,
+		HeightPadding: 1,
+	}, color.Red, color.Yellow)
+	c.AddLayerObject(20, 1, dt)
+	c.Draw()
+	<-controlSignal
+	c.Clear()
 
 	// n := tree.NewFactorioTree()
 	// tree.Draw(n)

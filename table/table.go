@@ -25,6 +25,8 @@ type Table struct {
 }
 
 func (t Table) Draw(x, y int) {
+	t.s.Width = t.i.calculateTableWidth()
+	t.s.Height = t.i.calculateTableHeight()
 	vt100.SetForegroundColor(t.fc)
 	vt100.SetBackgroundColor(t.bc)
 	for _y := y; _y < y+t.s.Height; _y++ {
