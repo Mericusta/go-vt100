@@ -3,7 +3,6 @@ package canvas
 import (
 	"go-vt100/color"
 	"go-vt100/object"
-	"go-vt100/shape"
 	"go-vt100/size"
 	"go-vt100/tab"
 	"go-vt100/terminal"
@@ -57,7 +56,7 @@ func (c *Canvas) SetBackgroundColor(bc color.Color) {
 	c.backgroundColor = bc
 }
 
-func (c *Canvas) AddLayerObject(x, y int, d shape.Drawable) {
+func (c *Canvas) AddLayerObject(x, y int, d object.Drawable) {
 	if c.withBoundary {
 		c.layerObjects = append(c.layerObjects, object.NewObject(x+1, y+1, d))
 	} else {

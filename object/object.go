@@ -2,15 +2,18 @@ package object
 
 import (
 	"go-vt100/coordinate"
-	"go-vt100/shape"
 )
+
+type Drawable interface {
+	Draw(int, int)
+}
 
 type Object struct {
 	c coordinate.Coordinate
-	d shape.Drawable
+	d Drawable
 }
 
-func NewObject(x, y int, d shape.Drawable) Object {
+func NewObject(x, y int, d Drawable) Object {
 	return Object{coordinate.Coordinate{X: x, Y: y}, d}
 }
 
