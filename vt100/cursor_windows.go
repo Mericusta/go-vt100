@@ -5,21 +5,21 @@ import (
 )
 
 func MoveCursorToAndPrint(x, y int, c string) {
-	fmt.Printf("\x1b[%d;%dH%v", y, x, c)
+	fmt.Printf("\033[%d;%dH%v", y, x, c)
 }
 
 func MoveCursorToHome() {
-	fmt.Printf("\x1b[H")
+	fmt.Printf("\033[H")
 }
 
 func MoveCursorToLine(y int) {
-	fmt.Printf("\x1b[%df\n", y)
+	fmt.Printf("\033[%df\n", y)
 }
 
 func CursorInvisible() {
-	fmt.Printf("\x1b[?25l")
+	fmt.Printf("\033[?25l")
 }
 
 func CursorVisible() {
-	fmt.Printf("\x1b[?25h")
+	fmt.Printf("\033[?25h")
 }

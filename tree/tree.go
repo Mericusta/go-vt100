@@ -1,12 +1,15 @@
-package treeInterface
+package tree
 
 import (
 	"fmt"
 	"go-vt100/canvas"
 	"go-vt100/color"
+	"go-vt100/coordinate"
 	"go-vt100/size"
 	"go-vt100/tab"
+	"go-vt100/terminal"
 	"go-vt100/vt100"
+	"strings"
 )
 
 type valueInterface interface {
@@ -20,14 +23,17 @@ type treeInterface interface {
 }
 
 type Tree struct {
-	s  size.Size
-	i  treeInterface
-	fc color.Color
-	bc color.Color
+	s      size.Size
+	i      treeInterface
+	fc     color.Color
+	bc     color.Color
+	margin int
 }
 
 func (t Tree) Draw(x, y int) {
 	// treeMaxDepth, treeMaxWidth, nodeDepthMap := align(t.i)
+	// t.s.Width = t.calculateTreeWidth()
+	// t.s.Height = t.calculateTreeHeight()
 	// nodeCanvansMap := make(map[treeInterface][]rune)
 	// fmt.Printf("treeMaxDepth = %v, treeMaxWidth = %v\n", treeMaxDepth, treeMaxWidth)
 	// bft(root, func(t treeInterface) bool {
@@ -50,11 +56,47 @@ func (t Tree) Draw(x, y int) {
 	vt100.SetForegroundColor(t.fc)
 	vt100.SetBackgroundColor(t.bc)
 
-	for _y := y; _y < y+t.s.Height; _y++ {
-		for _x := x; _x < x+t.s.Width; _x++ {
-			// fmt.Print
-		}
+	nodePosition := make(map[treeInterface]coordinate.Coordinate)
+	nodePosition[t.i] = coordinate.Coordinate{
+		X: x,
+		Y: y,
 	}
+	bft(t.i, func(ti treeInterface) bool {
+		pos, hasPos := nodePosition[ti]
+		if !hasPos {
+			panic(fmt.Sprintf("node %v not has position", ti.Value().Show()))
+		}
+		vt100.MoveCursorToAndPrint(pos.X, pos.Y, ti.Value().Show())
+		childrenCount := len(ti.Children())
+		if childrenCount > 0 {
+			yOffset := 0
+			for childIndex, child := range ti.Children() {
+				splitter := tab.LT()
+				if childIndex == childrenCount-1 {
+					splitter = tab.BL()
+				}
+				for index := 0; index <= yOffset; index++ {
+					vt100.MoveCursorToAndPrint(pos.X, pos.Y+childIndex+1+index, string(tab.VL()))
+				}
+				// vt100.MoveCursorToAndPrint(pos.X, pos.Y+childIndex+1+yOffset, fmt.Sprintf("%v%v ", string(splitter), strings.Repeat(string(tab.HL()), t.margin)))
+				vt100.MoveCursorToAndPrint(pos.X, pos.Y+1+childIndex+yOffset, fmt.Sprintf("%v%v %v", string(splitter), strings.Repeat(string(tab.HL()), t.margin), child.Value().Show()))
+				nodePosition[child] = coordinate.Coordinate{
+					X: pos.X + tab.Width() + t.margin*tab.Width() + tab.Width(),
+					Y: pos.Y + 1 + childIndex + yOffset,
+				}
+				bft(child, func(ti treeInterface) bool {
+					yOffset++
+					return true
+				})
+				<-terminal.ControlSignal
+				vt100.SaveScreen()
+				fmt.Printf("child %v, y offset %v", child.Value().Show(), yOffset)
+				<-terminal.ControlSignal
+				vt100.RestoreScreen()
+			}
+		}
+		return false
+	})
 
 	vt100.ClearForegroundColor()
 	vt100.ClearBackgroundColor()

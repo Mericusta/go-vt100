@@ -6,15 +6,13 @@ import (
 	"go-vt100/shape/matrix"
 	"go-vt100/shape/point"
 	"go-vt100/table"
+	"go-vt100/terminal"
+	"go-vt100/tree"
 	"go-vt100/vt100"
-	"os"
-	"os/signal"
 )
 
 func main() {
-	controlSignal := make(chan os.Signal)
-	signal.Notify(controlSignal, os.Interrupt)
-
+	<-terminal.ControlSignal
 	c := canvas.NewStdoutCanvas(true)
 	for y := 1; y <= 5; y++ {
 		for x := 1; x <= 10; x++ {
@@ -24,20 +22,20 @@ func main() {
 		}
 	}
 	c.Draw()
-	<-controlSignal
+	<-terminal.ControlSignal
 	c.Clear()
 
-	c.SetBackgroundColor(color.Black)
+	// c.SetBackgroundColor(color.Black)
 
 	c.AddLayerObject(5, 5, matrix.NewMatrix(6, 3, color.White))
 	c.Draw()
-	<-controlSignal
+	<-terminal.ControlSignal
 	c.Clear()
 
-	fct := table.NewFixedCellTable(2, 2, "standard out", color.Red, color.Yellow)
+	fct := table.NewFixedCellTable(2, 2, "standard out", color.Default, color.Default)
 	c.AddLayerObject(20, 5, fct)
 	c.Draw()
-	<-controlSignal
+	<-terminal.ControlSignal
 	c.Clear()
 
 	head := []string{"ID", "Value", "Desc"}
@@ -46,26 +44,27 @@ func main() {
 		{"2", "Hello World", "Msg"},
 		{"3", "Mericustar", "Author"},
 	}
-	act := table.NewAdaptiveCellTable(head, value, color.Red, color.Yellow)
+	act := table.NewAdaptiveCellTable(head, value, color.Default, color.Default)
 	c.AddLayerObject(20, 5, act)
 	c.Draw()
-	<-controlSignal
+	<-terminal.ControlSignal
 	c.Clear()
 
 	dt := table.NewDecoratedTable(head, value, &table.TableDecoration{
 		CellWidthPadding:  1,
 		CellHeightPadding: 0,
-	}, color.Red, color.Yellow)
+	}, color.Default, color.Default)
 	c.AddLayerObject(20, 1, dt)
 	c.Draw()
-	<-controlSignal
+	<-terminal.ControlSignal
 	c.Clear()
 
-	// n := tree.NewFactorioTree()
-	// tree.Draw(n)
+	ft := tree.NewFactorioTree()
+	c.AddLayerObject(1, 1, ft)
+	c.Draw()
 
 	// fmt.Println("Ctrl + C to exit")
-	<-controlSignal
+	<-terminal.ControlSignal
 	vt100.MoveCursorToLine(0)
 	vt100.ClearScreen()
 	vt100.CursorVisible()

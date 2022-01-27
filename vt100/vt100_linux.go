@@ -3,9 +3,9 @@ package vt100
 import "fmt"
 
 func ClearScreen() {
-	fmt.Printf("\x1b[2J")
+	fmt.Printf("\033[2J")
 }
 
 func Reset() {
-	fmt.Printf("\x1b[0m")
+	fmt.Printf("\033[0m")
 }

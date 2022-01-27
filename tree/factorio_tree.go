@@ -1,4 +1,4 @@
-package treeInterface
+package tree
 
 type FactorioMaterial struct {
 	v string
@@ -9,14 +9,14 @@ func (m FactorioMaterial) Show() string {
 }
 
 type FactorioTree struct {
-	Tree
 	v        valueInterface
 	tag      string
 	parent   treeInterface
 	children []treeInterface
 }
 
-func NewFactorioTree() *FactorioTree {
+func NewFactorioTree() Tree {
+	// load data
 	nodeA0 := &FactorioTree{v: &FactorioMaterial{v: "Steel magazine"}, tag: "A0"}
 	nodeB0 := &FactorioTree{v: &FactorioMaterial{v: "Iron magazine"}, tag: "B0"}
 	nodeC0 := &FactorioTree{v: &FactorioMaterial{v: "Steel plate"}, tag: "C0"}
@@ -56,8 +56,13 @@ func NewFactorioTree() *FactorioTree {
 	// rule 2: no-subnode element
 	// rule 3: the element which its subnode satisfied rule2
 
-	nodeA0.i = nodeA0
-	return nodeA0
+	// align tree
+	// treeMaxDepth, treeMaxWidth, nodeDepthMap := align(nodeA0)
+
+	return Tree{
+		i:      nodeA0,
+		margin: 1,
+	}
 }
 
 func (t *FactorioTree) Value() valueInterface {
@@ -70,6 +75,14 @@ func (t *FactorioTree) Children() []treeInterface {
 
 func (t *FactorioTree) Parent() treeInterface {
 	return t.parent
+}
+
+func (t *FactorioTree) calculateTreeWidth() int {
+	return -1
+}
+
+func (t *FactorioTree) calculateTreeHeight() int {
+	return -1
 }
 
 func align(root treeInterface) (int, int, map[treeInterface]int) {
@@ -143,3 +156,17 @@ func align(root treeInterface) (int, int, map[treeInterface]int) {
 // |    │             ┌─ F0|
 // |    └──────── D0 ─┤    |
 // |                  └─ G1|
+
+// |A0         |
+// |├─ B0      |
+// |│  └─ E0   |
+// |│     ├─ H0|
+// |│     └─ G2|
+// |├─ C0      |
+// |│  ├─ E1   |
+// |│  │  ├─ H1|
+// |│  │  └─ G3|
+// |│  └──── G0|
+// |└──── D0   |
+// |      ├─ F0|
+// |      └─ G1|
