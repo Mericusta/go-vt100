@@ -9,7 +9,7 @@ import (
 	"go-vt100/vt100"
 )
 
-type tableInterface interface {
+type tableViewInterface interface {
 	calculateTableWidth() int
 	calculateTableHeight() int
 	calculateCellWidthInfo(int) (int, int, int)
@@ -19,7 +19,7 @@ type tableInterface interface {
 
 type Table struct {
 	s  size.Size
-	i  tableInterface
+	i  tableViewInterface
 	fc color.Color
 	bc color.Color
 }
@@ -92,7 +92,7 @@ func (t Table) Draw(x, y int) {
 	vt100.ClearBackgroundColor()
 }
 
-func Draw(t tableInterface) {
+func Draw(t tableViewInterface) {
 	tableWidth := t.calculateTableWidth()
 	tableHeight := t.calculateTableHeight()
 	totalPoints := tableWidth * tableHeight

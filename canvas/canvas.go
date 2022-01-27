@@ -31,19 +31,6 @@ func NewCanvasWithBoundary(width, height int) Canvas {
 	return c
 }
 
-func NewStdoutCanvas(withBoundary bool) Canvas {
-	return Canvas{
-		// stdout is invalid in Debug
-		S: size.Size{
-			// Width:  terminal.Stdout().Width() - 1,
-			// Height: terminal.Stdout().Height(),
-			Width:  128,
-			Height: 25,
-		},
-		withBoundary: withBoundary,
-	}
-}
-
 func (c *Canvas) SetCursorVisible(visible bool) {
 	c.cursorVisible = visible
 	if c.cursorVisible {

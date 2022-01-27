@@ -146,6 +146,15 @@ func align(root treeInterface) (int, int, map[treeInterface]int) {
 	return treeMaxDepth, treeMaxWidth, nodeDepthMap
 }
 
+func (t *FactorioTree) calculateChildTreeInfo() (int, int) {
+	xOffset, treeHeight := 0, -1
+	bft(t, func(ti treeInterface) bool {
+		treeHeight++
+		return true
+	})
+	return xOffset, treeHeight
+}
+
 // |                  ┌─ H0|
 // |    ┌─ B0 ─── E0 ─┤    |
 // |    │             └─ G2|
