@@ -1,5 +1,7 @@
 package tree
 
+import "go-vt100/tab"
+
 type FactorioMaterial struct {
 	v string
 }
@@ -57,11 +59,14 @@ func NewFactorioTree() Tree {
 	// rule 3: the element which its subnode satisfied rule2
 
 	// align tree
-	// treeMaxDepth, treeMaxWidth, nodeDepthMap := align(nodeA0)
+	treeMaxDepth, treeMaxWidth, nodeDepthMap := nodeA0.align()
 
 	return Tree{
-		i:      nodeA0,
-		margin: 1,
+		i:            nodeA0,
+		margin:       1,
+		maxDepth:     treeMaxDepth,
+		maxWidth:     treeMaxWidth,
+		nodeDepthMap: nodeDepthMap,
 	}
 }
 
@@ -85,20 +90,20 @@ func (t *FactorioTree) calculateTreeHeight() int {
 	return -1
 }
 
-func align(root treeInterface) (int, int, map[treeInterface]int) {
+func (t *FactorioTree) align() (int, int, map[treeInterface]int) {
 	treeMaxDepth := 0
 	nodeDepthMap := make(map[treeInterface]int)
-	nodeDepthMap[root] = 0
+	nodeDepthMap[t] = 0
 	noSubNodeSlice := make([]treeInterface, 0)
-	bft(root, func(t treeInterface) bool {
-		if len(t.Children()) == 0 {
-			noSubNodeSlice = append(noSubNodeSlice, t)
+	bft(t, func(ti treeInterface) bool {
+		if len(ti.Children()) == 0 {
+			noSubNodeSlice = append(noSubNodeSlice, ti)
 		} else {
-			for _, subNode := range t.Children() {
-				if treeMaxDepth < nodeDepthMap[t]+1 {
-					treeMaxDepth = nodeDepthMap[t] + 1
+			for _, subNode := range ti.Children() {
+				if treeMaxDepth < nodeDepthMap[ti]+1 {
+					treeMaxDepth = nodeDepthMap[ti] + 1
 				}
-				nodeDepthMap[subNode] = nodeDepthMap[t] + 1
+				nodeDepthMap[subNode] = nodeDepthMap[ti] + 1
 			}
 		}
 		return true
@@ -138,21 +143,12 @@ func align(root treeInterface) (int, int, map[treeInterface]int) {
 
 	// fmt.Printf("treeInterface max depth: %v\n", treeMaxDepth)
 	// fmt.Printf("treeInterface max width: %v\n", treeMaxWidth)
-	// bft(root, func(t Tree) bool {
+	// bft(t, func(t Tree) bool {
 	// 	fmt.Printf("depth %v, treeInterface node %v, %v\n", nodeDepthMap[t], t.(*FactorioTree).tag, t.Value().Show())
 	// 	return true
 	// })
 
 	return treeMaxDepth, treeMaxWidth, nodeDepthMap
-}
-
-func (t *FactorioTree) calculateChildTreeInfo() (int, int) {
-	xOffset, treeHeight := 0, -1
-	bft(t, func(ti treeInterface) bool {
-		treeHeight++
-		return true
-	})
-	return xOffset, treeHeight
 }
 
 // |                  ┌─ H0|
@@ -166,11 +162,12 @@ func (t *FactorioTree) calculateChildTreeInfo() (int, int) {
 // |    └──────── D0 ─┤    |
 // |                  └─ G1|
 
+// margin = 1
 // |A0         |
-// |├─ B0      |
-// |│  └─ E0   |
-// |│     ├─ H0|
-// |│     └─ G2|
+// |├─ B0      | -> B0 tree height
+// |│  └─ E0   | -> B0 tree height
+// |│     ├─ H0| -> B0 tree height
+// |│     └─ G2| -> B0 tree height
 // |├─ C0      |
 // |│  ├─ E1   |
 // |│  │  ├─ H1|
@@ -179,3 +176,52 @@ func (t *FactorioTree) calculateChildTreeInfo() (int, int) {
 // |└──── D0   |
 // |      ├─ F0|
 // |      └─ G1|
+
+// margin = 2
+// |A0            |
+// |├── B0        | -> B0 tree height
+// |│   └── E0    | -> B0 tree height
+// |│       ├── H0| -> B0 tree height
+// |│       └── G2| -> B0 tree height
+// |├── C0        |
+// |│   ├── E1    |
+// |│   │   ├── H1|
+// |│   │   └── G3|
+// |│   └────── G0|
+// |└────── D0    |
+// |        ├── F0|
+// |        └── G1|
+
+// margin = 3
+// |A0               |
+// |├─── B0          | -> B0 tree height
+// |│    └─── E0     | -> B0 tree height
+// |│         ├─── H0| -> B0 tree height
+// |│         └─── G2| -> B0 tree height
+// |├─── C0          |
+// |│    ├─── E1     |
+// |│    │    ├─── H1|
+// |│    │    └─── G3|
+// |│    └──────── G0|
+// |└──────── D0     |
+// |          ├─── F0|
+// |          └─── G1|
+
+func (t *FactorioTree) calculateTreeInfo(parentDepth, nodeDepth, margin int) (int, int) {
+	xOffset, treeHeight := 0, 0
+	bft(t, func(ti treeInterface) bool {
+		treeHeight++
+		return true
+	})
+
+	// xOffset = (depth diff - 1) * (margin + splitter + space)
+	// margin = 1
+	// (2 - 0 - 1) * (1*1 + 1 + 1)
+	// margin = 2
+	// (2 - 0 - 1) * (2*1 + 1 + 1)
+	// margin = 3
+	// (2 - 0 - 1) * (3*1 + 1 + 1)
+	xOffset = (nodeDepth - parentDepth - 1) * (margin*tab.Width() + tab.Width() + tab.SpaceWidth())
+
+	return xOffset, treeHeight
+}
