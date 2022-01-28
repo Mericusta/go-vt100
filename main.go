@@ -12,8 +12,11 @@ import (
 )
 
 func main() {
+	canvasWidth := terminal.Stdout().Width() - 1
+	canvasHeight := terminal.Stdout().Height() - 4
+
 	<-terminal.ControlSignal
-	c := canvas.NewCanvasWithBoundary(terminal.Stdout().Width()-1, terminal.Stdout().Height()-4)
+	c := canvas.NewCanvasWithBoundary(canvasWidth, canvasHeight)
 	for y := 1; y <= 5; y++ {
 		for x := 1; x <= 10; x++ {
 			if y == x {
@@ -52,7 +55,7 @@ func main() {
 
 	dt := table.NewDecoratedTable(head, value, &table.TableDecoration{
 		CellWidthPadding:  1,
-		CellHeightPadding: 0,
+		CellHeightPadding: 1,
 	}, color.Default, color.Default)
 	c.AddLayerObject(20, 1, dt)
 	c.Draw()
@@ -62,9 +65,16 @@ func main() {
 	ft := tree.NewFactorioTree()
 	c.AddLayerObject(1, 1, ft)
 	c.Draw()
-
-	// fmt.Println("Ctrl + C to exit")
 	<-terminal.ControlSignal
+	c.Clear()
+
+	content := "Ctrl + C to exit"
+	fct = table.NewFixedCellTable(1, 1, content, color.Default, color.Default)
+	c.AddLayerObject(canvasWidth/2-len(content)/2, canvasHeight/2, fct)
+	c.Draw()
+	<-terminal.ControlSignal
+	c.Clear()
+
 	vt100.MoveCursorToLine(0)
 	vt100.ClearScreen()
 	vt100.CursorVisible()
