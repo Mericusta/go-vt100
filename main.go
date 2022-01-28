@@ -62,7 +62,7 @@ func main() {
 	<-terminal.ControlSignal
 	c.Clear()
 
-	ft := tree.NewFactorioTree()
+	ft := tree.NewFactorioTree(1)
 	c.AddLayerObject(1, 1, ft)
 	c.Draw()
 	<-terminal.ControlSignal

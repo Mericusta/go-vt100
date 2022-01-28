@@ -17,7 +17,7 @@ type FactorioTree struct {
 	children []treeInterface
 }
 
-func NewFactorioTree() Tree {
+func NewFactorioTree(margin int) Tree {
 	// load data
 	nodeA0 := &FactorioTree{v: &FactorioMaterial{v: "Steel magazine"}, tag: "A0"}
 	nodeB0 := &FactorioTree{v: &FactorioMaterial{v: "Iron magazine"}, tag: "B0"}
@@ -63,7 +63,7 @@ func NewFactorioTree() Tree {
 
 	return Tree{
 		i:            nodeA0,
-		margin:       1,
+		margin:       margin,
 		maxDepth:     treeMaxDepth,
 		maxWidth:     treeMaxWidth,
 		nodeDepthMap: nodeDepthMap,
