@@ -11,27 +11,25 @@ func (m FactorioMaterial) Show() string {
 }
 
 type FactorioTree struct {
-	v        valueInterface
-	tag      string
-	parent   treeInterface
-	children []treeInterface
+	tree
+	tag string
 }
 
 func NewFactorioTree(margin int) Tree {
 	// load data
-	nodeA0 := &FactorioTree{v: &FactorioMaterial{v: "Steel magazine"}, tag: "A0"}
-	nodeB0 := &FactorioTree{v: &FactorioMaterial{v: "Iron magazine"}, tag: "B0"}
-	nodeC0 := &FactorioTree{v: &FactorioMaterial{v: "Steel plate"}, tag: "C0"}
-	nodeD0 := &FactorioTree{v: &FactorioMaterial{v: "Copper plate"}, tag: "D0"}
-	nodeE0 := &FactorioTree{v: &FactorioMaterial{v: "Iron plate"}, tag: "E0"}
-	nodeE1 := &FactorioTree{v: &FactorioMaterial{v: "Iron plate"}, tag: "E1"}
-	nodeG0 := &FactorioTree{v: &FactorioMaterial{v: "Coal"}, tag: "G0"}
-	nodeF0 := &FactorioTree{v: &FactorioMaterial{v: "Copper ore"}, tag: "F0"}
-	nodeG1 := &FactorioTree{v: &FactorioMaterial{v: "Coal"}, tag: "G1"}
-	nodeH0 := &FactorioTree{v: &FactorioMaterial{v: "Iron ore"}, tag: "H0"}
-	nodeG2 := &FactorioTree{v: &FactorioMaterial{v: "Coal"}, tag: "G2"}
-	nodeH1 := &FactorioTree{v: &FactorioMaterial{v: "Iron ore"}, tag: "H1"}
-	nodeG3 := &FactorioTree{v: &FactorioMaterial{v: "Coal"}, tag: "G3"}
+	nodeA0 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Steel magazine"}}, tag: "A0"}
+	nodeB0 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Iron magazine"}}, tag: "B0"}
+	nodeC0 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Steel plate"}}, tag: "C0"}
+	nodeD0 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Copper plate"}}, tag: "D0"}
+	nodeE0 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Iron plate"}}, tag: "E0"}
+	nodeE1 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Iron plate"}}, tag: "E1"}
+	nodeG0 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Coal"}}, tag: "G0"}
+	nodeF0 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Copper ore"}}, tag: "F0"}
+	nodeG1 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Coal"}}, tag: "G1"}
+	nodeH0 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Iron ore"}}, tag: "H0"}
+	nodeG2 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Coal"}}, tag: "G2"}
+	nodeH1 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Iron ore"}}, tag: "H1"}
+	nodeG3 := &FactorioTree{tree: tree{v: &FactorioMaterial{v: "Coal"}}, tag: "G3"}
 	nodeA0.children = append(nodeA0.children, nodeB0, nodeC0, nodeD0)    // steel magazine
 	nodeB0.parent, nodeC0.parent, nodeD0.parent = nodeA0, nodeA0, nodeA0 // steel magazine
 	nodeB0.children = append(nodeB0.children, nodeE0)                    // iron magazine
@@ -68,26 +66,6 @@ func NewFactorioTree(margin int) Tree {
 		maxWidth:     treeMaxWidth,
 		nodeDepthMap: nodeDepthMap,
 	}
-}
-
-func (t *FactorioTree) Value() valueInterface {
-	return t.v
-}
-
-func (t *FactorioTree) Children() []treeInterface {
-	return t.children
-}
-
-func (t *FactorioTree) Parent() treeInterface {
-	return t.parent
-}
-
-func (t *FactorioTree) calculateTreeWidth() int {
-	return -1
-}
-
-func (t *FactorioTree) calculateTreeHeight() int {
-	return -1
 }
 
 func (t *FactorioTree) align() (int, int, map[treeInterface]int) {

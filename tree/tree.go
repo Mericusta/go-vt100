@@ -21,6 +21,24 @@ type treeInterface interface {
 	calculateTreeInfo(int, int, int) (int, int)
 }
 
+type tree struct {
+	v        valueInterface
+	parent   treeInterface
+	children []treeInterface
+}
+
+func (t *tree) Value() valueInterface {
+	return t.v
+}
+
+func (t *tree) Children() []treeInterface {
+	return t.children
+}
+
+func (t *tree) Parent() treeInterface {
+	return t.parent
+}
+
 type Tree struct {
 	s            size.Size
 	i            treeInterface
