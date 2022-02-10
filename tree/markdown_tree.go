@@ -96,12 +96,3 @@ func NewMarkdownTree(filename, rootTopic string, markdownDepthSpaceWidth, margin
 		nodeDepthMap: nodeDepthMap,
 	}
 }
-
-func (t *MarkdownTree) calculateTreeInfo(parentDepth, nodeDepth, margin int) (int, int) {
-	xOffset, treeHeight := 0, 0
-	bft(t, func(ti treeInterface) bool {
-		treeHeight++
-		return true
-	})
-	return xOffset, treeHeight
-}

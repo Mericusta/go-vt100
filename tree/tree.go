@@ -44,6 +44,25 @@ func (t *tree) Parent() treeInterface {
 	return t.parent
 }
 
+func (t *tree) calculateTreeInfo(parentDepth, nodeDepth, margin int) (int, int) {
+	xOffset, treeHeight := 0, 0
+	bft(t, func(ti treeInterface) bool {
+		treeHeight++
+		return true
+	})
+
+	// xOffset = (depth diff - 1) * (margin + splitter + space)
+	// margin = 1
+	// (2 - 0 - 1) * (1*1 + 1 + 1)
+	// margin = 2
+	// (2 - 0 - 1) * (2*1 + 1 + 1)
+	// margin = 3
+	// (2 - 0 - 1) * (3*1 + 1 + 1)
+	xOffset = (nodeDepth - parentDepth - 1) * (margin*tab.Width() + tab.Width() + tab.SpaceWidth())
+
+	return xOffset, treeHeight
+}
+
 type Tree struct {
 	s            size.Size
 	i            treeInterface
@@ -53,6 +72,10 @@ type Tree struct {
 	maxDepth     int
 	maxWidth     int
 	nodeDepthMap map[treeInterface]int
+}
+
+func (t Tree) RootNode() treeInterface {
+	return t.i
 }
 
 func (t Tree) Draw(x, y int, s size.Size) {
@@ -104,7 +127,7 @@ func (t Tree) Draw(x, y int, s size.Size) {
 				if childIndex == childrenCount-1 {
 					splitter = tab.BL()
 				}
-				// utility.DebugPrintf(terminal.Stdout().Height()-1, "pos.X = %v, childPosY = %v, childRowContent = |%v|", pos.X, childPosY, xOffset)
+				// utility.DebugPrintf(terminal.Stdout().Height()-1, "pos.X = %v, childPosY = %v, xOffset = %v", pos.X, childPosY, xOffset)
 				childRowContent := fmt.Sprintf("%v%v%v ", string(splitter), strings.Repeat(string(tab.HL()), xOffset), strings.Repeat(string(tab.HL()), t.margin))
 				if pos.X <= s.Width && childPosY <= s.Height {
 					vt100.MoveCursorToAndPrint(pos.X, childPosY, childRowContent)

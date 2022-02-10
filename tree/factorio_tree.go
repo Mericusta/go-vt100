@@ -1,7 +1,5 @@
 package tree
 
-import "go-vt100/tab"
-
 type FactorioMaterial struct {
 	v string
 }
@@ -57,7 +55,7 @@ func NewFactorioTree(margin int) Tree {
 	// rule 3: the element which its subnode satisfied rule2
 
 	// align tree
-	treeMaxDepth, treeMaxWidth, nodeDepthMap := nodeA0.align()
+	treeMaxDepth, treeMaxWidth, nodeDepthMap := align(nodeA0)
 
 	return Tree{
 		i:            nodeA0,
@@ -68,7 +66,20 @@ func NewFactorioTree(margin int) Tree {
 	}
 }
 
-func (t *FactorioTree) align() (int, int, map[treeInterface]int) {
+func NewFactorioTreeWithRootNode(rootNode treeInterface, margin int) Tree {
+	// align tree
+	treeMaxDepth, treeMaxWidth, nodeDepthMap := align(rootNode)
+
+	return Tree{
+		i:            rootNode,
+		margin:       margin,
+		maxDepth:     treeMaxDepth,
+		maxWidth:     treeMaxWidth,
+		nodeDepthMap: nodeDepthMap,
+	}
+}
+
+func align(t treeInterface) (int, int, map[treeInterface]int) {
 	treeMaxDepth := 0
 	nodeDepthMap := make(map[treeInterface]int)
 	nodeDepthMap[t] = 0
@@ -184,22 +195,3 @@ func (t *FactorioTree) align() (int, int, map[treeInterface]int) {
 // |└──────── D0     |
 // |          ├─── F0|
 // |          └─── G1|
-
-func (t *FactorioTree) calculateTreeInfo(parentDepth, nodeDepth, margin int) (int, int) {
-	xOffset, treeHeight := 0, 0
-	bft(t, func(ti treeInterface) bool {
-		treeHeight++
-		return true
-	})
-
-	// xOffset = (depth diff - 1) * (margin + splitter + space)
-	// margin = 1
-	// (2 - 0 - 1) * (1*1 + 1 + 1)
-	// margin = 2
-	// (2 - 0 - 1) * (2*1 + 1 + 1)
-	// margin = 3
-	// (2 - 0 - 1) * (3*1 + 1 + 1)
-	xOffset = (nodeDepth - parentDepth - 1) * (margin*tab.Width() + tab.Width() + tab.SpaceWidth())
-
-	return xOffset, treeHeight
-}

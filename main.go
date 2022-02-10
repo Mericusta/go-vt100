@@ -71,8 +71,11 @@ func main() {
 	c.Clear()
 
 	// canvas height is lower than
-	mt := tree.NewMarkdownTree("./resources/factorio.md", "Artillery wagon", 4, 1)
-	c.AddLayerObject(1, 1, mt)
+	mt := tree.NewMarkdownTree("./resources/factorio.md", "Artillery shell", 4, 1)
+	// c.AddLayerObject(1, 1, mt)
+	mtn := mt.RootNode()
+	ft = tree.NewFactorioTreeWithRootNode(mtn, 1)
+	c.AddLayerObject(1, 1, ft)
 	c.Draw()
 	<-terminal.ControlSignal
 	c.Clear()
