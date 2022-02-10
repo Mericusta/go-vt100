@@ -24,13 +24,13 @@ type Table struct {
 	bc color.Color
 }
 
-func (t Table) Draw(x, y int) {
+func (t Table) Draw(x, y int, s size.Size) {
 	t.s.Width = t.i.calculateTableWidth()
 	t.s.Height = t.i.calculateTableHeight()
 	vt100.SetForegroundColor(t.fc)
 	vt100.SetBackgroundColor(t.bc)
-	for _y := y; _y < y+t.s.Height; _y++ {
-		for _x := x; _x < x+t.s.Width; _x++ {
+	for _y := y; _y < y+t.s.Height && _y < s.Height; _y++ {
+		for _x := x; _x < x+t.s.Width && _x < s.Width; _x++ {
 			colRelativeIndex, rowRelativeIndex := _x-x, _y-y
 			cellX, cellWidthStartIndex, cellWidth := t.i.calculateCellWidthInfo(colRelativeIndex)
 			cellY, cellHeightStartIndex, cellHeight := t.i.calculateCellHeightInfo(rowRelativeIndex)

@@ -17,6 +17,7 @@ type valueInterface interface {
 type treeInterface interface {
 	Value() valueInterface
 	Children() []treeInterface
+	AppendChildren([]treeInterface)
 	Parent() treeInterface
 	calculateTreeInfo(int, int, int) (int, int)
 }
@@ -35,6 +36,10 @@ func (t *tree) Children() []treeInterface {
 	return t.children
 }
 
+func (t *tree) AppendChildren(children []treeInterface) {
+	t.children = append(t.children, children...)
+}
+
 func (t *tree) Parent() treeInterface {
 	return t.parent
 }
@@ -50,7 +55,7 @@ type Tree struct {
 	nodeDepthMap map[treeInterface]int
 }
 
-func (t Tree) Draw(x, y int) {
+func (t Tree) Draw(x, y int, s size.Size) {
 	vt100.SetForegroundColor(t.fc)
 	vt100.SetBackgroundColor(t.bc)
 
@@ -65,7 +70,9 @@ func (t Tree) Draw(x, y int) {
 			panic(fmt.Sprintf("node %v not has position", ti.Value().Show()))
 		}
 		// utility.DebugPrintf(terminal.Stdout().Height()-1, "pos.X = %v, pos.Y = %v", pos.X, pos.Y)
-		vt100.MoveCursorToAndPrint(pos.X, pos.Y, ti.Value().Show())
+		if pos.X <= s.Width && pos.Y <= s.Height {
+			vt100.MoveCursorToAndPrint(pos.X, pos.Y, ti.Value().Show())
+		}
 		nodeDepth, hasDepth := t.nodeDepthMap[ti]
 		if !hasDepth {
 			panic(fmt.Sprintf("node %v not has depth", ti.Value().Show()))
@@ -87,7 +94,9 @@ func (t Tree) Draw(x, y int) {
 					// print grandson VL except the last child
 					if childIndex != childrenCount-1 {
 						for offset := 0; offset <= childTreeHeight-1; offset++ {
-							vt100.MoveCursorToAndPrint(pos.X, childPosY+offset, string(tab.VL()))
+							if pos.X <= s.Width && childPosY+offset <= s.Height {
+								vt100.MoveCursorToAndPrint(pos.X, childPosY+offset, string(tab.VL()))
+							}
 						}
 					}
 				}
@@ -97,7 +106,9 @@ func (t Tree) Draw(x, y int) {
 				}
 				// utility.DebugPrintf(terminal.Stdout().Height()-1, "pos.X = %v, childPosY = %v, childRowContent = |%v|", pos.X, childPosY, xOffset)
 				childRowContent := fmt.Sprintf("%v%v%v ", string(splitter), strings.Repeat(string(tab.HL()), xOffset), strings.Repeat(string(tab.HL()), t.margin))
-				vt100.MoveCursorToAndPrint(pos.X, childPosY, childRowContent)
+				if pos.X <= s.Width && childPosY <= s.Height {
+					vt100.MoveCursorToAndPrint(pos.X, childPosY, childRowContent)
+				}
 				nodePosition[child] = coordinate.Coordinate{
 					// child position x = parent position X + splitter width + space width
 					X: pos.X + tab.Width() + xOffset + t.margin*tab.Width() + tab.SpaceWidth(),

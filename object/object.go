@@ -2,10 +2,11 @@ package object
 
 import (
 	"go-vt100/coordinate"
+	"go-vt100/size"
 )
 
 type Drawable interface {
-	Draw(int, int)
+	Draw(int, int, size.Size)
 }
 
 type Object struct {
@@ -21,6 +22,6 @@ func (o Object) X() int { return o.c.X }
 
 func (o Object) Y() int { return o.c.Y }
 
-func (o Object) Draw() {
-	o.d.Draw(o.c.X, o.c.Y)
+func (o Object) Draw(s size.Size) {
+	o.d.Draw(o.c.X, o.c.Y, s)
 }

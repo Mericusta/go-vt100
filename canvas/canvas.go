@@ -72,7 +72,7 @@ func (c Canvas) Draw() {
 	}
 
 	for _, object := range c.layerObjects {
-		object.Draw()
+		object.Draw(c.S)
 	}
 
 	vt100.MoveCursorToHome()
