@@ -148,14 +148,48 @@ func (t Tree) Draw(x, y int, s size.Size) {
 	vt100.ClearBackgroundColor()
 }
 
+//            A0
+//         /  |  \
+//       B0   C0  D0
+//      /    / |  | \
+//    E0   E1 G0  F0 G1
+//   / |   | \
+// H0 G2   H1 G3
+// --------------------
+// A0 -> B0 -> C0 -> D0 ->
+// E0 -> E1 -> G0 -> F0 ->
+// G1 -> H0 -> G2 -> H1 -> G3
 func bft(root treeInterface, f func(treeInterface) bool) {
 	nodeSlice := append(make([]treeInterface, 0), root)
 	for len(nodeSlice) != 0 {
-		nodeSlice = append(nodeSlice, nodeSlice[0].Children()...)
 		if !f(nodeSlice[0]) {
 			break
 		}
+		nodeSlice = append(nodeSlice, nodeSlice[0].Children()...)
 		nodeSlice = nodeSlice[1:]
+	}
+	fmt.Println()
+}
+
+//            A0
+//         /  |  \
+//       B0   C0  D0
+//      /    / |  | \
+//    E0   E1 G0  F0 G1
+//   / |   | \
+// H0 G2   H1 G3
+// --------------------
+// A0 -> B0 -> E0 -> H0 ->
+// G2 -> C0 -> E1 -> H1 ->
+// G3 -> G0 -> D0 -> F0 -> G1
+func dft(root treeInterface, f func(treeInterface) bool) {
+	nodeSlice := append(make([]treeInterface, 0), root)
+	for len(nodeSlice) != 0 {
+		if !f(nodeSlice[0]) {
+			break
+		}
+		newHeadSlice := append([]treeInterface{}, nodeSlice[0].Children()...)
+		nodeSlice = append(newHeadSlice, nodeSlice[1:]...)
 	}
 	fmt.Println()
 }

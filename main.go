@@ -70,7 +70,10 @@ func main() {
 	<-terminal.ControlSignal
 	c.Clear()
 
-	// canvas height is lower than
+	return
+
+	// canvas height might lower than tree height
+	// so you have to stretch window height if you want to see all content
 	mt := tree.NewMarkdownTree("./resources/factorio.md", "Artillery shell", 4, 1)
 	// c.AddLayerObject(1, 1, mt)
 	mtn := mt.RootNode()

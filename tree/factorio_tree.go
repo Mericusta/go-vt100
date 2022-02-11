@@ -1,5 +1,7 @@
 package tree
 
+import "go-vt100/utility"
+
 type FactorioMaterial struct {
 	v string
 }
@@ -41,21 +43,11 @@ func NewFactorioTree(margin int) Tree {
 	nodeE1.children = append(nodeE1.children, nodeH1, nodeG3)            // iron plate
 	nodeH1.parent, nodeG3.parent = nodeE1, nodeE1                        // iron plate
 
-	//            A0                      A0
-	//         /  |  \                 /  |  \
-	//       B0   C0  D0             B0   C0  \
-	//      /    / |  | \           /    / |   \
-	//    E0   E1 G0  F0 G1 ->    E0   E1  |    D0
-	//   / |   | \               / |  / |  |   / |
-	// H0 G2   H1 G3           H0 G2 H1 G3 G0 F0 G1
-	// ----------------------------
-	// align to the bottom rules:
-	// rule 1: same element
-	// rule 2: no-subnode element
-	// rule 3: the element which its subnode satisfied rule2
+	// right align tree
+	treeMaxDepth, treeMaxWidth, nodeDepthMap := rightAlign(nodeA0)
 
-	// align tree
-	treeMaxDepth, treeMaxWidth, nodeDepthMap := align(nodeA0)
+	// middle align tree
+	middleAlign(nodeA0)
 
 	return Tree{
 		i:            nodeA0,
@@ -67,8 +59,8 @@ func NewFactorioTree(margin int) Tree {
 }
 
 func NewFactorioTreeWithRootNode(rootNode treeInterface, margin int) Tree {
-	// align tree
-	treeMaxDepth, treeMaxWidth, nodeDepthMap := align(rootNode)
+	// right align tree
+	treeMaxDepth, treeMaxWidth, nodeDepthMap := rightAlign(rootNode)
 
 	return Tree{
 		i:            rootNode,
@@ -79,7 +71,36 @@ func NewFactorioTreeWithRootNode(rootNode treeInterface, margin int) Tree {
 	}
 }
 
-func align(t treeInterface) (int, int, map[treeInterface]int) {
+// leafAlign, also called 'Horizontal Right Alignment'
+// default horizontal alignment is 'Horizontal Left Alignment'
+// tree node view changes as follows:
+// |           A0       |    |           A0       |
+// |        /  |  \     |    |        /  |  \     |
+// |      B0   C0  D0   |    |      B0   C0  \    |
+// |     /    / |  | \  | -> |     /    / |   \   |
+// |   E0   E1 G0  F0 G1|    |   E0   E1  |    D0 |
+// |  / |   | \         |    |  / |  / |  |   / | |
+// |H0 G2   H1 G3       |    |H0 G2 H1 G3 G0 F0 G1|
+// ------------------------------------------------
+// render view changes as follows:
+// |A0         |    |A0         |
+// |├─ B0      |    |├─ B0      |
+// |│  └─ E0   |    |│  └─ E0   |
+// |│     ├─ H0|    |│     ├─ H0|
+// |│     └─ G2|    |│     └─ G2|
+// |├─ C0      |    |├─ C0      |
+// |│  ├─ E1   | -> |│  ├─ E1   |
+// |│  │  ├─ H1|    |│  │  ├─ H1|
+// |│  │  └─ G3|    |│  │  └─ G3|
+// |│  └─ G0   |    |│  └──── G0|
+// |└─ D0      |    |└──── D0   |
+// |   ├─ F0   |    |      ├─ F0|
+// |   └─ G1   |    |      └─ G1|
+// align to the bottom rules:
+// rule 1: same element
+// rule 2: no-subnode element
+// rule 3: the element which its subnode satisfied rule2
+func rightAlign(t treeInterface) (int, int, map[treeInterface]int) {
 	treeMaxDepth := 0
 	nodeDepthMap := make(map[treeInterface]int)
 	nodeDepthMap[t] = 0
@@ -138,6 +159,40 @@ func align(t treeInterface) (int, int, map[treeInterface]int) {
 	// })
 
 	return treeMaxDepth, treeMaxWidth, nodeDepthMap
+}
+
+// middleAlign, also called 'Vertical Center Alignment'
+// default vertical alignment is 'Vertical Top Alignment'
+// |A0         |    |                  ┌─ H0|
+// |├─ B0      |    |    ┌─ B0 ─── E0 ─┤    |
+// |│  └─ E0   |    |    │             └─ G2|
+// |│     ├─ H0|    |    │             ┌─ H1|
+// |│     └─ G2|    |    │      ┌─ E1 ─┤    |
+// |├─ C0      |    |A0 ─┼─ C0 ─┤      └─ G3|
+// |│  ├─ E1   | -> |    │      └─ G0       |
+// |│  │  ├─ H1|    |    │      ┌─ F0       |
+// |│  │  └─ G3|    |    └─ D0 ─┤           |
+// |│  └─ G0   |    |           └─ G1       |
+// |└─ D0      |    |                       |
+// |   ├─ F0   |    |                       |
+// |   └─ G1   |    |                       |
+func middleAlign(t treeInterface) {
+	treeWidthMap := make(map[treeInterface]int)
+	dft(t, func(ti treeInterface) bool {
+		if len(ti.Children()) == 0 {
+			treeWidthMap[ti] = 0
+			for parent := ti.Parent(); parent != nil; parent = parent.Parent() {
+				treeWidthMap[parent]++
+			}
+		}
+		return true
+	})
+
+	// for node := range treeWidthMap {
+	// 	if
+	// }
+
+	utility.DebugPrintf("treeMaxWidth = %v", treeWidthMap[t])
 }
 
 // |                  ┌─ H0|

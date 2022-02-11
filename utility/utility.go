@@ -8,10 +8,10 @@ import (
 	"os"
 )
 
-func DebugPrintf(y int, format string, content ...interface{}) {
+func DebugPrintf(format string, content ...interface{}) {
 	<-terminal.ControlSignal
 	formatContent := fmt.Sprintf(format, content...)
-	vt100.MoveCursorToAndPrint(2, y, formatContent)
+	vt100.MoveCursorToAndPrint(2, terminal.Stdout().Height()-1, formatContent)
 	<-terminal.ControlSignal
 	vt100.ClearLine()
 }
