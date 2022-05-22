@@ -1,8 +1,8 @@
 package point
 
 import (
-	"go-vt100/size"
-	"go-vt100/vt100"
+	"github.com/Mericusta/go-vt100/size"
+	"github.com/Mericusta/go-vt100/vt100"
 )
 
 type Point struct {

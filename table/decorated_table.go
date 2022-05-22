@@ -1,8 +1,8 @@
 package table
 
 import (
-	"go-vt100/color"
-	"go-vt100/tab"
+	"github.com/Mericusta/go-vt100/color"
+	"github.com/Mericusta/go-vt100/tab"
 )
 
 type DecoratedTable struct {

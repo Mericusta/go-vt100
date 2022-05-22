@@ -1,17 +1,17 @@
 package main
 
 import (
-	"go-vt100/canvas"
-	"go-vt100/color"
-	"go-vt100/shape/matrix"
-	"go-vt100/shape/point"
-	"go-vt100/table"
-	"go-vt100/terminal"
-	"go-vt100/tree"
-	"go-vt100/vt100"
+	"github.com/Mericusta/go-vt100/canvas"
+	"github.com/Mericusta/go-vt100/color"
+	"github.com/Mericusta/go-vt100/shape/matrix"
+	"github.com/Mericusta/go-vt100/shape/point"
+	"github.com/Mericusta/go-vt100/table"
+	"github.com/Mericusta/go-vt100/terminal"
+	"github.com/Mericusta/go-vt100/tree"
+	"github.com/Mericusta/go-vt100/vt100"
 )
 
-// "go-vt100/tree"
+// "github.com/Mericusta/go-vt100/tree"
 
 func main() {
 	canvasWidth := terminal.Stdout().Width() - 1
@@ -69,8 +69,6 @@ func main() {
 	c.Draw()
 	<-terminal.ControlSignal
 	c.Clear()
-
-	return
 
 	// canvas height might lower than tree height
 	// so you have to stretch window height if you want to see all content

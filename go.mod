@@ -1,5 +1,5 @@
-module go-vt100
+module github.com/Mericusta/go-vt100
 
-go 1.17
+go 1.18
 
-require golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
+require golang.org/x/sys v0.0.0-20220114195835-da31bd327af9

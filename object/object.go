@@ -1,8 +1,8 @@
 package object
 
 import (
-	"go-vt100/coordinate"
-	"go-vt100/size"
+	"github.com/Mericusta/go-vt100/coordinate"
+	"github.com/Mericusta/go-vt100/size"
 )
 
 type Drawable interface {

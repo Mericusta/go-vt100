@@ -3,9 +3,10 @@ package utility
 import (
 	"bufio"
 	"fmt"
-	"go-vt100/terminal"
-	"go-vt100/vt100"
 	"os"
+
+	"github.com/Mericusta/go-vt100/terminal"
+	"github.com/Mericusta/go-vt100/vt100"
 )
 
 func DebugPrintf(format string, content ...interface{}) {

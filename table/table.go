@@ -2,11 +2,12 @@ package table
 
 import (
 	"fmt"
-	"go-vt100/canvas"
-	"go-vt100/color"
-	"go-vt100/size"
-	"go-vt100/tab"
-	"go-vt100/vt100"
+
+	"github.com/Mericusta/go-vt100/canvas"
+	"github.com/Mericusta/go-vt100/color"
+	"github.com/Mericusta/go-vt100/size"
+	"github.com/Mericusta/go-vt100/tab"
+	"github.com/Mericusta/go-vt100/vt100"
 )
 
 type tableViewInterface interface {

@@ -2,9 +2,10 @@ package tree
 
 import (
 	"fmt"
-	"go-vt100/utility"
 	"regexp"
 	"strings"
+
+	"github.com/Mericusta/go-vt100/utility"
 )
 
 type MarkdownTopic struct {

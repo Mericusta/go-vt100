@@ -2,12 +2,13 @@ package tree
 
 import (
 	"fmt"
-	"go-vt100/color"
-	"go-vt100/coordinate"
-	"go-vt100/size"
-	"go-vt100/tab"
-	"go-vt100/vt100"
 	"strings"
+
+	"github.com/Mericusta/go-vt100/color"
+	"github.com/Mericusta/go-vt100/coordinate"
+	"github.com/Mericusta/go-vt100/size"
+	"github.com/Mericusta/go-vt100/tab"
+	"github.com/Mericusta/go-vt100/vt100"
 )
 
 type valueInterface interface {

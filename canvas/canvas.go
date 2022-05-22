@@ -1,11 +1,11 @@
 package canvas
 
 import (
-	"go-vt100/color"
-	"go-vt100/object"
-	"go-vt100/size"
-	"go-vt100/tab"
-	"go-vt100/vt100"
+	"github.com/Mericusta/go-vt100/color"
+	"github.com/Mericusta/go-vt100/object"
+	"github.com/Mericusta/go-vt100/size"
+	"github.com/Mericusta/go-vt100/tab"
+	"github.com/Mericusta/go-vt100/vt100"
 )
 
 type Canvas struct {

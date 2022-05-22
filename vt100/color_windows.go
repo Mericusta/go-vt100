@@ -2,7 +2,8 @@ package vt100
 
 import (
 	"fmt"
-	"go-vt100/color"
+
+	"github.com/Mericusta/go-vt100/color"
 )
 
 func SetForegroundColor(c color.Color) {
