@@ -1,6 +1,6 @@
-package tree
+package vt100
 
-import "github.com/Mericusta/go-vt100/utility"
+// import "github.com/Mericusta/go-vt100/utility"
 
 type FactorioMaterial struct {
 	v string
@@ -192,7 +192,7 @@ func middleAlign(t treeInterface) {
 	// 	if
 	// }
 
-	utility.DebugPrintf("treeMaxWidth = %v", treeWidthMap[t])
+	// utility.DebugPrintf("treeMaxWidth = %v", treeWidthMap[t])
 }
 
 // |                  ┌─ H0|

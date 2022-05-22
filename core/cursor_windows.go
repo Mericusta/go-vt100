@@ -1,4 +1,4 @@
-package vt100
+package core
 
 import (
 	"fmt"

@@ -1,9 +1,13 @@
-package vt100
+package core
 
 import "fmt"
 
 func ClearScreen() {
 	fmt.Printf("\033[2J")
+}
+
+func ClearLine() {
+	fmt.Printf("\033[2K")
 }
 
 func Reset() {

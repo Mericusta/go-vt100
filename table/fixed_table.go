@@ -1,8 +1,7 @@
-package table
+package vt100
 
 import (
-	"github.com/Mericusta/go-vt100/color"
-	"github.com/Mericusta/go-vt100/tab"
+	"github.com/Mericusta/go-vt100/core"
 )
 
 type FixedCellTable struct {
@@ -14,7 +13,7 @@ type FixedCellTable struct {
 	Content    []byte
 }
 
-func NewFixedCellTable(row, col int, content string, fc, bc color.Color) *FixedCellTable {
+func NewFixedCellTable(row, col int, content string, fc, bc core.Color) *FixedCellTable {
 	if len(content) == 0 {
 		content = "fixed cell table"
 	}
@@ -34,11 +33,11 @@ func NewFixedCellTable(row, col int, content string, fc, bc color.Color) *FixedC
 }
 
 func (t FixedCellTable) calculateTableWidth() int {
-	return t.CellWidth*t.col + tab.Width()*(t.col+1)
+	return t.CellWidth*t.col + core.Width()*(t.col+1)
 }
 
 func (t FixedCellTable) calculateTableHeight() int {
-	return t.CellHeight*t.row + tab.Width()*(t.row+1)
+	return t.CellHeight*t.row + core.Width()*(t.row+1)
 }
 
 func (t FixedCellTable) calculateCellWidthInfo(colRelativeIndex int) (int, int, int) {

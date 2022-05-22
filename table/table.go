@@ -1,13 +1,9 @@
-package table
+package vt100
 
 import (
 	"fmt"
 
-	"github.com/Mericusta/go-vt100/canvas"
-	"github.com/Mericusta/go-vt100/color"
-	"github.com/Mericusta/go-vt100/size"
-	"github.com/Mericusta/go-vt100/tab"
-	"github.com/Mericusta/go-vt100/vt100"
+	"github.com/Mericusta/go-vt100/core"
 )
 
 type tableViewInterface interface {
@@ -19,17 +15,17 @@ type tableViewInterface interface {
 }
 
 type Table struct {
-	s  size.Size
+	s  core.Size
 	i  tableViewInterface
-	fc color.Color
-	bc color.Color
+	fc core.Color
+	bc core.Color
 }
 
-func (t Table) Draw(x, y int, s size.Size) {
+func (t Table) Draw(x, y int, s core.Size) {
 	t.s.Width = t.i.calculateTableWidth()
 	t.s.Height = t.i.calculateTableHeight()
-	vt100.SetForegroundColor(t.fc)
-	vt100.SetBackgroundColor(t.bc)
+	core.SetForegroundColor(t.fc)
+	core.SetBackgroundColor(t.bc)
 	for _y := y; _y < y+t.s.Height && _y < s.Height; _y++ {
 		for _x := x; _x < x+t.s.Width && _x < s.Width; _x++ {
 			colRelativeIndex, rowRelativeIndex := _x-x, _y-y
@@ -40,57 +36,57 @@ func (t Table) Draw(x, y int, s size.Size) {
 				switch {
 				case rowRelativeIndex == 0:
 					// left top
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.TL()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.TL()))
 				case rowRelativeIndex == t.s.Height-1:
 					// left bottom
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.BL()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.BL()))
 				case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 					// left T
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.LT()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.LT()))
 				default:
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.VL()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.VL()))
 				}
 			case colRelativeIndex == t.s.Width-1:
 				switch {
 				case rowRelativeIndex == 0:
 					// right top
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.TR()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.TR()))
 				case rowRelativeIndex == t.s.Height-1:
 					// right bottom
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.BR()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.BR()))
 				case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 					// right T
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.RT()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.RT()))
 				default:
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.VL()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.VL()))
 				}
 			case colRelativeIndex == cellWidthStartIndex+cellWidth:
 				switch {
 				case rowRelativeIndex == 0:
 					// top T
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.TT()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.TT()))
 				case rowRelativeIndex == t.s.Height-1:
 					// bottom T
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.BT()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.BT()))
 				case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 					// center T
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.CT()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.CT()))
 				default:
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.VL()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.VL()))
 				}
 			default:
 				switch {
 				case rowRelativeIndex == 0 || rowRelativeIndex == t.s.Height-1 || rowRelativeIndex == cellHeightStartIndex+cellHeight:
-					vt100.MoveCursorToAndPrint(_x, _y, string(tab.HL()))
+					core.MoveCursorToAndPrint(_x, _y, string(core.HL()))
 				default:
-					vt100.MoveCursorToAndPrint(_x, _y, string(t.i.calculateCellContentRune(cellX, cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)))
-					// vt100.MoveCursorToAndPrint(_x, _y, " ")
+					core.MoveCursorToAndPrint(_x, _y, string(t.i.calculateCellContentRune(cellX, cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)))
+					// core.MoveCursorToAndPrint(_x, _y, " ")
 				}
 			}
 		}
 	}
-	vt100.ClearForegroundColor()
-	vt100.ClearBackgroundColor()
+	core.ClearForegroundColor()
+	core.ClearBackgroundColor()
 }
 
 func Draw(t tableViewInterface) {
@@ -99,7 +95,7 @@ func Draw(t tableViewInterface) {
 	totalPoints := tableWidth * tableHeight
 	tableRuneSlice := make([]rune, totalPoints)
 	for index := 0; index != totalPoints; index++ {
-		colRelativeIndex, rowRelativeIndex := canvas.TransformArrayIndexToMatrixCoordinates(index, tableWidth, tableHeight)
+		colRelativeIndex, rowRelativeIndex := core.TransformArrayIndexToMatrixCoordinates(index, tableWidth, tableHeight)
 		cellX, cellWidthStartIndex, cellWidth := t.calculateCellWidthInfo(colRelativeIndex)
 		cellY, cellHeightStartIndex, cellHeight := t.calculateCellHeightInfo(rowRelativeIndex)
 		switch {
@@ -107,51 +103,51 @@ func Draw(t tableViewInterface) {
 			switch {
 			case rowRelativeIndex == 0:
 				// left top
-				tableRuneSlice[index] = tab.TL()
+				tableRuneSlice[index] = core.TL()
 			case rowRelativeIndex == tableHeight-1:
 				// left bottom
-				tableRuneSlice[index] = tab.BL()
+				tableRuneSlice[index] = core.BL()
 			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 				// left T
-				tableRuneSlice[index] = tab.LT()
+				tableRuneSlice[index] = core.LT()
 			default:
-				tableRuneSlice[index] = tab.VL()
+				tableRuneSlice[index] = core.VL()
 			}
 		case colRelativeIndex == tableWidth-2:
 			switch {
 			case rowRelativeIndex == 0:
 				// right top
-				tableRuneSlice[index] = tab.TR()
+				tableRuneSlice[index] = core.TR()
 			case rowRelativeIndex == tableHeight-1:
 				// right bottom
-				tableRuneSlice[index] = tab.BR()
+				tableRuneSlice[index] = core.BR()
 			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 				// right T
-				tableRuneSlice[index] = tab.RT()
+				tableRuneSlice[index] = core.RT()
 			default:
-				tableRuneSlice[index] = tab.VL()
+				tableRuneSlice[index] = core.VL()
 			}
 			index++
-			tableRuneSlice[index] = tab.EndLine()
+			tableRuneSlice[index] = core.EndLine()
 			// fmt.Printf("\n%v", string(tableRuneSlice))
 		case colRelativeIndex == cellWidthStartIndex+cellWidth:
 			switch {
 			case rowRelativeIndex == 0:
 				// top T
-				tableRuneSlice[index] = tab.TT()
+				tableRuneSlice[index] = core.TT()
 			case rowRelativeIndex == tableHeight-1:
 				// bottom T
-				tableRuneSlice[index] = tab.BT()
+				tableRuneSlice[index] = core.BT()
 			case rowRelativeIndex == (cellHeightStartIndex + cellHeight):
 				// center T
-				tableRuneSlice[index] = tab.CT()
+				tableRuneSlice[index] = core.CT()
 			default:
-				tableRuneSlice[index] = tab.VL()
+				tableRuneSlice[index] = core.VL()
 			}
 		default:
 			switch {
 			case rowRelativeIndex == 0 || rowRelativeIndex == tableHeight-1 || rowRelativeIndex == cellHeightStartIndex+cellHeight:
-				tableRuneSlice[index] = tab.HL()
+				tableRuneSlice[index] = core.HL()
 			default:
 				tableRuneSlice[index] = t.calculateCellContentRune(cellX, cellY, colRelativeIndex-cellWidthStartIndex, rowRelativeIndex-cellHeightStartIndex)
 			}

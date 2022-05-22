@@ -1,8 +1,7 @@
-package table
+package vt100
 
 import (
-	"github.com/Mericusta/go-vt100/color"
-	"github.com/Mericusta/go-vt100/tab"
+	"github.com/Mericusta/go-vt100/core"
 )
 
 type AdaptiveCellTable struct {
@@ -14,7 +13,7 @@ type AdaptiveCellTable struct {
 	contentMap      [][]string
 }
 
-func NewAdaptiveCellTable(headSlice []string, lineContentSlice [][]string, fc, bc color.Color) *AdaptiveCellTable {
+func NewAdaptiveCellTable(headSlice []string, lineContentSlice [][]string, fc, bc core.Color) *AdaptiveCellTable {
 	t := &AdaptiveCellTable{
 		Table: Table{
 			fc: fc,
@@ -52,11 +51,11 @@ func (t AdaptiveCellTable) calculateTableWidth() int {
 	for _, columnWidth := range t.colMaxWidthMap {
 		tableWidth += columnWidth
 	}
-	return tableWidth + tab.Width()*(t.col+1)
+	return tableWidth + core.Width()*(t.col+1)
 }
 
 func (t AdaptiveCellTable) calculateTableHeight() int {
-	return 1*t.row + tab.Width()*(t.row+1)
+	return 1*t.row + core.Width()*(t.row+1)
 }
 
 func (t AdaptiveCellTable) calculateCellWidthInfo(colRelativeIndex int) (int, int, int) {
@@ -86,5 +85,5 @@ func (t AdaptiveCellTable) calculateCellContentRune(cellX, cellY, contentColInde
 	if contentColIndex < len(content) {
 		return rune(content[contentColIndex])
 	}
-	return tab.Space()
+	return core.Space()
 }

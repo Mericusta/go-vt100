@@ -1,4 +1,4 @@
-package color
+package core
 
 type Color int
 

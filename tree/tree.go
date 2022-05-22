@@ -1,14 +1,10 @@
-package tree
+package vt100
 
 import (
 	"fmt"
 	"strings"
 
-	"github.com/Mericusta/go-vt100/color"
-	"github.com/Mericusta/go-vt100/coordinate"
-	"github.com/Mericusta/go-vt100/size"
-	"github.com/Mericusta/go-vt100/tab"
-	"github.com/Mericusta/go-vt100/vt100"
+	"github.com/Mericusta/go-vt100/core"
 )
 
 type valueInterface interface {
@@ -59,16 +55,16 @@ func (t *tree) calculateTreeInfo(parentDepth, nodeDepth, margin int) (int, int) 
 	// (2 - 0 - 1) * (2*1 + 1 + 1)
 	// margin = 3
 	// (2 - 0 - 1) * (3*1 + 1 + 1)
-	xOffset = (nodeDepth - parentDepth - 1) * (margin*tab.Width() + tab.Width() + tab.SpaceWidth())
+	xOffset = (nodeDepth - parentDepth - 1) * (margin*core.Width() + core.Width() + core.SpaceWidth())
 
 	return xOffset, treeHeight
 }
 
 type Tree struct {
-	s            size.Size
+	s            core.Size
 	i            treeInterface
-	fc           color.Color
-	bc           color.Color
+	fc           core.Color
+	bc           core.Color
 	margin       int
 	maxDepth     int
 	maxWidth     int
@@ -79,12 +75,12 @@ func (t Tree) RootNode() treeInterface {
 	return t.i
 }
 
-func (t Tree) Draw(x, y int, s size.Size) {
-	vt100.SetForegroundColor(t.fc)
-	vt100.SetBackgroundColor(t.bc)
+func (t Tree) Draw(x, y int, s core.Size) {
+	core.SetForegroundColor(t.fc)
+	core.SetBackgroundColor(t.bc)
 
-	nodePosition := make(map[treeInterface]coordinate.Coordinate)
-	nodePosition[t.i] = coordinate.Coordinate{
+	nodePosition := make(map[treeInterface]core.Coordinate)
+	nodePosition[t.i] = core.Coordinate{
 		X: x,
 		Y: y,
 	}
@@ -95,7 +91,7 @@ func (t Tree) Draw(x, y int, s size.Size) {
 		}
 		// utility.DebugPrintf(terminal.Stdout().Height()-1, "pos.X = %v, pos.Y = %v", pos.X, pos.Y)
 		if pos.X <= s.Width && pos.Y <= s.Height {
-			vt100.MoveCursorToAndPrint(pos.X, pos.Y, ti.Value().Show())
+			core.MoveCursorToAndPrint(pos.X, pos.Y, ti.Value().Show())
 		}
 		nodeDepth, hasDepth := t.nodeDepthMap[ti]
 		if !hasDepth {
@@ -119,23 +115,23 @@ func (t Tree) Draw(x, y int, s size.Size) {
 					if childIndex != childrenCount-1 {
 						for offset := 0; offset <= childTreeHeight-1; offset++ {
 							if pos.X <= s.Width && childPosY+offset <= s.Height {
-								vt100.MoveCursorToAndPrint(pos.X, childPosY+offset, string(tab.VL()))
+								core.MoveCursorToAndPrint(pos.X, childPosY+offset, string(core.VL()))
 							}
 						}
 					}
 				}
-				splitter := tab.LT()
+				splitter := core.LT()
 				if childIndex == childrenCount-1 {
-					splitter = tab.BL()
+					splitter = core.BL()
 				}
 				// utility.DebugPrintf(terminal.Stdout().Height()-1, "pos.X = %v, childPosY = %v, xOffset = %v", pos.X, childPosY, xOffset)
-				childRowContent := fmt.Sprintf("%v%v%v ", string(splitter), strings.Repeat(string(tab.HL()), xOffset), strings.Repeat(string(tab.HL()), t.margin))
+				childRowContent := fmt.Sprintf("%v%v%v ", string(splitter), strings.Repeat(string(core.HL()), xOffset), strings.Repeat(string(core.HL()), t.margin))
 				if pos.X <= s.Width && childPosY <= s.Height {
-					vt100.MoveCursorToAndPrint(pos.X, childPosY, childRowContent)
+					core.MoveCursorToAndPrint(pos.X, childPosY, childRowContent)
 				}
-				nodePosition[child] = coordinate.Coordinate{
+				nodePosition[child] = core.Coordinate{
 					// child position x = parent position X + splitter width + space width
-					X: pos.X + tab.Width() + xOffset + t.margin*tab.Width() + tab.SpaceWidth(),
+					X: pos.X + core.Width() + xOffset + t.margin*core.Width() + core.SpaceWidth(),
 					Y: childPosY,
 				}
 				// utility.DebugPrintf(terminal.Stdout().Height()-1, "child %v position %v, %v", child.Value().Show(), nodePosition[child].X, nodePosition[child].Y)
@@ -145,8 +141,8 @@ func (t Tree) Draw(x, y int, s size.Size) {
 		return true
 	})
 
-	vt100.ClearForegroundColor()
-	vt100.ClearBackgroundColor()
+	core.ClearForegroundColor()
+	core.ClearBackgroundColor()
 }
 
 //            A0

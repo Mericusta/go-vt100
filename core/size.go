@@ -1,4 +1,4 @@
-package size
+package core
 
 type Size struct {
 	Width  int

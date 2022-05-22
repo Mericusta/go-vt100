@@ -1,4 +1,4 @@
-package terminal
+package core
 
 import (
 	"golang.org/x/sys/windows"

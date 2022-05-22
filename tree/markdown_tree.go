@@ -1,11 +1,11 @@
-package tree
+package vt100
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"regexp"
 	"strings"
-
-	"github.com/Mericusta/go-vt100/utility"
 )
 
 type MarkdownTopic struct {
@@ -21,7 +21,7 @@ type MarkdownTree struct {
 	depth int
 }
 
-func NewMarkdownTree(filename, rootTopic string, markdownDepthSpaceWidth, margin int) Tree {
+func NewMarkdownTree(f io.Reader, rootTopic string, markdownDepthSpaceWidth, margin int) Tree {
 	rootTopicRegexp := regexp.MustCompile(fmt.Sprintf(`^\s*-\s+%v\s*$`, rootTopic))
 	topicRegexp := regexp.MustCompile(`^(?P<DEPTH>\s+)-\s+(?P<TOPIC>.*)$`)
 	depthIndex := topicRegexp.SubexpIndex("DEPTH")
@@ -36,9 +36,11 @@ func NewMarkdownTree(filename, rootTopic string, markdownDepthSpaceWidth, margin
 	var currentLineParentNode treeInterface
 	nodeDepthMap := make(map[treeInterface]int)
 
-	utility.ReadFileLineOneByOne(filename, func(s string) bool {
+	scanner := bufio.NewScanner(f)
+
+	for scanner.Scan() {
 		switch {
-		case rootTopicRegexp.MatchString(s):
+		case rootTopicRegexp.MatchString(scanner.Text()):
 			inTopicScope = true
 			rootNode = &MarkdownTree{
 				tree:  tree{v: &MarkdownTopic{v: rootTopic}},
@@ -46,18 +48,17 @@ func NewMarkdownTree(filename, rootTopic string, markdownDepthSpaceWidth, margin
 			}
 			nodeDepthMap[rootNode] = 0
 			currentLineParentNode = rootNode
-			return true
 		case inTopicScope:
-			if !topicRegexp.MatchString(s) {
-				return false
+			if !topicRegexp.MatchString(scanner.Text()) {
+				break
 			}
-			stringSubmatchSlice := topicRegexp.FindStringSubmatch(s)
+			stringSubmatchSlice := topicRegexp.FindStringSubmatch(scanner.Text())
 			if depthIndex >= len(stringSubmatchSlice) {
-				panic(fmt.Sprintf("not find sub match DEPTH at |%v|", s))
+				panic(fmt.Sprintf("not find sub match DEPTH at |%v|", scanner.Text()))
 			}
 			depth := len(stringSubmatchSlice[depthIndex]) / markdownDepthSpaceWidth
 			if topicIndex >= len(stringSubmatchSlice) {
-				panic(fmt.Sprintf("not find sub match TOPIC at |%v|", s))
+				panic(fmt.Sprintf("not find sub match TOPIC at |%v|", scanner.Text()))
 			}
 
 			switch {
@@ -83,11 +84,12 @@ func NewMarkdownTree(filename, rootTopic string, markdownDepthSpaceWidth, margin
 			}
 			nodeDepthMap[currentLineNode] = depth
 			currentLineParentNode.AppendChildren([]treeInterface{currentLineNode})
-			return true
-		default:
-			return true
 		}
-	})
+	}
+
+	if scanner.Err() != nil {
+		panic(scanner.Err().Error())
+	}
 
 	return Tree{
 		i:      rootNode,
