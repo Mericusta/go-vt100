@@ -21,7 +21,7 @@ type MarkdownTree struct {
 	depth int
 }
 
-func NewMarkdownTree(f io.Reader, rootTopic string, markdownDepthSpaceWidth, margin int) Tree {
+func NewMarkdownTree(r io.Reader, rootTopic string, markdownDepthSpaceWidth, margin int) Tree {
 	rootTopicRegexp := regexp.MustCompile(fmt.Sprintf(`^\s*-\s+%v\s*$`, rootTopic))
 	topicRegexp := regexp.MustCompile(`^(?P<DEPTH>\s+)-\s+(?P<TOPIC>.*)$`)
 	depthIndex := topicRegexp.SubexpIndex("DEPTH")
@@ -36,8 +36,7 @@ func NewMarkdownTree(f io.Reader, rootTopic string, markdownDepthSpaceWidth, mar
 	var currentLineParentNode treeInterface
 	nodeDepthMap := make(map[treeInterface]int)
 
-	scanner := bufio.NewScanner(f)
-
+	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		switch {
 		case rootTopicRegexp.MatchString(scanner.Text()):
@@ -50,7 +49,7 @@ func NewMarkdownTree(f io.Reader, rootTopic string, markdownDepthSpaceWidth, mar
 			currentLineParentNode = rootNode
 		case inTopicScope:
 			if !topicRegexp.MatchString(scanner.Text()) {
-				break
+				goto SCANEND
 			}
 			stringSubmatchSlice := topicRegexp.FindStringSubmatch(scanner.Text())
 			if depthIndex >= len(stringSubmatchSlice) {
@@ -91,6 +90,7 @@ func NewMarkdownTree(f io.Reader, rootTopic string, markdownDepthSpaceWidth, mar
 		panic(scanner.Err().Error())
 	}
 
+SCANEND:
 	return Tree{
 		i:      rootNode,
 		margin: margin,
