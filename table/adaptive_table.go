@@ -1,4 +1,4 @@
-package vt100
+package table
 
 import (
 	"github.com/Mericusta/go-vt100/core"

@@ -1,4 +1,4 @@
-package vt100
+package table
 
 import (
 	"fmt"

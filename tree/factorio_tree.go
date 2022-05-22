@@ -1,6 +1,4 @@
-package vt100
-
-// import "github.com/Mericusta/go-vt100/utility"
+package tree
 
 type FactorioMaterial struct {
 	v string

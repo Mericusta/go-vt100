@@ -1,4 +1,4 @@
-package vt100
+package shape
 
 import (
 	"github.com/Mericusta/go-vt100/core"
