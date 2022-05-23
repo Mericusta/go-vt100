@@ -2,8 +2,6 @@ package core
 
 type Drawable interface {
 	Draw(uint, uint, Size)
-	Width() uint
-	Height() uint
 }
 
 type Object struct {

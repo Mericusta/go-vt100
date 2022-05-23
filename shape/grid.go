@@ -2,27 +2,26 @@ package shape
 
 import "github.com/Mericusta/go-vt100/core"
 
-type Grid struct {
-	// logic data
-	col     uint
-	row     uint
-	content map[uint]map[uint][]byte // y : x : content
-	// graphic data
+// Grids is a collection of distanced lines
+// The area enclosed by the lines is called the Grid
+// Grid area can hold another shape instead of Grids
+type Grids struct {
+	col             uint
+	row             uint
+	line            Line
+	contents        map[uint]map[uint]Shape // y : x : content
 	size            core.Size
 	maxContentWidth uint
 }
 
-func NewGrid(content map[uint]map[uint][]byte) *Grid {
-	if len(content) == 0 {
-		return nil
-	}
-	g := &Grid{
+func NewGrid(content map[uint]map[uint]Shape) Grids {
+	g := Grids{
 		col:             1,
 		row:             1,
-		content:         content,
+		contents:        content,
 		maxContentWidth: 1,
 	}
-	for y, xMap := range g.content {
+	for y, xMap := range g.contents {
 		if g.row < y {
 			g.row = y
 		}
@@ -30,8 +29,8 @@ func NewGrid(content map[uint]map[uint][]byte) *Grid {
 			if g.col < x {
 				g.col = x
 			}
-			if g.maxContentWidth < uint(len(c)) {
-				g.maxContentWidth = uint(len(c))
+			if g.maxContentWidth < c.Width() {
+				g.maxContentWidth = c.Width()
 			}
 		}
 	}
@@ -40,6 +39,14 @@ func NewGrid(content map[uint]map[uint][]byte) *Grid {
 	return g
 }
 
-func (g Grid) Draw(x, y int) {
+func (g Grids) Draw(x, y int) {
 
+}
+
+func (g Grids) Width() uint {
+	return 0
+}
+
+func (g Grids) Height() uint {
+	return 0
 }

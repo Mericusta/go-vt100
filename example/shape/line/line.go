@@ -29,7 +29,7 @@ func main() {
 	})
 	// rune in ASCII
 	p = shape.NewLine(
-		shape.NewPoint('*'),
+		shape.NewPoint(core.CT()),
 		5, core.Horizontal,
 	)
 	p.Draw(3, 7, core.Size{
@@ -37,7 +37,7 @@ func main() {
 		Height: terminal.Stdout().Height(),
 	})
 	p = shape.NewLine(
-		shape.NewPoint('*'),
+		shape.NewPoint(core.CT()),
 		5, core.Vertical,
 	)
 	p.Draw(3, 7, core.Size{

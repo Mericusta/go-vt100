@@ -27,7 +27,7 @@ func main() {
 		Width:  terminal.Stdout().Width(),
 		Height: terminal.Stdout().Height(),
 	})
-	// // rune in ASCII
+	// rune in ASCII
 	r = shape.NewRectangle(shape.NewLine(
 		shape.NewPoint('*'),
 		5, core.Horizontal,

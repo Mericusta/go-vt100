@@ -15,5 +15,10 @@ func main() {
 		Width:  terminal.Stdout().Width(),
 		Height: terminal.Stdout().Height(),
 	})
+	p = shape.NewPoint(core.CT())
+	p.Draw(1, 2, core.Size{
+		Width:  terminal.Stdout().Width(),
+		Height: terminal.Stdout().Height(),
+	})
 	<-terminal.ControlSignal
 }
