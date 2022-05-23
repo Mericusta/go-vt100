@@ -33,11 +33,11 @@ func NewFixedCellTable(row, col int, content string, fc, bc core.Color) *FixedCe
 }
 
 func (t FixedCellTable) calculateTableWidth() int {
-	return t.CellWidth*t.col + core.Width()*(t.col+1)
+	return t.CellWidth*t.col + core.TabWidth()*(t.col+1)
 }
 
 func (t FixedCellTable) calculateTableHeight() int {
-	return t.CellHeight*t.row + core.Width()*(t.row+1)
+	return t.CellHeight*t.row + core.TabWidth()*(t.row+1)
 }
 
 func (t FixedCellTable) calculateCellWidthInfo(colRelativeIndex int) (int, int, int) {

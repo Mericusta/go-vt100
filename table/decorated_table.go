@@ -26,7 +26,7 @@ func NewDecoratedTable(headSlice []string, lineContentSlice [][]string, decorati
 }
 
 func (t DecoratedTable) calculateTableHeight() int {
-	return (1+t.CellHeightPadding*2)*t.row + core.Width()*(t.row+1)
+	return (1+t.CellHeightPadding*2)*t.row + core.TabWidth()*(t.row+1)
 }
 
 func (t DecoratedTable) calculateCellHeightInfo(rowRelativeIndex int) (int, int, int) {

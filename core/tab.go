@@ -49,6 +49,6 @@ func EndLine() rune { return '\n' }
 
 func EndLineWidth() int { return 1 }
 
-func Width() int { return 1 }
+func TabWidth() int { return 1 }
 
-func Height() int { return 1 }
+func TabHeight() int { return 1 }

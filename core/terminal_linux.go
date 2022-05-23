@@ -11,7 +11,7 @@ type unixTerminal unix.Winsize
 func init() {
 	unixWinSize, err := unix.IoctlGetWinsize(syscall.Stdout, unix.TIOCGWINSZ)
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
 	terminal = unixTerminal(*unixWinSize)
 }

@@ -55,7 +55,7 @@ func (t *tree) calculateTreeInfo(parentDepth, nodeDepth, margin int) (int, int) 
 	// (2 - 0 - 1) * (2*1 + 1 + 1)
 	// margin = 3
 	// (2 - 0 - 1) * (3*1 + 1 + 1)
-	xOffset = (nodeDepth - parentDepth - 1) * (margin*core.Width() + core.Width() + core.SpaceWidth())
+	xOffset = (nodeDepth - parentDepth - 1) * (margin*core.TabWidth() + core.TabWidth() + core.SpaceWidth())
 
 	return xOffset, treeHeight
 }
@@ -131,7 +131,7 @@ func (t Tree) Draw(x, y int, s core.Size) {
 				}
 				nodePosition[child] = core.Coordinate{
 					// child position x = parent position X + splitter width + space width
-					X: pos.X + core.Width() + xOffset + t.margin*core.Width() + core.SpaceWidth(),
+					X: pos.X + core.TabWidth() + xOffset + t.margin*core.TabWidth() + core.SpaceWidth(),
 					Y: childPosY,
 				}
 				// utility.DebugPrintf(terminal.Stdout().Height()-1, "child %v position %v, %v", child.Value().Show(), nodePosition[child].X, nodePosition[child].Y)

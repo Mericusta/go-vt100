@@ -51,11 +51,11 @@ func (t AdaptiveCellTable) calculateTableWidth() int {
 	for _, columnWidth := range t.colMaxWidthMap {
 		tableWidth += columnWidth
 	}
-	return tableWidth + core.Width()*(t.col+1)
+	return tableWidth + core.TabWidth()*(t.col+1)
 }
 
 func (t AdaptiveCellTable) calculateTableHeight() int {
-	return 1*t.row + core.Width()*(t.row+1)
+	return 1*t.row + core.TabWidth()*(t.row+1)
 }
 
 func (t AdaptiveCellTable) calculateCellWidthInfo(colRelativeIndex int) (int, int, int) {
