@@ -1,4 +1,4 @@
-//go:build !debug
+//go:build !unittest
 
 package terminal
 
@@ -34,10 +34,10 @@ func init() {
 	terminal = windowsTerminal(csbInfo)
 }
 
-func (t windowsTerminal) Width() int {
-	return int(t.Size.X)
+func (t windowsTerminal) Width() uint {
+	return uint(t.Size.X)
 }
 
-func (t windowsTerminal) Height() int {
-	return int(t.Size.Y)
+func (t windowsTerminal) Height() uint {
+	return uint(t.Size.Y)
 }

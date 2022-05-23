@@ -8,7 +8,7 @@ type Canvas struct {
 	layerObjects    []Object
 }
 
-func NewCanvas(width, height int) Canvas {
+func NewCanvas(width, height uint) Canvas {
 	return Canvas{
 		S: Size{
 			Width:  width,
@@ -17,7 +17,7 @@ func NewCanvas(width, height int) Canvas {
 	}
 }
 
-func NewCanvasWithBoundary(width, height int) Canvas {
+func NewCanvasWithBoundary(width, height uint) Canvas {
 	c := NewCanvas(width+2, height+2)
 	c.withBoundary = true
 	return c
@@ -87,8 +87,8 @@ func (c *Canvas) Clear() {
 
 func (c Canvas) drawBackground() {
 	SetBackgroundColor(c.backgroundColor)
-	for y := 1; y <= c.S.Height; y++ {
-		for x := 1; x <= c.S.Width; x++ {
+	for y := uint(1); y <= c.S.Height; y++ {
+		for x := uint(1); x <= c.S.Width; x++ {
 			MoveCursorToAndPrint(x, y, string(Space()))
 		}
 	}
@@ -96,15 +96,15 @@ func (c Canvas) drawBackground() {
 }
 
 func (c Canvas) drawBoundary() {
-	topLineY := 0
+	topLineY := uint(0)
 	bottomLineY := c.S.Height - 1
-	leftLineX := 0
+	leftLineX := uint(0)
 	rightLineX := c.S.Width - 1
-	for x := 1; x < rightLineX; x++ {
+	for x := uint(1); x < rightLineX; x++ {
 		MoveCursorToAndPrint(x, topLineY, string(HL()))
 		MoveCursorToAndPrint(x, bottomLineY, string(HL()))
 	}
-	for y := 1; y < bottomLineY; y++ {
+	for y := uint(1); y < bottomLineY; y++ {
 		MoveCursorToAndPrint(leftLineX, y, string(VL()))
 		MoveCursorToAndPrint(rightLineX, y, string(VL()))
 	}

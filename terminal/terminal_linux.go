@@ -1,4 +1,4 @@
-//go:build !debug
+//go:build !unittest
 
 package terminal
 
@@ -18,10 +18,10 @@ func init() {
 	terminal = unixTerminal(*unixWinSize)
 }
 
-func (t unixTerminal) Width() int {
+func (t unixTerminal) Width() uint {
 	return int(t.Col)
 }
 
-func (t unixTerminal) Height() int {
+func (t unixTerminal) Height() uint {
 	return int(t.Row)
 }

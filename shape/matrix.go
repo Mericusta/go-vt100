@@ -9,11 +9,11 @@ type Matrix struct {
 	c core.Color
 }
 
-func NewMatrix(w, h int, c core.Color) Matrix {
+func NewMatrix(w, h uint, c core.Color) Matrix {
 	return Matrix{core.Size{Width: w, Height: h}, c}
 }
 
-func (m Matrix) Draw(x, y int, s core.Size) {
+func (m Matrix) Draw(x, y uint, s core.Size) {
 	core.SetBackgroundColor(m.c)
 	for _y := y; _y < y+m.s.Height && _y < s.Height; _y++ {
 		for _x := x; _x < x+m.s.Width && _x < s.Width; _x++ {

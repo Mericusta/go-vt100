@@ -1,4 +1,4 @@
-//go:build debug
+//go:build unittest
 
 package terminal
 
@@ -8,10 +8,10 @@ func init() {
 	terminal = debugTerminal{}
 }
 
-func (t debugTerminal) Width() int {
+func (t debugTerminal) Width() uint {
 	return 128
 }
 
-func (t debugTerminal) Height() int {
+func (t debugTerminal) Height() uint {
 	return 64
 }

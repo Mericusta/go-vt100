@@ -1,8 +1,9 @@
 package core
 
 // Coordinate right-handed coordinate system
-// Coordinate {0,0} is the origin
+// {0,0} is the origin
+// X, Y can not be negative number
 type Coordinate struct {
-	X int
-	Y int
+	X uint
+	Y uint
 }

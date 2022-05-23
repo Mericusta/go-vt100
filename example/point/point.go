@@ -2,16 +2,18 @@ package main
 
 import (
 	"github.com/Mericusta/go-vt100/core"
-	"github.com/Mericusta/go-vt100/core/terminal"
 	"github.com/Mericusta/go-vt100/shape"
+	"github.com/Mericusta/go-vt100/terminal"
 )
 
 func main() {
-	c := core.NewCanvasWithBoundary(terminal.Stdout().Width(), terminal.Stdout().Height())
-	defer c.Destruct()
-
-	c.AddLayerObject(core.Coordinate{X: 0, Y: 0}, shape.NewPoint('❤'))
-
-	c.Draw()
+	defer terminal.Destruct()
+	core.ClearScreen()
+	core.CursorInvisible()
+	p := shape.NewPoint('❤')
+	p.Draw(1, 1, core.Size{
+		Width:  terminal.Stdout().Width(),
+		Height: terminal.Stdout().Height(),
+	})
 	<-terminal.ControlSignal
 }

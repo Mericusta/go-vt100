@@ -4,15 +4,15 @@ import "github.com/Mericusta/go-vt100/core"
 
 type Grid struct {
 	// logic data
-	col     int
-	row     int
-	content map[int]map[int][]byte // y : x : content
+	col     uint
+	row     uint
+	content map[uint]map[uint][]byte // y : x : content
 	// graphic data
 	size            core.Size
-	maxContentWidth int
+	maxContentWidth uint
 }
 
-func NewGrid(content map[int]map[int][]byte) *Grid {
+func NewGrid(content map[uint]map[uint][]byte) *Grid {
 	if len(content) == 0 {
 		return nil
 	}
@@ -30,8 +30,8 @@ func NewGrid(content map[int]map[int][]byte) *Grid {
 			if g.col < x {
 				g.col = x
 			}
-			if g.maxContentWidth < len(c) {
-				g.maxContentWidth = len(c)
+			if g.maxContentWidth < uint(len(c)) {
+				g.maxContentWidth = uint(len(c))
 			}
 		}
 	}
