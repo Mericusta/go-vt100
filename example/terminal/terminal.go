@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/Mericusta/go-vt100/core"
-	"github.com/Mericusta/go-vt100/core/terminal"
+	"github.com/Mericusta/go-vt100/terminal"
 )
 
 func main() {
