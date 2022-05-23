@@ -1,9 +1,8 @@
 package shape
 
 import (
-	"math"
-
 	"github.com/Mericusta/go-vt100/core"
+	"golang.org/x/text/width"
 )
 
 // Point is the unit shape, that is just one ANSI code
@@ -25,10 +24,15 @@ func (p Point) Draw(x, y uint, s core.Size) {
 }
 
 func (p Point) Width() uint {
-	if p.r > math.MaxInt8 {
+	property := width.LookupRune(p.r)
+	switch property.Kind() {
+	case width.EastAsianWide, width.EastAsianFullwidth, width.Neutral:
 		return 2
+	case width.EastAsianNarrow, width.EastAsianHalfwidth, width.EastAsianAmbiguous:
+		return 1
+	default:
+		return 0
 	}
-	return 1
 }
 
 func (p Point) Height() uint {

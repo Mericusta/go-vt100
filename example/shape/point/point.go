@@ -20,5 +20,10 @@ func main() {
 		Width:  terminal.Stdout().Width(),
 		Height: terminal.Stdout().Height(),
 	})
+	p = shape.NewPoint('*')
+	p.Draw(1, 3, core.Size{
+		Width:  terminal.Stdout().Width(),
+		Height: terminal.Stdout().Height(),
+	})
 	<-terminal.ControlSignal
 }

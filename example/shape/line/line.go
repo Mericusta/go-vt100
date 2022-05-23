@@ -10,7 +10,6 @@ func main() {
 	defer terminal.Destruct()
 	core.ClearScreen()
 	core.CursorInvisible()
-	// rune not in ASCII
 	p := shape.NewLine(
 		shape.NewPoint('❤'),
 		5, core.Horizontal,
@@ -27,7 +26,6 @@ func main() {
 		Width:  terminal.Stdout().Width(),
 		Height: terminal.Stdout().Height(),
 	})
-	// rune in ASCII
 	p = shape.NewLine(
 		shape.NewPoint(core.CT()),
 		5, core.Horizontal,
@@ -41,6 +39,22 @@ func main() {
 		5, core.Vertical,
 	)
 	p.Draw(3, 7, core.Size{
+		Width:  terminal.Stdout().Width(),
+		Height: terminal.Stdout().Height(),
+	})
+	p = shape.NewLine(
+		shape.NewPoint('*'),
+		5, core.Horizontal,
+	)
+	p.Draw(3, 12, core.Size{
+		Width:  terminal.Stdout().Width(),
+		Height: terminal.Stdout().Height(),
+	})
+	p = shape.NewLine(
+		shape.NewPoint('*'),
+		5, core.Vertical,
+	)
+	p.Draw(3, 12, core.Size{
 		Width:  terminal.Stdout().Width(),
 		Height: terminal.Stdout().Height(),
 	})
