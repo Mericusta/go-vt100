@@ -1,6 +1,9 @@
-package shape
+package container
 
-import "github.com/Mericusta/go-vt100/core"
+import (
+	"github.com/Mericusta/go-vt100/core"
+	"github.com/Mericusta/go-vt100/shape"
+)
 
 // Grids is a collection of distanced lines
 // The area enclosed by the lines is called the Grid
@@ -8,13 +11,12 @@ import "github.com/Mericusta/go-vt100/core"
 type Grids struct {
 	col             uint
 	row             uint
-	line            Line
-	contents        map[uint]map[uint]Shape // y : x : content
+	contents        map[uint]map[uint]shape.Shape // y : x : content
 	size            core.Size
 	maxContentWidth uint
 }
 
-func NewGrid(content map[uint]map[uint]Shape) Grids {
+func NewGrid(content map[uint]map[uint]shape.Shape) Grids {
 	g := Grids{
 		col:             1,
 		row:             1,
