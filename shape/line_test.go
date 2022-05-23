@@ -62,7 +62,7 @@ func TestLine_Width(t *testing.T) {
 		{
 			"vertical line, length is 5, point rune is '❤'",
 			NewLine(NewPoint('❤'), 5, core.Vertical),
-			1,
+			2,
 		},
 		{
 			"horizontal line, length is 5, point rune is '*'",

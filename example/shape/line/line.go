@@ -32,7 +32,7 @@ func main() {
 		shape.NewPoint('*'),
 		5, core.Horizontal,
 	)
-	p.Draw(2, 7, core.Size{
+	p.Draw(3, 7, core.Size{
 		Width:  terminal.Stdout().Width(),
 		Height: terminal.Stdout().Height(),
 	})
@@ -40,7 +40,7 @@ func main() {
 		shape.NewPoint('*'),
 		5, core.Vertical,
 	)
-	p.Draw(2, 7, core.Size{
+	p.Draw(3, 7, core.Size{
 		Width:  terminal.Stdout().Width(),
 		Height: terminal.Stdout().Height(),
 	})

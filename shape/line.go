@@ -37,14 +37,14 @@ func (l Line) Draw(x, y uint, s core.Size) {
 
 func (l Line) Width() uint {
 	if l.direction == core.Vertical {
-		return 1
+		return l.point.Width()
 	}
 	return l.length * l.point.Width()
 }
 
 func (l Line) Height() uint {
 	if l.direction == core.Horizontal {
-		return 1
+		return l.point.Height()
 	}
 	return l.length * l.point.Height()
 }
