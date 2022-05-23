@@ -18,7 +18,7 @@ func TestNewGrid(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			"1x1 grid",
+			"1x1 grid with 1 width content",
 			args{
 				content: map[int]map[int][]byte{
 					1: {
@@ -39,6 +39,31 @@ func TestNewGrid(t *testing.T) {
 					Height: 3,
 				},
 				maxContentWidth: 1,
+			},
+		},
+		// TODO: Add test cases.
+		{
+			"3x3 grid with 3 width content",
+			args{
+				content: map[int]map[int][]byte{
+					3: {
+						3: []byte(" 0 "),
+					},
+				},
+			},
+			&Grid{
+				col: 3,
+				row: 3,
+				content: map[int]map[int][]byte{
+					3: {
+						3: []byte(" 0 "),
+					},
+				},
+				size: core.Size{
+					Width:  13,
+					Height: 7,
+				},
+				maxContentWidth: 3,
 			},
 		},
 	}

@@ -1,4 +1,6 @@
-package core
+//go:build !debug
+
+package terminal
 
 import (
 	"golang.org/x/sys/windows"
