@@ -10,6 +10,6 @@ func ClearLine() {
 	fmt.Printf("\033[2K")
 }
 
-func Reset() {
+func ResetAttribute() {
 	fmt.Printf("\033[0m")
 }

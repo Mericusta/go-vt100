@@ -5,12 +5,12 @@ type Drawable interface {
 }
 
 type Object struct {
-	c Coordinate
+	c Coordinate // relative coordinate
 	d Drawable
 }
 
-func NewObject(x, y int, d Drawable) Object {
-	return Object{Coordinate{X: x, Y: y}, d}
+func NewObject(c Coordinate, d Drawable) Object {
+	return Object{c, d}
 }
 
 func (o Object) X() int { return o.c.X }

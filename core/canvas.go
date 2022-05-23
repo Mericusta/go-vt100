@@ -23,6 +23,13 @@ func NewCanvasWithBoundary(width, height int) Canvas {
 	return c
 }
 
+func (c *Canvas) Destruct() {
+	c.layerObjects = nil
+	ResetAttribute()
+	ClearScreen()
+	CursorVisible()
+}
+
 func (c *Canvas) SetCursorVisible(visible bool) {
 	c.cursorVisible = visible
 	if c.cursorVisible {
@@ -36,15 +43,18 @@ func (c *Canvas) SetBackgroundColor(bc Color) {
 	c.backgroundColor = bc
 }
 
-func (c *Canvas) AddLayerObject(x, y int, d Drawable) {
+// AddLayerObject
+// @param coordinate relative coordinates of the canvas origin
+// @param d          something to draw
+func (c *Canvas) AddLayerObject(coordinate Coordinate, d Drawable) {
 	if c.withBoundary {
-		c.layerObjects = append(c.layerObjects, NewObject(x+1, y+1, d))
+		// boundary is not the canvas content, so it can not coincide with boundaries
+		c.layerObjects = append(c.layerObjects, NewObject(Coordinate{X: coordinate.X + 1, Y: coordinate.Y + 1}, d))
 	} else {
-		c.layerObjects = append(c.layerObjects, NewObject(x, y, d))
+		c.layerObjects = append(c.layerObjects, NewObject(coordinate, d))
 	}
 }
 
-// has some bug on vscode terminal with git - bash at sometime
 func (c Canvas) Draw() {
 	if c.cursorVisible {
 		CursorVisible()
@@ -86,21 +96,21 @@ func (c Canvas) drawBackground() {
 }
 
 func (c Canvas) drawBoundary() {
-	topLineY := 1
-	bottomLineY := c.S.Height
-	for x := 2; x < c.S.Width; x++ {
+	topLineY := 0
+	bottomLineY := c.S.Height - 1
+	leftLineX := 0
+	rightLineX := c.S.Width - 1
+	for x := 1; x < rightLineX; x++ {
 		MoveCursorToAndPrint(x, topLineY, string(HL()))
 		MoveCursorToAndPrint(x, bottomLineY, string(HL()))
 	}
-	leftLineX := 1
-	rightLineX := c.S.Width
-	for y := 2; y < c.S.Height; y++ {
+	for y := 1; y < bottomLineY; y++ {
 		MoveCursorToAndPrint(leftLineX, y, string(VL()))
 		MoveCursorToAndPrint(rightLineX, y, string(VL()))
 	}
-	MoveCursorToAndPrint(1, 1, string(TL()))
-	MoveCursorToAndPrint(rightLineX, 1, string(TR()))
-	MoveCursorToAndPrint(1, bottomLineY, string(BL()))
+	MoveCursorToAndPrint(leftLineX, topLineY, string(TL()))
+	MoveCursorToAndPrint(rightLineX, topLineY, string(TR()))
+	MoveCursorToAndPrint(leftLineX, bottomLineY, string(BL()))
 	MoveCursorToAndPrint(rightLineX, bottomLineY, string(BR()))
 }
 
