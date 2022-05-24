@@ -7,7 +7,7 @@ import (
 
 // Point is the unit shape, that is just one ANSI code
 // Point height is fixed at 1
-// Point width is its length in []byte
+// Point width is depends on the width of its ANSI characters
 type Point struct {
 	r rune
 }
@@ -16,11 +16,48 @@ func NewPoint(r rune) Point {
 	return Point{r}
 }
 
-func (p Point) Draw(x, y uint, s core.Size) {
-	if x > s.Width || y > s.Height {
+// func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
+// 	startAbsX := c.X + ctx.Coordinate().X
+// 	endAbsX := startAbsX + int(p.Width())
+// 	if endAbsX < ctx.Coordinate().X || endAbsX > ctx.Coordinate().X+int(ctx.Width()) {
+// 		// outer left || outer right
+// 		return
+// 	}
+// 	startAbsY := c.Y + ctx.Coordinate().Y
+// 	endAbsY := startAbsY + int(p.Height())
+// 	if endAbsY < ctx.Coordinate().Y || endAbsY > ctx.Coordinate().Y+int(ctx.Height()) {
+// 		// outer left || outer right
+// 		return
+// 	}
+// 	if startAbsX < 0 {
+// 		startAbsX = 0
+// 	}
+// 	if startAbsY < 0 {
+// 		startAbsY = 0
+// 	}
+// 	core.MoveCursorToAndPrint(uint(startAbsX), uint(startAbsY), string(p.r))
+// }
+
+func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
+	startAbsX := c.X
+	endAbsX := startAbsX + int(p.Width())
+	if startAbsX < ctx.Coordinate().X || endAbsX > ctx.Coordinate().X+int(ctx.Width()) {
+		// outer left || outer right
 		return
 	}
-	core.MoveCursorToAndPrint(x, y, string(p.r))
+	startAbsY := c.Y
+	endAbsY := startAbsY + int(p.Height())
+	if endAbsY < ctx.Coordinate().Y || endAbsY > ctx.Coordinate().Y+int(ctx.Height()) {
+		// outer left || outer right
+		return
+	}
+	if startAbsX < 0 {
+		startAbsX = 0
+	}
+	if startAbsY < 0 {
+		startAbsY = 0
+	}
+	core.MoveCursorToAndPrint(uint(startAbsX), uint(startAbsY), string(p.r))
 }
 
 func (p Point) Width() uint {

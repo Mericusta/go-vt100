@@ -19,18 +19,15 @@ func NewLine(p Point, l uint, d core.Direction) Line {
 	}
 }
 
-func (l Line) Draw(x, y uint, s core.Size) {
-	if x > s.Width || y > s.Height {
-		return
-	}
+func (l Line) Draw(ctx core.RenderContext, c core.Coordinate) {
 	switch l.direction {
 	case core.Horizontal:
-		for _x := x; _x < x+l.length*l.point.Width(); _x += l.point.Width() {
-			l.point.Draw(_x, y, s)
+		for _x := 0; _x < int(l.length*l.point.Width()); _x += int(l.point.Width()) {
+			l.point.Draw(ctx, core.Coordinate{X: c.X + _x, Y: c.Y})
 		}
 	case core.Vertical:
-		for _y := y; _y < y+l.length*l.point.Height(); _y += l.point.Height() {
-			l.point.Draw(x, _y, s)
+		for _y := 0; _y < int(l.length*l.point.Height()); _y += int(l.point.Height()) {
+			l.point.Draw(ctx, core.Coordinate{X: c.X, Y: c.Y + _y})
 		}
 	}
 }

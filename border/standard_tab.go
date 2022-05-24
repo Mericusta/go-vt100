@@ -1,4 +1,4 @@
-package core
+package border
 
 // ┌────┬────┐
 // │    │    │
@@ -38,17 +38,3 @@ func LT() rune { return '├' }
 
 // RT '┤'
 func RT() rune { return '┤' }
-
-// Space ' '
-func Space() rune { return ' ' }
-
-func SpaceWidth() int { return 1 }
-
-// EndLine
-func EndLine() rune { return '\n' }
-
-func EndLineWidth() uint { return 1 }
-
-func TabWidth() uint { return 1 }
-
-func TabHeight() uint { return 1 }

@@ -1,8 +1,6 @@
 package shape
 
-import (
-	"github.com/Mericusta/go-vt100/core"
-)
+import "github.com/Mericusta/go-vt100/core"
 
 // Rectangle is a collection of lines
 type Rectangle struct {
@@ -17,18 +15,15 @@ func NewRectangle(l Line, c uint) Rectangle {
 	}
 }
 
-func (r Rectangle) Draw(x, y uint, s core.Size) {
-	if x > s.Width || y > s.Height {
-		return
-	}
+func (r Rectangle) Draw(ctx core.RenderContext, c core.Coordinate) {
 	switch r.line.direction {
 	case core.Horizontal:
-		for _y := y; _y < y+r.count*r.line.Height(); _y += r.line.Height() {
-			r.line.Draw(x, _y, s)
+		for _y := 0; _y < int(r.count*r.line.Height()); _y += int(r.line.Height()) {
+			r.line.Draw(ctx, core.Coordinate{X: c.X, Y: c.Y + _y})
 		}
 	case core.Vertical:
-		for _x := x; _x < x+r.count*r.line.Width(); _x += r.line.Width() {
-			r.line.Draw(_x, y, s)
+		for _x := 0; _x < int(r.count*r.line.Width()); _x += int(r.line.Width()) {
+			r.line.Draw(ctx, core.Coordinate{X: c.X + _x, Y: c.Y})
 		}
 	}
 }

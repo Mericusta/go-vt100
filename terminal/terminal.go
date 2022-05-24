@@ -14,10 +14,7 @@ func init() {
 	signal.Notify(ControlSignal, os.Interrupt)
 }
 
-type Terminal interface {
-	Width() uint
-	Height() uint
-}
+type Terminal core.RenderContext
 
 var terminal Terminal
 
@@ -29,4 +26,19 @@ func Destruct() {
 	core.ResetAttribute()
 	core.ClearScreen()
 	core.CursorVisible()
+}
+
+func Context() core.RenderContext {
+	return terminal
+}
+
+func DebugOutput(outFunc func(), conditionFunc func() bool) {
+	if conditionFunc == nil || conditionFunc() {
+		core.SaveScreen()
+		core.ClearScreen()
+		core.MoveCursorToLine(terminal.Height() / 2)
+		outFunc()
+		<-ControlSignal
+		core.RestoreScreen()
+	}
 }
