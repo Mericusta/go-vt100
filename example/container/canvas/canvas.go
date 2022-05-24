@@ -14,7 +14,7 @@ func main() {
 	core.CursorInvisible()
 	c := container.NewCanvas(core.Size{Width: 64, Height: 17})
 	// in canvas
-	c.AppendObject(core.NewObject(
+	c.AppendObjects(core.NewObject(
 		core.Coordinate{X: 0, Y: 0},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(
@@ -28,7 +28,7 @@ func main() {
 	<-terminal.ControlSignal
 	c.Clear()
 	// coincides with the boundary
-	c.AppendObject(core.NewObject(
+	c.AppendObjects(core.NewObject(
 		core.Coordinate{X: 50, Y: -2},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(
@@ -42,7 +42,7 @@ func main() {
 	<-terminal.ControlSignal
 	c.Clear()
 	// out canvas
-	c.AppendObject(core.NewObject(
+	c.AppendObjects(core.NewObject(
 		core.Coordinate{X: 50, Y: -5},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(

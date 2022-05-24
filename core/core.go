@@ -1,32 +1,23 @@
 package core
 
-type RenderContext interface {
+type Unit interface {
 	Width() uint
 	Height() uint
+}
+
+type RenderContext interface {
+	Unit
 	// Coordinate
 	// @return absolute coordinate
 	Coordinate() Coordinate
 }
 
 type Drawable interface {
-	// Width() uint
-	// Height() uint
+	Unit
 	// Draw
 	// @Coordinate absolute coordinate
 	Draw(RenderContext, Coordinate)
 }
-
-// type RenderTree struct {
-// 	nodes []RenderTree
-// }
-
-// func (t RenderTree) Append() {
-// 	// t.N.Draw()
-// }
-
-// func (t RenderTree) Render() {
-// 	// t.N.Draw()
-// }
 
 type Object struct {
 	C Coordinate // relative coordinate

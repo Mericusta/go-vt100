@@ -21,13 +21,11 @@ type Canvas struct {
 
 func NewCanvas(s core.Size) Canvas {
 	return Canvas{
-		ContainerContext: ContainerContext{
-			s: s,
-		},
-		leftTop:     shape.NewPoint(border.TL()),
-		rightTop:    shape.NewPoint(border.TR()),
-		leftBottom:  shape.NewPoint(border.BL()),
-		rightBottom: shape.NewPoint(border.BR()),
+		ContainerContext: ContainerContext{s: s},
+		leftTop:          shape.NewPoint(border.TL()),
+		rightTop:         shape.NewPoint(border.TR()),
+		leftBottom:       shape.NewPoint(border.BL()),
+		rightBottom:      shape.NewPoint(border.BR()),
 		horizontalLine: shape.NewLine(
 			shape.NewPoint(border.HL()),
 			s.Width, core.Horizontal,
@@ -39,7 +37,7 @@ func NewCanvas(s core.Size) Canvas {
 	}
 }
 
-func (c *Canvas) AppendObject(o ...core.Object) {
+func (c *Canvas) AppendObjects(o ...core.Object) {
 	c.objects = append(c.objects, o...)
 }
 
