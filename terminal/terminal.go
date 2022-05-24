@@ -34,11 +34,15 @@ func Context() core.RenderContext {
 
 func DebugOutput(outFunc func(), conditionFunc func() bool) {
 	if conditionFunc == nil || conditionFunc() {
-		core.SaveScreen()
-		core.ClearScreen()
-		core.MoveCursorToLine(terminal.Height() / 2)
+		core.CursorVisible()
+		// core.SaveScreen()
+		// core.ClearScreen()
+		// core.MoveCursorToLine(terminal.Height() / 2)
 		outFunc()
 		<-ControlSignal
-		core.RestoreScreen()
+		// core.RestoreScreen()
+		core.CursorInvisible()
+	} else {
+		panic("here")
 	}
 }

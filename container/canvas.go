@@ -11,10 +11,10 @@ import (
 type Canvas struct {
 	ContainerContext
 	objects        []core.Object
-	leftTop        shape.Point
-	rightTop       shape.Point
-	leftBottom     shape.Point
-	rightBottom    shape.Point
+	LeftTop        shape.Point
+	RightTop       shape.Point
+	LeftBottom     shape.Point
+	RightBottom    shape.Point
 	horizontalLine shape.Line
 	verticalLine   shape.Line
 }
@@ -22,10 +22,10 @@ type Canvas struct {
 func NewCanvas(s core.Size) Canvas {
 	return Canvas{
 		ContainerContext: ContainerContext{s: s},
-		leftTop:          shape.NewPoint(border.TL()),
-		rightTop:         shape.NewPoint(border.TR()),
-		leftBottom:       shape.NewPoint(border.BL()),
-		rightBottom:      shape.NewPoint(border.BR()),
+		LeftTop:          shape.NewPoint(border.TL()),
+		RightTop:         shape.NewPoint(border.TR()),
+		LeftBottom:       shape.NewPoint(border.BL()),
+		RightBottom:      shape.NewPoint(border.BR()),
 		horizontalLine: shape.NewLine(
 			shape.NewPoint(border.HL()),
 			s.Width, core.Horizontal,
@@ -50,14 +50,14 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 	}
 
 	// border
-	c.leftTop.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y - 1})
+	c.LeftTop.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y - 1})
 	c.horizontalLine.Draw(ctx, core.Coordinate{X: coordinate.X, Y: coordinate.Y - 1})
-	c.rightTop.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y - 1})
+	c.RightTop.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y - 1})
 	c.verticalLine.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y})
 	c.verticalLine.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y})
-	c.leftBottom.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y + int(c.Height())})
+	c.LeftBottom.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y + int(c.Height())})
 	c.horizontalLine.Draw(ctx, core.Coordinate{X: coordinate.X, Y: coordinate.Y + int(c.Height())})
-	c.rightBottom.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y + int(c.Height())})
+	c.RightBottom.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y + int(c.Height())})
 }
 
 func (c *Canvas) Clear() {

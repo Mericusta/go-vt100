@@ -11,9 +11,13 @@ func main() {
 	defer terminal.Destruct()
 	core.ClearScreen()
 	core.CursorInvisible()
-	g := container.NewGrids(map[uint]map[uint]core.Drawable{
-		1: {1: shape.NewPoint('❤')},
+	p := shape.NewPoint('❤')
+	c := container.NewCanvas(core.Size{Width: p.Width(), Height: p.Height()})
+	c.AppendObjects(core.Object{D: p})
+	g := container.NewGrids(map[uint]map[uint]container.Canvas{
+		1: {1: c, 2: c},
+		2: {1: c},
 	})
-	g.Draw(terminal.Context(), core.Coordinate{X: int(terminal.Stdout().Width()-64) / 2, Y: 1})
+	g.Draw(terminal.Context(), core.Coordinate{X: 0, Y: 0})
 	<-terminal.ControlSignal
 }
