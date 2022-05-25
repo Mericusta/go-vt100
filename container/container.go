@@ -2,6 +2,7 @@ package container
 
 import "github.com/Mericusta/go-vt100/core"
 
+// ContainerContext support container size and coordinate to objects while drawing
 type ContainerContext struct {
 	s core.Size
 	c core.Coordinate

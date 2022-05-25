@@ -9,139 +9,175 @@ import (
 // Grids is a collection of distanced lines
 // The area enclosed by the lines is canvas
 // Canvas hold another shape instead of Canvas and Grids
+// Grids auto expanded itself to max column and row
+// Grid auto adapts itself to max canvas size
 type Grids struct {
 	ContainerContext
 	col           uint
 	row           uint
-	canvasMap     map[uint]map[uint]Canvas // row : col : canvas
+	objects       map[uint]map[uint]core.Object // row : col : object
 	maxCanvasSize core.Size
 }
 
 func NewGrids(canvas map[uint]map[uint]Canvas) Grids {
 	g := Grids{
-		col:       1,
-		row:       1,
-		canvasMap: canvas,
+		col:     1,
+		row:     1,
+		objects: make(map[uint]map[uint]core.Object),
 		maxCanvasSize: core.Size{
 			Width:  1,
 			Height: 1,
 		},
 	}
-	for y, xMap := range g.canvasMap {
-		if g.row < y {
-			g.row = y
+	for row, colMap := range canvas {
+		if g.row < row {
+			g.row = row
 		}
-		for x, o := range xMap {
-			if g.col < x {
-				g.col = x
+		if g.objects[row] == nil {
+			g.objects[row] = make(map[uint]core.Object)
+		}
+		for col, c := range colMap {
+			if g.col < col {
+				g.col = col
 			}
-			if g.maxCanvasSize.Width < o.Width() {
-				g.maxCanvasSize.Width = o.Width()
+			if g.maxCanvasSize.Width < c.Width() {
+				g.maxCanvasSize.Width = c.Width()
 			}
-			if g.maxCanvasSize.Height < o.Height() {
-				g.maxCanvasSize.Height = o.Height()
+			if g.maxCanvasSize.Height < c.Height() {
+				g.maxCanvasSize.Height = c.Height()
 			}
 		}
 	}
-	g.ContainerContext.s.Height = g.row*(g.maxCanvasSize.Height+border.TabWidth()) + border.TabWidth()
-	g.ContainerContext.s.Width = g.col*(g.maxCanvasSize.Width+border.TabWidth()) + border.TabWidth()
+	g.resize()
+	g.adjustCanvasBorder(canvas)
+	return g
+}
+
+func (g *Grids) SetCanvas(canvas map[uint]map[uint]Canvas) {
+	for _y, xMap := range canvas {
+		for _x, c := range xMap {
+			if _, has := g.objects[_y]; !has {
+				return
+			}
+			if _, has := g.objects[_y][_x]; !has {
+				return
+			}
+			if g.maxCanvasSize.Width < c.Width() {
+				g.maxCanvasSize.Width = c.Width()
+			}
+			if g.maxCanvasSize.Height < c.Height() {
+				g.maxCanvasSize.Height = c.Height()
+			}
+		}
+	}
+	g.resize()
+	g.adjustCanvasBorder(canvas)
+}
+
+func (g *Grids) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
+	g.ContainerContext.c = coordinate
 	for _row := uint(1); _row <= g.row; _row++ {
 		for _col := uint(1); _col <= g.col; _col++ {
-			drawCanvas := NewCanvas(g.maxCanvasSize)
-			if colMap, hasRow := g.canvasMap[_row]; hasRow {
-				if c, hasCol := colMap[_col]; hasCol {
-					drawCanvas = c
+			o := g.objects[_row][_col]
+			o.D.Draw(ctx, core.Coordinate{
+				X: coordinate.X + int((_col-1)*(border.TabWidth()+o.D.Width())) + int(border.TabWidth()),
+				Y: coordinate.Y + int((_row-1)*(border.TabHeight()+o.D.Height())) + int(border.TabHeight()),
+			})
+		}
+	}
+}
+
+func (g *Grids) Clear() {
+	for _, colMap := range g.objects {
+		for _, o := range colMap {
+			o.D.(*Canvas).Clear()
+		}
+	}
+}
+
+func (g *Grids) resize() {
+	g.ContainerContext.s.Height = g.row*(g.maxCanvasSize.Height+border.TabWidth()) + border.TabWidth()
+	g.ContainerContext.s.Width = g.col*(g.maxCanvasSize.Width+border.TabWidth()) + border.TabWidth()
+}
+
+func (g *Grids) adjustCanvasBorder(canvas map[uint]map[uint]Canvas) {
+	emptyCanvas := NewCanvas(g.maxCanvasSize)
+	for _row := uint(1); _row <= g.row; _row++ {
+		for _col := uint(1); _col <= g.col; _col++ {
+			var drawCanvas core.Drawable
+			if colMap, hasRow := g.objects[_row]; hasRow {
+				if o, hasCol := colMap[_col]; hasCol {
+					drawCanvas = o.D
 				}
-			} else {
-				g.canvasMap[_row] = make(map[uint]Canvas)
+			}
+			if colMap, hasRow := canvas[_row]; hasRow {
+				if c, hasCol := colMap[_col]; hasCol {
+					drawCanvas = &c
+				}
+			}
+			if drawCanvas == nil {
+				drawCanvas = &emptyCanvas
 			}
 			switch {
 			case _row == 1 && _row != g.row:
 				switch {
 				case _col == 1 && _col != g.col:
-					drawCanvas.RightTop = shape.NewPoint(border.TT())
-					drawCanvas.RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.LT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.TT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.LT())
 				case _col != 1 && _col != g.col:
-					drawCanvas.LeftTop = shape.NewPoint(border.TT())
-					drawCanvas.RightTop = shape.NewPoint(border.TT())
-					drawCanvas.RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.TT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.TT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.CT())
 				case _col != 1 && _col == g.col:
-					drawCanvas.LeftTop = shape.NewPoint(border.TT())
-					drawCanvas.RightBottom = shape.NewPoint(border.RT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.TT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.RT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.CT())
 				}
 			case _row != 1 && _row != g.row:
 				switch {
 				case _col == 1 && _col != g.col:
-					drawCanvas.LeftTop = shape.NewPoint(border.LT())
-					drawCanvas.RightTop = shape.NewPoint(border.CT())
-					drawCanvas.RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.LT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.LT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.LT())
 				case _col != 1 && _col != g.col:
-					drawCanvas.LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.RightTop = shape.NewPoint(border.CT())
-					drawCanvas.RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.CT())
 				case _col != 1 && _col == g.col:
-					drawCanvas.LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.RightTop = shape.NewPoint(border.RT())
-					drawCanvas.RightBottom = shape.NewPoint(border.RT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.RT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.RT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.CT())
 				}
 			case _row != 1 && _row == g.row:
 				switch {
 				case _col == 1 && _col != g.col:
-					drawCanvas.LeftTop = shape.NewPoint(border.LT())
-					drawCanvas.RightTop = shape.NewPoint(border.CT())
-					drawCanvas.RightBottom = shape.NewPoint(border.BT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.LT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.BT())
 				case _col != 1 && _col != g.col:
-					drawCanvas.LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.RightTop = shape.NewPoint(border.CT())
-					drawCanvas.RightBottom = shape.NewPoint(border.BT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.BT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.BT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.BT())
 				case _col != 1 && _col == g.col:
-					drawCanvas.LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.RightTop = shape.NewPoint(border.RT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.BT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.RT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.BT())
 				}
 			}
-			g.canvasMap[_row][_col] = drawCanvas
+			drawCanvas.(*Canvas).resize(g.maxCanvasSize)
+			g.objects[_row][_col] = core.NewObject(
+				core.Coordinate{
+					X: int((_col-1)*(border.TabWidth()+drawCanvas.Width()) + border.TabWidth()),
+					Y: int((_row-1)*(border.TabWidth()+drawCanvas.Height()) + border.TabHeight()),
+				},
+				drawCanvas,
+			)
 		}
 	}
-	return g
-}
-
-func (g *Grids) SetObjects(oMap map[uint]map[uint]Canvas) {
-	for _y, xMap := range oMap {
-		for _x, d := range xMap {
-			if _, has := g.canvasMap[_y]; !has {
-				g.canvasMap[_y] = make(map[uint]Canvas)
-			}
-			g.canvasMap[_y][_x] = d
-		}
-	}
-}
-
-func (g Grids) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
-	g.ContainerContext.c = coordinate
-	for _row := uint(1); _row <= g.row; _row++ {
-		for _col := uint(1); _col <= g.col; _col++ {
-			c := g.canvasMap[_row][_col]
-			// terminal.DebugOutput(func() {
-			// 	fmt.Printf("c = %v, %v\n", c.RightTop, border.TR())
-			// }, nil)
-			c.Draw(ctx, core.Coordinate{
-				X: coordinate.X + int((_col-1)*(border.TabWidth()+c.Width())) + int(border.TabWidth()),
-				Y: coordinate.Y + int((_row-1)*(border.TabHeight()+c.Height())) + int(border.TabHeight()),
-			})
-		}
-	}
-
-	// objects
-}
-
-func (g Grids) Clear() {
-
 }

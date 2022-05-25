@@ -19,6 +19,7 @@ type Drawable interface {
 	Draw(RenderContext, Coordinate)
 }
 
+// Object hold drawable and its relative coordinate of parent
 type Object struct {
 	C Coordinate // relative coordinate
 	D Drawable

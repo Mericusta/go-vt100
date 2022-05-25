@@ -15,8 +15,8 @@ type Canvas struct {
 	RightTop       shape.Point
 	LeftBottom     shape.Point
 	RightBottom    shape.Point
-	horizontalLine shape.Line
-	verticalLine   shape.Line
+	HorizontalLine shape.Line
+	VerticalLine   shape.Line
 }
 
 func NewCanvas(s core.Size) Canvas {
@@ -26,11 +26,11 @@ func NewCanvas(s core.Size) Canvas {
 		RightTop:         shape.NewPoint(border.TR()),
 		LeftBottom:       shape.NewPoint(border.BL()),
 		RightBottom:      shape.NewPoint(border.BR()),
-		horizontalLine: shape.NewLine(
+		HorizontalLine: shape.NewLine(
 			shape.NewPoint(border.HL()),
 			s.Width, core.Horizontal,
 		),
-		verticalLine: shape.NewLine(
+		VerticalLine: shape.NewLine(
 			shape.NewPoint(border.VL()),
 			s.Height, core.Vertical,
 		),
@@ -51,23 +51,39 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 
 	// border
 	c.LeftTop.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y - 1})
-	c.horizontalLine.Draw(ctx, core.Coordinate{X: coordinate.X, Y: coordinate.Y - 1})
+	c.HorizontalLine.Draw(ctx, core.Coordinate{X: coordinate.X, Y: coordinate.Y - 1})
 	c.RightTop.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y - 1})
-	c.verticalLine.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y})
-	c.verticalLine.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y})
+	c.VerticalLine.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y})
+	c.VerticalLine.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y})
 	c.LeftBottom.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y + int(c.Height())})
-	c.horizontalLine.Draw(ctx, core.Coordinate{X: coordinate.X, Y: coordinate.Y + int(c.Height())})
+	c.HorizontalLine.Draw(ctx, core.Coordinate{X: coordinate.X, Y: coordinate.Y + int(c.Height())})
 	c.RightBottom.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y + int(c.Height())})
 }
 
 func (c *Canvas) Clear() {
+	c.objects = []core.Object{core.NewObject(
+		core.Coordinate{X: 0, Y: 0},
+		shape.NewRectangle(
+			shape.NewLine(
+				shape.NewPoint(border.Space()),
+				c.Width(),
+				core.Horizontal,
+			),
+			c.Height(),
+		),
+	)}
+	c.Draw(c, c.Coordinate())
 	c.objects = nil
-	r := shape.NewRectangle(
-		shape.NewLine(shape.NewPoint(border.Space()), c.Width()+border.TabWidth()*2, core.Horizontal),
-		c.Height(),
+}
+
+func (c *Canvas) resize(s core.Size) {
+	c.s = s
+	c.HorizontalLine = shape.NewLine(
+		shape.NewPoint(border.HL()),
+		s.Width, core.Horizontal,
 	)
-	r.Draw(c, core.Coordinate{
-		X: c.c.X,
-		Y: c.c.Y,
-	})
+	c.VerticalLine = shape.NewLine(
+		shape.NewPoint(border.VL()),
+		s.Height, core.Vertical,
+	)
 }
