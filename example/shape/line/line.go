@@ -13,16 +13,16 @@ func main() {
 	core.CursorInvisible()
 	var d core.Drawable
 	d = shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal)
-	d.Draw(core.Coordinate{X: 1, Y: 1})
+	d.Draw(terminal.Context(), core.Coordinate{X: 1, Y: 1})
 	d = shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal)
-	d.Draw(core.Coordinate{X: 1, Y: 2})
+	d.Draw(terminal.Context(), core.Coordinate{X: 1, Y: 2})
 	d = shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal)
-	d.Draw(core.Coordinate{X: 1, Y: 3})
+	d.Draw(terminal.Context(), core.Coordinate{X: 1, Y: 3})
 	d = shape.NewLine(shape.NewPoint('❤'), 5, core.Vertical)
-	d.Draw(core.Coordinate{X: 1, Y: 4})
+	d.Draw(terminal.Context(), core.Coordinate{X: 1, Y: 4})
 	d = shape.NewLine(shape.NewPoint(border.CT()), 5, core.Vertical)
-	d.Draw(core.Coordinate{X: 3, Y: 4})
+	d.Draw(terminal.Context(), core.Coordinate{X: 3, Y: 4})
 	d = shape.NewLine(shape.NewPoint('*'), 5, core.Vertical)
-	d.Draw(core.Coordinate{X: 4, Y: 4})
+	d.Draw(terminal.Context(), core.Coordinate{X: 4, Y: 4})
 	<-terminal.ControlSignal
 }

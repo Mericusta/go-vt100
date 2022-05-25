@@ -62,9 +62,12 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 
 func (c *Canvas) Clear() {
 	c.objects = nil
-	r := shape.NewRectangle(shape.NewLine(shape.NewPoint(border.Space()), c.Width()+2, core.Horizontal), c.Height()+2)
+	r := shape.NewRectangle(
+		shape.NewLine(shape.NewPoint(border.Space()), c.Width()+border.TabWidth()*2, core.Horizontal),
+		c.Height(),
+	)
 	r.Draw(c, core.Coordinate{
-		X: c.c.X - 1,
-		Y: c.c.Y - 1,
+		X: c.c.X,
+		Y: c.c.Y,
 	})
 }

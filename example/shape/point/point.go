@@ -13,10 +13,10 @@ func main() {
 	core.CursorInvisible()
 	var d core.Drawable
 	d = shape.NewPoint('❤')
-	d.Draw(core.Coordinate{X: 1, Y: 1})
+	d.Draw(terminal.Context(), core.Coordinate{X: 1, Y: 1})
 	d = shape.NewPoint(border.CT())
-	d.Draw(core.Coordinate{X: 1, Y: 2})
+	d.Draw(terminal.Context(), core.Coordinate{X: 1, Y: 2})
 	d = shape.NewPoint('*')
-	d.Draw(core.Coordinate{X: 1, Y: 3})
+	d.Draw(terminal.Context(), core.Coordinate{X: 1, Y: 3})
 	<-terminal.ControlSignal
 }

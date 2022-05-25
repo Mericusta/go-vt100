@@ -16,28 +16,6 @@ func NewPoint(r rune) Point {
 	return Point{r}
 }
 
-// func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
-// 	startAbsX := c.X + ctx.Coordinate().X
-// 	endAbsX := startAbsX + int(p.Width())
-// 	if endAbsX < ctx.Coordinate().X || endAbsX > ctx.Coordinate().X+int(ctx.Width()) {
-// 		// outer left || outer right
-// 		return
-// 	}
-// 	startAbsY := c.Y + ctx.Coordinate().Y
-// 	endAbsY := startAbsY + int(p.Height())
-// 	if endAbsY < ctx.Coordinate().Y || endAbsY > ctx.Coordinate().Y+int(ctx.Height()) {
-// 		// outer left || outer right
-// 		return
-// 	}
-// 	if startAbsX < 0 {
-// 		startAbsX = 0
-// 	}
-// 	if startAbsY < 0 {
-// 		startAbsY = 0
-// 	}
-// 	core.MoveCursorToAndPrint(uint(startAbsX), uint(startAbsY), string(p.r))
-// }
-
 func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
 	startAbsX := c.X
 	endAbsX := startAbsX + int(p.Width())
@@ -47,8 +25,8 @@ func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
 	}
 	startAbsY := c.Y
 	endAbsY := startAbsY + int(p.Height())
-	if endAbsY < ctx.Coordinate().Y || endAbsY > ctx.Coordinate().Y+int(ctx.Height()) {
-		// outer left || outer right
+	if startAbsY < ctx.Coordinate().Y || endAbsY > ctx.Coordinate().Y+int(ctx.Height()) {
+		// outer top || outer bottom
 		return
 	}
 	if startAbsX < 0 {
