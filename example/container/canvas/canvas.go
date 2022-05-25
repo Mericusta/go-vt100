@@ -28,6 +28,7 @@ func main() {
 	<-terminal.ControlSignal
 	c.Clear()
 	<-terminal.ControlSignal
+
 	// coincides with the boundary
 	c.AppendObjects(core.NewObject(
 		core.Coordinate{X: 50, Y: -2},
@@ -43,6 +44,7 @@ func main() {
 	<-terminal.ControlSignal
 	c.Clear()
 	<-terminal.ControlSignal
+
 	// out canvas
 	c.AppendObjects(core.NewObject(
 		core.Coordinate{X: 50, Y: -5},
@@ -58,6 +60,7 @@ func main() {
 	<-terminal.ControlSignal
 	c.Clear()
 	<-terminal.ControlSignal
+
 	// canvas out terminal
 	c.Draw(terminal.Context(), core.Coordinate{X: 0, Y: 0})
 	<-terminal.ControlSignal

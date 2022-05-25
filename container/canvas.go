@@ -61,18 +61,31 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 }
 
 func (c *Canvas) Clear() {
-	c.objects = []core.Object{core.NewObject(
-		core.Coordinate{X: 0, Y: 0},
-		shape.NewRectangle(
-			shape.NewLine(
-				shape.NewPoint(border.Space()),
-				c.Width(),
-				core.Horizontal,
-			),
-			c.Height(),
+	// c.objects = []core.Object{core.NewObject(
+	// 	core.Coordinate{X: 0, Y: 0},
+	// 	shape.NewRectangle(
+	// 		shape.NewLine(
+	// 			shape.NewPoint(border.Space()),
+	// 			c.Width(),
+	// 			core.Horizontal,
+	// 		),
+	// 		c.Height(),
+	// 	),
+	// )}
+	// c.Draw(c, c.Coordinate())
+	// c.objects = nil
+
+	r := shape.NewRectangle(
+		shape.NewLine(
+			shape.NewPoint(border.Space()),
+			c.Width()+2*border.TabWidth(),
+			core.Horizontal,
 		),
-	)}
-	c.Draw(c, c.Coordinate())
+		c.Height()+2*border.TabHeight(),
+	)
+	rCoordinate := core.Coordinate{X: c.c.X - 1, Y: c.c.Y - 1}
+	clearCtx := shape.NewShapeContext(core.Size{Width: r.Width(), Height: r.Height()}, rCoordinate)
+	r.Draw(clearCtx, rCoordinate)
 	c.objects = nil
 }
 

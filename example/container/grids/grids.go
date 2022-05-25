@@ -44,10 +44,16 @@ func main() {
 		1: {1: c1, 2: c2},
 		2: {1: c3},
 	})
+	g1.Draw(terminal.Context(), core.Coordinate{X: int(terminal.Stdout().Width()-g1.Width()) / 2, Y: 1})
+	<-terminal.ControlSignal
+	g1.Clear()
+	<-terminal.ControlSignal
+
 	g1.SetCanvas(map[uint]map[uint]container.Canvas{
 		2: {2: c4},
 	})
 	g1.Draw(terminal.Context(), core.Coordinate{X: int(terminal.Stdout().Width()-g1.Width()) / 2, Y: 1})
 	<-terminal.ControlSignal
 	g1.Clear()
+	<-terminal.ControlSignal
 }

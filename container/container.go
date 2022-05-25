@@ -8,6 +8,10 @@ type ContainerContext struct {
 	c core.Coordinate
 }
 
+func NewContainerContext(s core.Size, c core.Coordinate) ContainerContext {
+	return ContainerContext{s: s, c: c}
+}
+
 func (c ContainerContext) Width() uint {
 	return c.s.Width
 }

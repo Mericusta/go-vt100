@@ -6,6 +6,7 @@ import "github.com/Mericusta/go-vt100/core"
 // the default origin is {0,0}
 // line origin is relative coordinate
 type Line struct {
+	ShapeContext
 	point     Point
 	length    uint
 	direction core.Direction
@@ -20,6 +21,7 @@ func NewLine(p Point, l uint, d core.Direction) Line {
 }
 
 func (l Line) Draw(ctx core.RenderContext, c core.Coordinate) {
+	l.ShapeContext.c = c
 	switch l.direction {
 	case core.Horizontal:
 		for _x := 0; _x < int(l.length*l.point.Width()); _x += int(l.point.Width()) {

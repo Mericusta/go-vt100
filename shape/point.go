@@ -9,14 +9,16 @@ import (
 // Point height is fixed at 1
 // Point width is depends on the width of its ANSI characters
 type Point struct {
+	ShapeContext
 	r rune
 }
 
 func NewPoint(r rune) Point {
-	return Point{r}
+	return Point{r: r}
 }
 
 func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
+	p.ShapeContext.c = c
 	startAbsX := c.X
 	endAbsX := startAbsX + int(p.Width())
 	if startAbsX < ctx.Coordinate().X || endAbsX > ctx.Coordinate().X+int(ctx.Width()) {

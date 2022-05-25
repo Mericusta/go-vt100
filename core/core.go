@@ -28,11 +28,3 @@ type Object struct {
 func NewObject(c Coordinate, d Drawable) Object {
 	return Object{c, d}
 }
-
-// func (o Object) X() int { return o.c.X }
-
-// func (o Object) Y() int { return o.c.Y }
-
-// func (o Object) Draw() {
-// 	o.d.Draw(o.c)
-// }
