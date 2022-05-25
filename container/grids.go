@@ -80,8 +80,8 @@ func (g *Grids) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 		for _col := uint(1); _col <= g.col; _col++ {
 			o := g.objects[_row][_col]
 			o.D.Draw(ctx, core.Coordinate{
-				X: coordinate.X + int((_col-1)*(border.TabWidth()+o.D.Width())) + int(border.TabWidth()),
-				Y: coordinate.Y + int((_row-1)*(border.TabHeight()+o.D.Height())) + int(border.TabHeight()),
+				X: coordinate.X + o.C.X,
+				Y: coordinate.Y + o.C.Y,
 			})
 		}
 	}
