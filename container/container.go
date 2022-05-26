@@ -9,22 +9,20 @@ import (
 
 // ContainerContext support container size and coordinate to objects while drawing
 type ContainerContext struct {
-	c core.Coordinate
-	s core.Size
+	core.BasicContext
 }
 
-func NewContainerContext(c core.Coordinate, s core.Size) ContainerContext {
-	return ContainerContext{c: c, s: s}
+func NewContainerContext(s core.Size) ContainerContext {
+	return ContainerContext{BasicContext: core.NewBasicContext(s)}
 }
 
-func (c ContainerContext) Coordinate() core.Coordinate {
-	return c.c
-}
-
-func (c ContainerContext) Width() uint {
-	return c.s.Width
-}
-
-func (c ContainerContext) Height() uint {
-	return c.s.Height
+func (ctx *ContainerContext) SetCoordinate(c core.Coordinate) {
+	x, y := c.X, c.Y
+	if x < 0 {
+		x = 0
+	}
+	if y < 0 {
+		y = 0
+	}
+	ctx.BasicContext.SetCoordinate(core.Coordinate{X: x, Y: y})
 }

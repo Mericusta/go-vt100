@@ -4,26 +4,37 @@ import "github.com/Mericusta/go-vt100/core"
 
 // Rectangle is a collection of lines
 type Rectangle struct {
+	ShapeContext
 	line  Line
 	count uint
 }
 
 func NewRectangle(l Line, c uint) Rectangle {
-	return Rectangle{
+	r := Rectangle{
 		line:  l,
 		count: c,
 	}
+	r.BasicContext = core.NewBasicContext(core.Size{
+		Width:  r.Width(),
+		Height: r.Height(),
+	})
+	return r
 }
 
 func (r Rectangle) Draw(ctx core.RenderContext, c core.Coordinate) {
+	r.SetCoordinate(c)
+	coincidenceCtx, has := r.CoincidenceCheck(ctx)
+	if !has {
+		return
+	}
 	switch r.line.direction {
 	case core.Horizontal:
 		for _y := 0; _y < int(r.count*r.line.Height()); _y += int(r.line.Height()) {
-			r.line.Draw(ctx, core.Coordinate{X: c.X, Y: c.Y + _y})
+			r.line.Draw(coincidenceCtx, core.Coordinate{X: c.X, Y: c.Y + _y})
 		}
 	case core.Vertical:
 		for _x := 0; _x < int(r.count*r.line.Width()); _x += int(r.line.Width()) {
-			r.line.Draw(ctx, core.Coordinate{X: c.X + _x, Y: c.Y})
+			r.line.Draw(coincidenceCtx, core.Coordinate{X: c.X + _x, Y: c.Y})
 		}
 	}
 }
