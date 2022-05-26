@@ -5,11 +5,10 @@ import (
 	"github.com/Mericusta/go-vt100/container"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
-	"github.com/Mericusta/go-vt100/terminal"
 )
 
 func main() {
-	defer terminal.Destruct()
+	defer core.Destruct()
 	core.ClearScreen()
 	core.CursorInvisible()
 	c := container.NewCanvas(core.Size{Width: 64, Height: 17})
@@ -24,10 +23,10 @@ func main() {
 		core.Coordinate{X: 2, Y: 12},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
 	))
-	c.Draw(terminal.Context(), core.Coordinate{X: int(terminal.Stdout().Width()-64) / 2, Y: 1})
-	<-terminal.ControlSignal
+	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 1})
+	<-core.ControlSignal
 	c.Clear()
-	<-terminal.ControlSignal
+	<-core.ControlSignal
 
 	// coincides with the boundary
 	c.AppendObjects(core.NewObject(
@@ -40,10 +39,10 @@ func main() {
 		core.Coordinate{X: 50, Y: 14},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
 	))
-	c.Draw(terminal.Context(), core.Coordinate{X: int(terminal.Stdout().Width()-64) / 2, Y: 1})
-	<-terminal.ControlSignal
+	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 1})
+	<-core.ControlSignal
 	c.Clear()
-	<-terminal.ControlSignal
+	<-core.ControlSignal
 
 	// out canvas
 	c.AppendObjects(core.NewObject(
@@ -56,12 +55,12 @@ func main() {
 		core.Coordinate{X: 50, Y: 19},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
 	))
-	c.Draw(terminal.Context(), core.Coordinate{X: int(terminal.Stdout().Width()-64) / 2, Y: 1})
-	<-terminal.ControlSignal
+	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 1})
+	<-core.ControlSignal
 	c.Clear()
-	<-terminal.ControlSignal
+	<-core.ControlSignal
 
 	// canvas out terminal
-	c.Draw(terminal.Context(), core.Coordinate{X: 0, Y: 0})
-	<-terminal.ControlSignal
+	c.Draw(core.Context(), core.Coordinate{X: 0, Y: 0})
+	<-core.ControlSignal
 }

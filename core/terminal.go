@@ -1,10 +1,8 @@
-package terminal
+package core
 
 import (
 	"os"
 	"os/signal"
-
-	"github.com/Mericusta/go-vt100/core"
 )
 
 var ControlSignal chan os.Signal
@@ -14,7 +12,7 @@ func init() {
 	signal.Notify(ControlSignal, os.Interrupt)
 }
 
-type Terminal core.RenderContext
+type Terminal Unit
 
 var terminal Terminal
 
@@ -23,25 +21,25 @@ func Stdout() Terminal {
 }
 
 func Destruct() {
-	core.ResetAttribute()
-	core.ClearScreen()
-	core.CursorVisible()
+	ResetAttribute()
+	ClearScreen()
+	CursorVisible()
 }
 
-func Context() core.RenderContext {
-	return terminal
+func Context() RenderContext {
+	return NewBasicContext(Size{Width: terminal.Width(), Height: terminal.Height()})
 }
 
 func DebugOutput(outFunc func(), conditionFunc func() bool) {
 	if conditionFunc == nil || conditionFunc() {
-		core.CursorVisible()
-		// core.SaveScreen()
-		// core.ClearScreen()
-		// core.MoveCursorToLine(terminal.Height() / 2)
+		CursorVisible()
+		SaveScreen()
+		ClearScreen()
+		MoveCursorToLine(terminal.Height() / 2)
 		outFunc()
 		<-ControlSignal
-		// core.RestoreScreen()
-		core.CursorInvisible()
+		RestoreScreen()
+		CursorInvisible()
 	} else {
 		panic("here")
 	}

@@ -14,30 +14,27 @@ type Point struct {
 }
 
 func NewPoint(r rune) Point {
-	return Point{r: r}
+	p := Point{r: r}
+	p.BasicContext = core.NewBasicContext(core.Size{
+		Width:  p.Width(),
+		Height: p.Height(),
+	})
+	return p
 }
 
 func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
-	p.ShapeContext.c = c
-	startAbsX := c.X
-	endAbsX := startAbsX + int(p.Width())
-	if startAbsX < ctx.Coordinate().X || endAbsX > ctx.Coordinate().X+int(ctx.Width()) {
-		// outer left || outer right
+	if c.X < 0 {
 		return
 	}
-	startAbsY := c.Y
-	endAbsY := startAbsY + int(p.Height())
-	if startAbsY < ctx.Coordinate().Y || endAbsY > ctx.Coordinate().Y+int(ctx.Height()) {
-		// outer top || outer bottom
+	if c.Y < 0 {
 		return
 	}
-	if startAbsX < 0 {
-		startAbsX = 0
+	p.SetCoordinate(c)
+	coincidenceCtx, has := p.CoincidenceCheck(ctx)
+	if !has {
+		return
 	}
-	if startAbsY < 0 {
-		startAbsY = 0
-	}
-	core.MoveCursorToAndPrint(uint(startAbsX), uint(startAbsY), string(p.r))
+	core.MoveCursorToAndPrint(uint(coincidenceCtx.Coordinate().X), uint(coincidenceCtx.Coordinate().Y), string(p.r))
 }
 
 func (p Point) Width() uint {

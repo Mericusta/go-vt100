@@ -1,6 +1,6 @@
 //go:build unittest
 
-package terminal
+package core
 
 type debugTerminal struct{}
 

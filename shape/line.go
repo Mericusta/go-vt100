@@ -1,6 +1,8 @@
 package shape
 
-import "github.com/Mericusta/go-vt100/core"
+import (
+	"github.com/Mericusta/go-vt100/core"
+)
 
 // Line is a collection of points in the horizontal or vertical direction
 // the default origin is {0,0}
@@ -13,23 +15,32 @@ type Line struct {
 }
 
 func NewLine(p Point, l uint, d core.Direction) Line {
-	return Line{
+	line := Line{
 		point:     p,
 		length:    l,
 		direction: d,
 	}
+	line.BasicContext = core.NewBasicContext(core.Size{
+		Width:  line.Width(),
+		Height: line.Height(),
+	})
+	return line
 }
 
 func (l Line) Draw(ctx core.RenderContext, c core.Coordinate) {
-	l.ShapeContext.c = c
+	l.SetCoordinate(c)
+	coincidenceCtx, has := l.CoincidenceCheck(ctx)
+	if !has {
+		return
+	}
 	switch l.direction {
 	case core.Horizontal:
 		for _x := 0; _x < int(l.length*l.point.Width()); _x += int(l.point.Width()) {
-			l.point.Draw(ctx, core.Coordinate{X: c.X + _x, Y: c.Y})
+			l.point.Draw(coincidenceCtx, core.Coordinate{X: c.X + _x, Y: c.Y})
 		}
 	case core.Vertical:
 		for _y := 0; _y < int(l.length*l.point.Height()); _y += int(l.point.Height()) {
-			l.point.Draw(ctx, core.Coordinate{X: c.X, Y: c.Y + _y})
+			l.point.Draw(coincidenceCtx, core.Coordinate{X: c.X, Y: c.Y + _y})
 		}
 	}
 }

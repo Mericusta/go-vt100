@@ -4,7 +4,6 @@ import "github.com/Mericusta/go-vt100/core"
 
 // Rectangle is a collection of lines
 type Rectangle struct {
-	ShapeContext
 	line  Line
 	count uint
 }
@@ -17,7 +16,6 @@ func NewRectangle(l Line, c uint) Rectangle {
 }
 
 func (r Rectangle) Draw(ctx core.RenderContext, c core.Coordinate) {
-	r.ShapeContext.c = c
 	switch r.line.direction {
 	case core.Horizontal:
 		for _y := 0; _y < int(r.count*r.line.Height()); _y += int(r.line.Height()) {

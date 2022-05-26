@@ -1,11 +1,8 @@
 //go:build !unittest
 
-package terminal
+package core
 
-import (
-	"github.com/Mericusta/go-vt100/core"
-	"golang.org/x/sys/windows"
-)
+import "golang.org/x/sys/windows"
 
 type windowsTerminal windows.ConsoleScreenBufferInfo
 
@@ -41,8 +38,4 @@ func (t windowsTerminal) Width() uint {
 
 func (t windowsTerminal) Height() uint {
 	return uint(t.Size.Y)
-}
-
-func (t windowsTerminal) Coordinate() core.Coordinate {
-	return core.Coordinate{}
 }

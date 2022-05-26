@@ -8,24 +8,25 @@ import (
 	"github.com/Mericusta/go-vt100/shape"
 )
 
-// Textarea is a Canvas with multi line text
+// Textarea is a collection of Points
 type Textarea struct {
 	ContainerContext
-	canvas Canvas
+	objects [][]core.Object
 }
 
 func NewTextarea(s string, d core.Direction) Textarea {
+	t := Textarea{}
 	lineTextSlice := strings.Split(s, string(border.EndLine()))
-	objects := make([]core.Object, 0, len(s))
-	var canvas Canvas
+	t.objects = make([][]core.Object, 0, len(s))
 	if d == core.Horizontal {
 		var maxWidth, height int
 		for _, line := range lineTextSlice {
 			lineWidth, maxHeight := 0, 0
+			lineObjects := make([]core.Object, len(line))
 			for _, r := range line {
 				p := shape.NewPoint(r)
-				objects = append(
-					objects,
+				lineObjects = append(
+					lineObjects,
 					core.Object{
 						C: core.Coordinate{X: lineWidth, Y: height},
 						D: p,
@@ -40,17 +41,20 @@ func NewTextarea(s string, d core.Direction) Textarea {
 				maxWidth = lineWidth
 			}
 			height += maxHeight
+			t.objects = append(t.objects, lineObjects)
 		}
-		canvas = NewCanvas(core.Size{Width: uint(maxWidth), Height: uint(height)})
-		canvas.AppendObjects(objects...)
+		// canvas = NewCanvas(core.Size{Width: uint(maxWidth), Height: uint(height)})
+		// canvas.AppendObjects(objects...)
+		t.ContainerContext.s = core.Size{Width: uint(maxWidth), Height: uint(height)}
 	} else if d == core.Vertical {
 		var maxHeight, width int
 		for _, line := range lineTextSlice {
 			lineHeight, maxWidth := 0, 0
+			lineObjects := make([]core.Object, len(line))
 			for _, r := range line {
 				p := shape.NewPoint(r)
-				objects = append(
-					objects,
+				lineObjects = append(
+					lineObjects,
 					core.Object{
 						C: core.Coordinate{X: width, Y: lineHeight},
 						D: p,
@@ -65,19 +69,25 @@ func NewTextarea(s string, d core.Direction) Textarea {
 				maxHeight = lineHeight
 			}
 			width += maxWidth
+			t.objects = append(t.objects, lineObjects)
 		}
-		canvas = NewCanvas(core.Size{Width: uint(width), Height: uint(maxHeight)})
-		canvas.AppendObjects(objects...)
+		// canvas = NewCanvas(core.Size{Width: uint(width), Height: uint(maxHeight)})
+		// canvas.AppendObjects(objects...)
+		t.ContainerContext.s = core.Size{Width: uint(width), Height: uint(maxHeight)}
 	} else {
 		panic("not supported direction")
 	}
-	return Textarea{
-		ContainerContext: canvas.ContainerContext,
-		canvas:           canvas,
-	}
+	return t
 }
 
 func (t *Textarea) Draw(ctx core.RenderContext, c core.Coordinate) {
-	t.ContainerContext.c = c
-	t.canvas.Draw(ctx, c)
+	// t.ContainerContext.c = c
+
+	// for _, os := range t.objects {
+	// 	for _, o := range os {
+	// 		o.D.Draw(c, )
+	// 	}
+	// }
+
+	// t.canvas.Draw(ctx, c)
 }
