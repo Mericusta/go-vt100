@@ -45,7 +45,7 @@ func NewTextarea(s string, d core.Direction) Textarea {
 		}
 		// canvas = NewCanvas(core.Size{Width: uint(maxWidth), Height: uint(height)})
 		// canvas.AppendObjects(objects...)
-		t.ContainerContext.s = core.Size{Width: uint(maxWidth), Height: uint(height)}
+		// t.ContainerContext.s = core.Size{Width: uint(maxWidth), Height: uint(height)}
 	} else if d == core.Vertical {
 		var maxHeight, width int
 		for _, line := range lineTextSlice {
@@ -73,7 +73,7 @@ func NewTextarea(s string, d core.Direction) Textarea {
 		}
 		// canvas = NewCanvas(core.Size{Width: uint(width), Height: uint(maxHeight)})
 		// canvas.AppendObjects(objects...)
-		t.ContainerContext.s = core.Size{Width: uint(width), Height: uint(maxHeight)}
+		// t.ContainerContext.s = core.Size{Width: uint(width), Height: uint(maxHeight)}
 	} else {
 		panic("not supported direction")
 	}

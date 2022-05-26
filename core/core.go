@@ -63,12 +63,6 @@ func (c BasicContext) CoincidenceCheck(ctx RenderContext) (RenderContext, bool) 
 	startAbsX := c.c.X
 	endAbsX := startAbsX + int(c.s.Width)
 	newCtx.s.Width = c.s.Width
-	// DebugOutput(func() {
-	// 	fmt.Printf("startAbsX = %v\n", startAbsX)
-	// 	fmt.Printf("endAbsX = %v\n", endAbsX)
-	// 	fmt.Printf("ctx.Coordinate().X = %v\n", ctx.Coordinate().X)
-	// 	fmt.Printf("ctx.Coordinate().X+int(ctx.Width()) = %v\n", ctx.Coordinate().X+int(ctx.Width()))
-	// }, nil)
 	if endAbsX < ctx.Coordinate().X || ctx.Coordinate().X+int(ctx.Width()) < startAbsX {
 		// outer left || outer right
 		return newCtx, false
@@ -78,12 +72,12 @@ func (c BasicContext) CoincidenceCheck(ctx RenderContext) (RenderContext, bool) 
 			newCtx.c.X = 0
 		}
 	}
-	newCtx.s.Width = uint(math.Max(float64(endAbsX), float64(ctx.Coordinate().X+int(ctx.Width()))) - float64(newCtx.c.X))
+	newCtx.s.Width = uint(math.Min(float64(endAbsX), float64(ctx.Coordinate().X+int(ctx.Width()))) - float64(newCtx.c.X))
 
 	startAbsY := c.c.Y
 	endAbsY := startAbsY + int(c.s.Height)
 	newCtx.s.Height = c.s.Height
-	if startAbsY < ctx.Coordinate().Y || endAbsY > ctx.Coordinate().Y+int(ctx.Height()) {
+	if endAbsY < ctx.Coordinate().Y || ctx.Coordinate().Y+int(ctx.Height()) < startAbsY {
 		// outer top || outer bottom
 		return newCtx, false
 	} else {
@@ -92,7 +86,7 @@ func (c BasicContext) CoincidenceCheck(ctx RenderContext) (RenderContext, bool) 
 			newCtx.c.Y = 0
 		}
 	}
-	newCtx.s.Height = uint(math.Max(float64(endAbsY), float64(ctx.Coordinate().Y+int(ctx.Height()))) - float64(newCtx.c.Y))
+	newCtx.s.Height = uint(math.Min(float64(endAbsY), float64(ctx.Coordinate().Y+int(ctx.Height()))) - float64(newCtx.c.Y))
 	return newCtx, true
 }
 

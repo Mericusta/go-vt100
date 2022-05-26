@@ -59,13 +59,13 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 
 	// border
 	c.LeftTop.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y - 1})
-	c.HorizontalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X, Y: coordinate.Y - 1})
-	c.RightTop.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y - 1})
-	c.VerticalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y})
-	c.VerticalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y})
-	c.LeftBottom.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y + int(c.Height())})
-	c.HorizontalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X, Y: coordinate.Y + int(c.Height())})
-	c.RightBottom.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y + int(c.Height())})
+	// c.HorizontalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X, Y: coordinate.Y - 1})
+	// c.RightTop.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y - 1})
+	// c.VerticalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y})
+	// c.VerticalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y})
+	// c.LeftBottom.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y + int(c.Height())})
+	// c.HorizontalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X, Y: coordinate.Y + int(c.Height())})
+	// c.RightBottom.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y + int(c.Height())})
 }
 
 func (c *Canvas) Clear() {

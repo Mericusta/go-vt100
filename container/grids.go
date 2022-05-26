@@ -75,16 +75,16 @@ func (g *Grids) SetCanvas(canvas map[uint]map[uint]Canvas) {
 }
 
 func (g *Grids) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
-	g.ContainerContext.c = coordinate
-	for _row := uint(1); _row <= g.row; _row++ {
-		for _col := uint(1); _col <= g.col; _col++ {
-			o := g.objects[_row][_col]
-			o.D.Draw(ctx, core.Coordinate{
-				X: coordinate.X + o.C.X,
-				Y: coordinate.Y + o.C.Y,
-			})
-		}
-	}
+	// g.ContainerContext.c = coordinate
+	// for _row := uint(1); _row <= g.row; _row++ {
+	// 	for _col := uint(1); _col <= g.col; _col++ {
+	// 		o := g.objects[_row][_col]
+	// 		o.D.Draw(ctx, core.Coordinate{
+	// 			X: coordinate.X + o.C.X,
+	// 			Y: coordinate.Y + o.C.Y,
+	// 		})
+	// 	}
+	// }
 }
 
 func (g *Grids) Clear() {
@@ -96,8 +96,8 @@ func (g *Grids) Clear() {
 }
 
 func (g *Grids) resize() {
-	g.ContainerContext.s.Height = g.row*(g.maxCanvasSize.Height+border.TabWidth()) + border.TabWidth()
-	g.ContainerContext.s.Width = g.col*(g.maxCanvasSize.Width+border.TabWidth()) + border.TabWidth()
+	// g.ContainerContext.s.Height = g.row*(g.maxCanvasSize.Height+border.TabWidth()) + border.TabWidth()
+	// g.ContainerContext.s.Width = g.col*(g.maxCanvasSize.Width+border.TabWidth()) + border.TabWidth()
 }
 
 func (g *Grids) adjustCanvasBorder(canvas map[uint]map[uint]Canvas) {
