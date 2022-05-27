@@ -35,8 +35,8 @@ func NewCanvas(s core.Size) Canvas {
 		),
 	}
 	c.BasicContext = core.NewBasicContext(core.Size{
-		Width:  s.Width + c.VerticalLine.Width()*2,
-		Height: s.Height + c.HorizontalLine.Height()*2,
+		Width:  s.Width,
+		Height: s.Height,
 	})
 	return c
 }
@@ -46,8 +46,8 @@ func (c *Canvas) AppendObjects(o ...core.Object) {
 }
 
 func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
-	c.BasicContext.SetCoordinate(coordinate)
-	coincidenceCtx, has := c.CoincidenceCheck(ctx)
+	c.SetCoordinate(coordinate)
+	coincidenceCtx, has := ctx.CoincidenceCheck(c)
 	if !has {
 		return
 	}
@@ -58,43 +58,32 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 	}
 
 	// border
-	c.LeftTop.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y - 1})
-	// c.HorizontalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X, Y: coordinate.Y - 1})
-	// c.RightTop.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y - 1})
-	// c.VerticalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y})
-	// c.VerticalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y})
-	// c.LeftBottom.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y + int(c.Height())})
-	// c.HorizontalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X, Y: coordinate.Y + int(c.Height())})
-	// c.RightBottom.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y + int(c.Height())})
+	c.LeftTop.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y - 1})
+	c.HorizontalLine.Draw(ctx, core.Coordinate{X: coordinate.X, Y: coordinate.Y - 1})
+	c.RightTop.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y - 1})
+	c.VerticalLine.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y})
+	c.VerticalLine.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y})
+	c.LeftBottom.Draw(ctx, core.Coordinate{X: coordinate.X - 1, Y: coordinate.Y + int(c.Height())})
+	c.HorizontalLine.Draw(ctx, core.Coordinate{X: coordinate.X, Y: coordinate.Y + int(c.Height())})
+	c.RightBottom.Draw(ctx, core.Coordinate{X: coordinate.X + int(c.Width()), Y: coordinate.Y + int(c.Height())})
 }
 
 func (c *Canvas) Clear() {
-	// c.objects = []core.Object{core.NewObject(
-	// 	core.Coordinate{X: 0, Y: 0},
-	// 	shape.NewRectangle(
-	// 		shape.NewLine(
-	// 			shape.NewPoint(border.Space()),
-	// 			c.Width(),
-	// 			core.Horizontal,
-	// 		),
-	// 		c.Height(),
-	// 	),
-	// )}
-	// c.Draw(c, c.Coordinate())
-	// c.objects = nil
-
-	// r := shape.NewRectangle(
-	// 	shape.NewLine(
-	// 		shape.NewPoint(border.Space()),
-	// 		c.Width()+2*border.TabWidth(),
-	// 		core.Horizontal,
-	// 	),
-	// 	c.Height()+2*border.TabHeight(),
-	// )
-	// rCoordinate := core.Coordinate{X: c.c.X - 1, Y: c.c.Y - 1}
-	// clearCtx := shape.NewShapeContext(core.Size{Width: r.Width(), Height: r.Height()}, rCoordinate)
-	// r.Draw(clearCtx, rCoordinate)
-	// c.objects = nil
+	r := shape.NewRectangle(
+		shape.NewLine(
+			shape.NewPoint(border.Space()),
+			c.Width()+2*border.TabWidth(),
+			core.Horizontal,
+		),
+		c.Height()+2*border.TabHeight(),
+	)
+	clearCtx := shape.NewShapeContext(core.Size{
+		Width:  r.Width() + border.TabWidth()*2,
+		Height: r.Height() + border.TabHeight()*2,
+	})
+	clearCtx.SetCoordinate(core.Coordinate{X: c.Coordinate().X - 1, Y: c.Coordinate().Y - 1})
+	r.Draw(clearCtx, core.Coordinate{X: c.Coordinate().X - 1, Y: c.Coordinate().Y - 1})
+	c.objects = nil
 }
 
 func (c *Canvas) resize(s core.Size) {

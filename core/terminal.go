@@ -34,8 +34,14 @@ func Context() RenderContext {
 	return NewBasicContext(Size{Width: terminal.Width(), Height: terminal.Height()})
 }
 
-func DebugOutput(outFunc func(), conditionFunc func() bool) {
-	if conditionFunc == nil || conditionFunc() {
+func DebugOutput(outFunc func(), conditionFunc ...func() bool) {
+	if conditionFunc == nil || func() bool {
+		total := true
+		for _, f := range conditionFunc {
+			total = total && f()
+		}
+		return total
+	}() {
 		CursorVisible()
 		SaveScreen()
 		ClearScreen()
