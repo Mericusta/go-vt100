@@ -4,11 +4,10 @@ import (
 	"github.com/Mericusta/go-vt100/container"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
-	"github.com/Mericusta/go-vt100/terminal"
 )
 
 func main() {
-	defer terminal.Destruct()
+	defer core.Destruct()
 	core.ClearScreen()
 	core.CursorInvisible()
 	// 3 point expand to 2x2 grid, each grid size is 2x1
@@ -19,10 +18,10 @@ func main() {
 		1: {1: c, 2: c},
 		2: {1: c},
 	})
-	g.Draw(terminal.Context(), core.Coordinate{X: 0, Y: 0})
-	<-terminal.ControlSignal
+	g.Draw(core.Context(), core.Coordinate{X: 0, Y: 0})
+	<-core.ControlSignal
 	g.Clear()
-	<-terminal.ControlSignal
+	<-core.ControlSignal
 	// 3 length 3 line expand to 2x2 grid, each grid size is
 	s1 := shape.NewPoint('❤')
 	c1 := container.NewCanvas(core.Size{Width: s1.Width(), Height: s1.Height()})
@@ -44,16 +43,16 @@ func main() {
 		1: {1: c1, 2: c2},
 		2: {1: c3},
 	})
-	g1.Draw(terminal.Context(), core.Coordinate{X: int(terminal.Stdout().Width()-g1.Width()) / 2, Y: 1})
-	<-terminal.ControlSignal
+	g1.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-g1.Width()) / 2, Y: 1})
+	<-core.ControlSignal
 	g1.Clear()
-	<-terminal.ControlSignal
+	<-core.ControlSignal
 
 	g1.SetCanvas(map[uint]map[uint]container.Canvas{
 		2: {2: c4},
 	})
-	g1.Draw(terminal.Context(), core.Coordinate{X: int(terminal.Stdout().Width()-g1.Width()) / 2, Y: 1})
-	<-terminal.ControlSignal
+	g1.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-g1.Width()) / 2, Y: 1})
+	<-core.ControlSignal
 	g1.Clear()
-	<-terminal.ControlSignal
+	<-core.ControlSignal
 }

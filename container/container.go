@@ -15,14 +15,3 @@ type ContainerContext struct {
 func NewContainerContext(s core.Size) ContainerContext {
 	return ContainerContext{BasicContext: core.NewBasicContext(s)}
 }
-
-func (ctx *ContainerContext) SetCoordinate(c core.Coordinate) {
-	x, y := c.X, c.Y
-	if x < 0 {
-		x = 0
-	}
-	if y < 0 {
-		y = 0
-	}
-	ctx.BasicContext.SetCoordinate(core.Coordinate{X: x, Y: y})
-}
