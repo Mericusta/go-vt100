@@ -29,7 +29,7 @@ func NewLine(p Point, l uint, d core.Direction) Line {
 
 func (l Line) Draw(ctx core.RenderContext, c core.Coordinate) {
 	l.SetCoordinate(c)
-	coincidenceCtx, has := l.CoincidenceCheck(ctx)
+	coincidenceCtx, has := ctx.CoincidenceCheck(l)
 	if !has {
 		return
 	}

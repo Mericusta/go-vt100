@@ -10,7 +10,10 @@ import (
 // @param x column index in vt100, absolute coordinate of terminal
 // @param y row index in vt100, absolute coordinate of terminal
 func MoveCursorToAndPrint(x, y uint, c string) {
-	fmt.Printf("\033[%d;%dH%v", y+1, x+1, c)
+	// DebugOutput(func() {
+	// 	fmt.Printf("c = %v, x = %v, y = %v\n", c, x, y)
+	// }, nil)
+	fmt.Printf("\033[%d;%dH%v", y+uint(Origin().X), x+uint(Origin().Y), c)
 }
 
 func MoveCursorToHome() {

@@ -57,36 +57,29 @@ func (c BasicContext) Coordinate() Coordinate {
 //       └───────────┘
 // Point is in Container but not in terminal.
 // Thats why Container also need coincidence check.
-// @param ctx parent container ctx
+// @param ctx sth to render's ctx
 func (c BasicContext) CoincidenceCheck(ctx RenderContext) (RenderContext, bool) {
 	newCtx := BasicContext{}
-	startAbsX := c.c.X
-	endAbsX := startAbsX + int(c.s.Width)
-	newCtx.s.Width = c.s.Width
-	if endAbsX < ctx.Coordinate().X || ctx.Coordinate().X+int(ctx.Width()) < startAbsX {
+	renderStartX := ctx.Coordinate().X
+	renderEndX := renderStartX + int(ctx.Width())
+	if renderEndX <= c.c.X || c.c.X+int(c.Width()) <= renderStartX {
 		// outer left || outer right
 		return newCtx, false
 	} else {
-		newCtx.c.X = int(math.Max(float64(startAbsX), float64(ctx.Coordinate().X)))
-		if newCtx.c.X < 0 {
-			newCtx.c.X = 0
-		}
+		newCtx.c.X = int(math.Max(float64(c.c.X), float64(renderStartX)))
 	}
-	newCtx.s.Width = uint(math.Min(float64(endAbsX), float64(ctx.Coordinate().X+int(ctx.Width()))) - float64(newCtx.c.X))
 
-	startAbsY := c.c.Y
-	endAbsY := startAbsY + int(c.s.Height)
-	newCtx.s.Height = c.s.Height
-	if endAbsY < ctx.Coordinate().Y || ctx.Coordinate().Y+int(ctx.Height()) < startAbsY {
-		// outer top || outer bottom
+	renderStartY := ctx.Coordinate().Y
+	renderEndY := renderStartY + int(ctx.Height())
+	if renderEndY <= c.c.Y || c.c.Y+int(c.Height()) <= renderStartY {
+		// outer left || outer right
 		return newCtx, false
 	} else {
-		newCtx.c.Y = int(math.Max(float64(startAbsY), float64(ctx.Coordinate().Y)))
-		if newCtx.c.Y < 0 {
-			newCtx.c.Y = 0
-		}
+		newCtx.c.Y = int(math.Max(float64(c.c.Y), float64(renderStartY)))
 	}
-	newCtx.s.Height = uint(math.Min(float64(endAbsY), float64(ctx.Coordinate().Y+int(ctx.Height()))) - float64(newCtx.c.Y))
+
+	newCtx.s.Width = uint(math.Min(float64(c.c.X+int(c.Width())), float64(renderEndX)) - float64(newCtx.c.X))
+	newCtx.s.Height = uint(math.Min(float64(c.c.Y+int(c.Height())), float64(renderEndY)) - float64(newCtx.c.Y))
 	return newCtx, true
 }
 

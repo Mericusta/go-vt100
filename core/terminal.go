@@ -16,6 +16,10 @@ type Terminal Unit
 
 var terminal Terminal
 
+func Origin() Coordinate {
+	return Coordinate{X: 1, Y: 1}
+}
+
 func Stdout() Terminal {
 	return terminal
 }

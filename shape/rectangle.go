@@ -23,7 +23,7 @@ func NewRectangle(l Line, c uint) Rectangle {
 
 func (r Rectangle) Draw(ctx core.RenderContext, c core.Coordinate) {
 	r.SetCoordinate(c)
-	coincidenceCtx, has := r.CoincidenceCheck(ctx)
+	coincidenceCtx, has := ctx.CoincidenceCheck(r)
 	if !has {
 		return
 	}

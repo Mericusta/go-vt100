@@ -1,8 +1,6 @@
 package shape
 
 import (
-	"fmt"
-
 	"github.com/Mericusta/go-vt100/core"
 	"golang.org/x/text/width"
 )
@@ -25,16 +23,9 @@ func NewPoint(r rune) Point {
 }
 
 func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
-	if c.X < 0 {
-		return
-	}
-	if c.Y < 0 {
-		return
-	}
 	p.SetCoordinate(c)
-	coincidenceCtx, has := p.CoincidenceCheck(ctx)
+	coincidenceCtx, has := ctx.CoincidenceCheck(p)
 	if !has {
-		panic(fmt.Sprintf("%v %v %v", coincidenceCtx.Width(), coincidenceCtx.Height(), coincidenceCtx.Coordinate()))
 		return
 	}
 	core.MoveCursorToAndPrint(uint(coincidenceCtx.Coordinate().X), uint(coincidenceCtx.Coordinate().Y), string(p.r))

@@ -20,10 +20,10 @@ func main() {
 	<-core.ControlSignal
 	// half outer container
 	d = shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal), 5)
-	d.Draw(core.Context(), core.Coordinate{X: -2, Y: 17})
+	d.Draw(core.Context(), core.Coordinate{X: -2, Y: 16})
 	<-core.ControlSignal
 	d = shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Vertical), 5)
-	d.Draw(core.Context(), core.Coordinate{X: 15, Y: -2})
+	d.Draw(core.Context(), core.Coordinate{X: 11, Y: -2})
 	<-core.ControlSignal
 	// total outer container
 	d = shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal), 5)
