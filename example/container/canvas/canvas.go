@@ -63,4 +63,11 @@ func main() {
 	// canvas out terminal
 	c.Draw(core.Context(), core.Coordinate{X: -15, Y: -15})
 	<-core.ControlSignal
+	c.Clear()
+	<-core.ControlSignal
+
+	// canvas resize
+	c.Resize(core.Size{Width: 10, Height: 5})
+	c.Draw(core.Context(), core.Coordinate{X: 1, Y: 1})
+	<-core.ControlSignal
 }

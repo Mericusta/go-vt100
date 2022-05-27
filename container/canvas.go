@@ -25,19 +25,8 @@ func NewCanvas(s core.Size) Canvas {
 		RightTop:    shape.NewPoint(border.TR()),
 		LeftBottom:  shape.NewPoint(border.BL()),
 		RightBottom: shape.NewPoint(border.BR()),
-		HorizontalLine: shape.NewLine(
-			shape.NewPoint(border.HL()),
-			s.Width, core.Horizontal,
-		),
-		VerticalLine: shape.NewLine(
-			shape.NewPoint(border.VL()),
-			s.Height, core.Vertical,
-		),
 	}
-	c.BasicContext = core.NewBasicContext(core.Size{
-		Width:  s.Width,
-		Height: s.Height,
-	})
+	c.Resize(s)
 	return c
 }
 
@@ -86,14 +75,17 @@ func (c *Canvas) Clear() {
 	c.objects = nil
 }
 
-func (c *Canvas) resize(s core.Size) {
-	// c.s = s
-	// c.HorizontalLine = shape.NewLine(
-	// 	shape.NewPoint(border.HL()),
-	// 	s.Width, core.Horizontal,
-	// )
-	// c.VerticalLine = shape.NewLine(
-	// 	shape.NewPoint(border.VL()),
-	// 	s.Height, core.Vertical,
-	// )
+func (c *Canvas) Resize(s core.Size) {
+	c.HorizontalLine = shape.NewLine(
+		shape.NewPoint(border.HL()),
+		s.Width, core.Horizontal,
+	)
+	c.VerticalLine = shape.NewLine(
+		shape.NewPoint(border.VL()),
+		s.Height, core.Vertical,
+	)
+	c.BasicContext = core.NewBasicContext(core.Size{
+		Width:  s.Width,
+		Height: s.Height,
+	})
 }
