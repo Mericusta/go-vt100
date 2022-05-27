@@ -87,7 +87,7 @@ type Drawable interface {
 	Unit
 	// Draw
 	// @param RenderContext parent container's Size and Coordinate
-	// @param Coordinate absolute coordinate
+	// @param Coordinate relative coordinate of parent container
 	Draw(RenderContext, Coordinate)
 }
 

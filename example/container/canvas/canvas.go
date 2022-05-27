@@ -23,9 +23,10 @@ func main() {
 		core.Coordinate{X: 2, Y: 12},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
 	))
-	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 1})
+	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 0})
 	<-core.ControlSignal
 	c.Clear()
+	c.ClearObjects()
 	<-core.ControlSignal
 
 	// coincides with the boundary
@@ -39,9 +40,10 @@ func main() {
 		core.Coordinate{X: 50, Y: 14},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
 	))
-	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 1})
+	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 0})
 	<-core.ControlSignal
 	c.Clear()
+	c.ClearObjects()
 	<-core.ControlSignal
 
 	// out canvas
@@ -55,19 +57,21 @@ func main() {
 		core.Coordinate{X: 50, Y: 19},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
 	))
-	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 1})
+	c.Draw(core.Context(), core.Coordinate{X: int(core.Stdout().Width()-64) / 2, Y: 0})
 	<-core.ControlSignal
 	c.Clear()
+	c.ClearObjects()
 	<-core.ControlSignal
 
 	// canvas out terminal
 	c.Draw(core.Context(), core.Coordinate{X: -15, Y: -15})
 	<-core.ControlSignal
 	c.Clear()
+	c.ClearObjects()
 	<-core.ControlSignal
 
 	// canvas resize
 	c.Resize(core.Size{Width: 10, Height: 5})
-	c.Draw(core.Context(), core.Coordinate{X: 1, Y: 1})
+	c.Draw(core.Context(), core.Coordinate{X: 0, Y: 0})
 	<-core.ControlSignal
 }

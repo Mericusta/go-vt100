@@ -1,7 +1,9 @@
 package container
 
 import (
+	"github.com/Mericusta/go-vt100/border"
 	"github.com/Mericusta/go-vt100/core"
+	"github.com/Mericusta/go-vt100/shape"
 )
 
 // About Object: Container contains some shapes, the shapes relative coordinate is defined by user, so they need Object.
@@ -14,4 +16,21 @@ type ContainerContext struct {
 
 func NewContainerContext(s core.Size) ContainerContext {
 	return ContainerContext{BasicContext: core.NewBasicContext(s)}
+}
+
+func (ctx *ContainerContext) Clear() {
+	r := shape.NewRectangle(
+		shape.NewLine(
+			shape.NewPoint(border.CT()),
+			ctx.Width(),
+			core.Horizontal,
+		),
+		ctx.Height(),
+	)
+	clearCtx := shape.NewShapeContext(core.Size{
+		Width:  r.Width(),
+		Height: r.Height(),
+	})
+	clearCtx.SetCoordinate(core.Coordinate{X: ctx.Coordinate().X, Y: ctx.Coordinate().Y})
+	r.Draw(clearCtx, core.Coordinate{X: ctx.Coordinate().X, Y: ctx.Coordinate().Y})
 }

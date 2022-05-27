@@ -10,7 +10,7 @@ import (
 
 // Textarea is a collection of Points
 type Textarea struct {
-	core.BasicContext
+	ContainerContext
 	objects [][]core.Object
 }
 

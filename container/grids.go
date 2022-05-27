@@ -40,11 +40,11 @@ func NewGrids(canvas map[uint]map[uint]Canvas) Grids {
 			if g.col < col {
 				g.col = col
 			}
-			if g.maxCanvasSize.Width < c.Width() {
-				g.maxCanvasSize.Width = c.Width()
+			if g.maxCanvasSize.Width < (c.Width() - border.TabWidth()*2) {
+				g.maxCanvasSize.Width = c.Width() - border.TabWidth()*2
 			}
-			if g.maxCanvasSize.Height < c.Height() {
-				g.maxCanvasSize.Height = c.Height()
+			if g.maxCanvasSize.Height < (c.Height() - border.TabHeight()*2) {
+				g.maxCanvasSize.Height = c.Height() - border.TabHeight()*2
 			}
 		}
 	}
@@ -53,51 +53,11 @@ func NewGrids(canvas map[uint]map[uint]Canvas) Grids {
 	return g
 }
 
-func (g *Grids) SetCanvas(canvas map[uint]map[uint]Canvas) {
-	for _y, xMap := range canvas {
-		for _x, c := range xMap {
-			if _, has := g.objects[_y]; !has {
-				return
-			}
-			if _, has := g.objects[_y][_x]; !has {
-				return
-			}
-			if g.maxCanvasSize.Width < c.Width() {
-				g.maxCanvasSize.Width = c.Width()
-			}
-			if g.maxCanvasSize.Height < c.Height() {
-				g.maxCanvasSize.Height = c.Height()
-			}
-		}
-	}
-	g.resize()
-	g.adjustCanvasBorder(canvas)
-}
-
-func (g *Grids) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
-	// g.ContainerContext.c = coordinate
-	// for _row := uint(1); _row <= g.row; _row++ {
-	// 	for _col := uint(1); _col <= g.col; _col++ {
-	// 		o := g.objects[_row][_col]
-	// 		o.D.Draw(ctx, core.Coordinate{
-	// 			X: coordinate.X + o.C.X,
-	// 			Y: coordinate.Y + o.C.Y,
-	// 		})
-	// 	}
-	// }
-}
-
-func (g *Grids) Clear() {
-	for _, colMap := range g.objects {
-		for _, o := range colMap {
-			o.D.(*Canvas).Clear()
-		}
-	}
-}
-
 func (g *Grids) resize() {
-	// g.ContainerContext.s.Height = g.row*(g.maxCanvasSize.Height+border.TabWidth()) + border.TabWidth()
-	// g.ContainerContext.s.Width = g.col*(g.maxCanvasSize.Width+border.TabWidth()) + border.TabWidth()
+	g.BasicContext = core.NewBasicContext(core.Size{
+		Width:  g.row*(g.maxCanvasSize.Width+border.TabWidth()) + border.TabWidth(),
+		Height: g.col*(g.maxCanvasSize.Height+border.TabHeight()) + border.TabHeight(),
+	})
 }
 
 func (g *Grids) adjustCanvasBorder(canvas map[uint]map[uint]Canvas) {
@@ -105,19 +65,20 @@ func (g *Grids) adjustCanvasBorder(canvas map[uint]map[uint]Canvas) {
 	for _row := uint(1); _row <= g.row; _row++ {
 		for _col := uint(1); _col <= g.col; _col++ {
 			var drawCanvas core.Drawable
-			if colMap, hasRow := g.objects[_row]; hasRow {
-				if o, hasCol := colMap[_col]; hasCol {
-					drawCanvas = o.D
-				}
-			}
 			if colMap, hasRow := canvas[_row]; hasRow {
 				if c, hasCol := colMap[_col]; hasCol {
 					drawCanvas = &c
 				}
 			}
+			if colMap, hasRow := g.objects[_row]; hasRow {
+				if o, hasCol := colMap[_col]; hasCol {
+					drawCanvas = o.D
+				}
+			}
 			if drawCanvas == nil {
 				drawCanvas = &emptyCanvas
 			}
+			drawCanvas.(*Canvas).Resize(g.maxCanvasSize)
 			switch {
 			case _row == 1 && _row != g.row:
 				switch {
@@ -170,14 +131,67 @@ func (g *Grids) adjustCanvasBorder(canvas map[uint]map[uint]Canvas) {
 					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.BT())
 				}
 			}
-			drawCanvas.(*Canvas).resize(g.maxCanvasSize)
 			g.objects[_row][_col] = core.NewObject(
 				core.Coordinate{
-					X: int((_col-1)*(border.TabWidth()+drawCanvas.Width()) + border.TabWidth()),
-					Y: int((_row-1)*(border.TabWidth()+drawCanvas.Height()) + border.TabHeight()),
+					X: int((_col - 1) * (drawCanvas.Width() - border.TabWidth())),
+					Y: int((_row - 1) * (drawCanvas.Height() - border.TabHeight())),
 				},
 				drawCanvas,
 			)
+		}
+	}
+}
+
+func (g *Grids) SetCanvas(canvas map[uint]map[uint]Canvas) {
+	for _y, xMap := range canvas {
+		for _x, c := range xMap {
+			if _, has := g.objects[_y]; !has {
+				return
+			}
+			if _, has := g.objects[_y][_x]; !has {
+				return
+			}
+			if g.maxCanvasSize.Width < c.Width() {
+				g.maxCanvasSize.Width = c.Width()
+			}
+			if g.maxCanvasSize.Height < c.Height() {
+				g.maxCanvasSize.Height = c.Height()
+			}
+		}
+	}
+	g.resize()
+	g.adjustCanvasBorder(canvas)
+}
+
+func (g *Grids) ClearGrid(gridMap map[uint]map[uint]struct{}) {
+	for _y, xMap := range gridMap {
+		for _x := range xMap {
+			g.objects[_y][_x].D.(*Canvas).ClearObjects()
+		}
+	}
+}
+
+func (g *Grids) ClearAllGrid() {
+	for _y, xMap := range g.objects {
+		for _x := range xMap {
+			g.objects[_y][_x].D.(*Canvas).ClearObjects()
+		}
+	}
+}
+
+func (g *Grids) Draw(ctx core.RenderContext, c core.Coordinate) {
+	g.BasicContext.SetCoordinate(c)
+	coincidenceCtx, has := ctx.CoincidenceCheck(g)
+	if !has {
+		return
+	}
+	for _row := uint(1); _row <= g.row; _row++ {
+		for _col := uint(1); _col <= g.col; _col++ {
+			o := g.objects[_row][_col]
+			o.D.Draw(coincidenceCtx, core.Coordinate{
+				X: c.X + o.C.X,
+				Y: c.Y + o.C.Y,
+			})
 		}
 	}
 }
