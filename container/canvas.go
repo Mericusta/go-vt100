@@ -79,3 +79,10 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 	c.HorizontalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.LeftBottom.Width()), Y: coordinate.Y + int(c.LeftTop.Height()) + int(c.VerticalLine.Height())})
 	c.RightBottom.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.LeftTop.Width()) + int(c.HorizontalLine.Width()), Y: coordinate.Y + int(c.LeftTop.Height()) + int(c.VerticalLine.Height())})
 }
+
+func (c Canvas) Size() core.Size {
+	return core.Size{
+		Width:  c.Width() - c.VerticalLine.Width()*2,
+		Height: c.Height() - c.HorizontalLine.Height()*2,
+	}
+}

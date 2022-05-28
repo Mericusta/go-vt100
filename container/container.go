@@ -21,7 +21,7 @@ func NewContainerContext(s core.Size) ContainerContext {
 func (ctx *ContainerContext) Clear() {
 	r := shape.NewRectangle(
 		shape.NewLine(
-			shape.NewPoint(border.CT()),
+			shape.NewPoint(border.Space()),
 			ctx.Width(),
 			core.Horizontal,
 		),

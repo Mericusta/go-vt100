@@ -65,14 +65,14 @@ func (g *Grids) adjustCanvasBorder(canvas map[uint]map[uint]Canvas) {
 	for _row := uint(1); _row <= g.row; _row++ {
 		for _col := uint(1); _col <= g.col; _col++ {
 			var drawCanvas core.Drawable
-			if colMap, hasRow := canvas[_row]; hasRow {
-				if c, hasCol := colMap[_col]; hasCol {
-					drawCanvas = &c
-				}
-			}
 			if colMap, hasRow := g.objects[_row]; hasRow {
 				if o, hasCol := colMap[_col]; hasCol {
 					drawCanvas = o.D
+				}
+			}
+			if colMap, hasRow := canvas[_row]; hasRow {
+				if c, hasCol := colMap[_col]; hasCol {
+					drawCanvas = &c
 				}
 			}
 			if drawCanvas == nil {
@@ -151,11 +151,11 @@ func (g *Grids) SetCanvas(canvas map[uint]map[uint]Canvas) {
 			if _, has := g.objects[_y][_x]; !has {
 				return
 			}
-			if g.maxCanvasSize.Width < c.Width() {
-				g.maxCanvasSize.Width = c.Width()
+			if g.maxCanvasSize.Width < c.Size().Width {
+				g.maxCanvasSize.Width = c.Size().Width
 			}
-			if g.maxCanvasSize.Height < c.Height() {
-				g.maxCanvasSize.Height = c.Height()
+			if g.maxCanvasSize.Height < c.Size().Height {
+				g.maxCanvasSize.Height = c.Size().Height
 			}
 		}
 	}
