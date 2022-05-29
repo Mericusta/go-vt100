@@ -12,14 +12,14 @@ func main() {
 	core.CursorInvisible()
 
 	// example 1
-	header1StrSlice := []string{"header 1", "header 2", "header 3", "operation"}
+	header1StrSlice := []string{"HA", "HB", "HC", "HD"}
 	header1DrawableSlice := make([]core.Drawable, len(header1StrSlice))
 	for i, s := range header1StrSlice {
 		t := container.NewTextarea(s, core.Horizontal)
 		header1DrawableSlice[i] = &t
 	}
 	value1StrMap := map[uint]map[uint]string{
-		1: {1: "A", 2: "B", 3: "C", 4: "OP1"},
+		1: {1: "A", 2: "AB", 3: "ABC", 4: "OPERATION"},
 		2: {1: string(border.VL()), 2: string(border.HL()), 3: string(border.CT())},
 		4: {1: "❤", 3: "❤"},
 	}

@@ -23,14 +23,14 @@ func NewTable(headerSlice []core.Drawable, valueMap map[uint]map[uint]core.Drawa
 	}
 	for i, h := range headerSlice {
 		if t.columnMaxWidth[uint(i)] == 0 || t.columnMaxWidth[uint(i)] < h.Width() {
-			t.columnMaxWidth[uint(i)] = h.Width()
+			t.columnMaxWidth[uint(i)+1] = h.Width()
 		}
 		if t.rowMaxHeight[0] == 0 || t.rowMaxHeight[0] < h.Height() {
 			t.rowMaxHeight[0] = h.Height()
 		}
 	}
 	t.rowMaxHeight[1] = 1
-	t.rowCount = uint(2)
+	t.rowCount = uint(1) // from 0, including header, at least one value row
 	for row, colMap := range valueMap {
 		if t.rowCount < row {
 			t.rowCount = row
@@ -77,7 +77,7 @@ func (t *Table) adjustBorder(headerSlice []core.Drawable, valueMap map[uint]map[
 		objX := 0
 		for _col := uint(0); _col < colCount; _col++ {
 			drawCanvas := NewCanvas(core.Size{
-				Width:  t.columnMaxWidth[uint(_col)],
+				Width:  t.columnMaxWidth[uint(_col)+1],
 				Height: t.rowMaxHeight[uint(_row)],
 			})
 			if _row == 0 {
@@ -161,7 +161,7 @@ func (t *Table) adjustBorder(headerSlice []core.Drawable, valueMap map[uint]map[
 					drawCanvas.LeftBottom = shape.NewPoint(border.BT())
 				}
 			}
-			t.objects[uint(_row)][uint(_col)] = core.NewObject(
+			t.objects[uint(_row)][uint(_col+1)] = core.NewObject(
 				core.Coordinate{X: objX, Y: objY}, &drawCanvas,
 			)
 			objX += int(drawCanvas.Width()) - 1
