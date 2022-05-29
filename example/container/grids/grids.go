@@ -12,7 +12,7 @@ func main() {
 	core.CursorInvisible()
 	// 3 point expand to 2x2 grid, each grid size is 2x1
 	p := shape.NewPoint('❤')
-	c := container.NewCanvas(core.Size{Width: p.Width(), Height: p.Height()})
+	c := container.NewCanvas(core.Size{Width: p.Width(), Height: p.Height()}, true)
 	c.AppendObjects(core.Object{D: p})
 	g := container.NewGrids(map[uint]map[uint]container.Canvas{
 		1: {1: c, 2: c},
@@ -30,18 +30,19 @@ func main() {
 	g.ClearAllGrid()
 	g.Draw(core.Context(), core.Coordinate{X: 0, Y: 0})
 	<-core.ControlSignal
+	g.Clear()
 
 	// 3 length 3 line expand to 2x2 grid, each grid size is
 	s1 := shape.NewPoint('❤')
-	c1 := container.NewCanvas(core.Size{Width: s1.Width(), Height: s1.Height()})
+	c1 := container.NewCanvas(core.Size{Width: s1.Width(), Height: s1.Height()}, true)
 	c1.AppendObjects(core.Object{D: s1})
 
 	s2 := shape.NewLine(s1, 4, core.Horizontal)
-	c2 := container.NewCanvas(core.Size{Width: s2.Width(), Height: s2.Height()})
+	c2 := container.NewCanvas(core.Size{Width: s2.Width(), Height: s2.Height()}, true)
 	c2.AppendObjects(core.Object{D: s2})
 
 	s3 := shape.NewLine(s1, 4, core.Vertical)
-	c3 := container.NewCanvas(core.Size{Width: s3.Width(), Height: s3.Height()})
+	c3 := container.NewCanvas(core.Size{Width: s3.Width(), Height: s3.Height()}, true)
 	c3.AppendObjects(core.Object{D: s3})
 
 	g1 := container.NewGrids(map[uint]map[uint]container.Canvas{
@@ -54,7 +55,7 @@ func main() {
 	<-core.ControlSignal
 
 	s4 := shape.NewRectangle(shape.NewLine(s1, 5, core.Horizontal), 5)
-	c4 := container.NewCanvas(core.Size{Width: s4.Width(), Height: s4.Height()})
+	c4 := container.NewCanvas(core.Size{Width: s4.Width(), Height: s4.Height()}, true)
 	c4.AppendObjects(core.Object{D: s4})
 	g1.SetCanvas(map[uint]map[uint]container.Canvas{
 		2: {2: c4},
