@@ -49,7 +49,7 @@ func NewGrids(canvas map[uint]map[uint]Canvas) Grids {
 		}
 	}
 	g.resize()
-	g.adjustCanvasBorder(canvas)
+	g.adjustBorder(canvas)
 	return g
 }
 
@@ -60,7 +60,7 @@ func (g *Grids) resize() {
 	})
 }
 
-func (g *Grids) adjustCanvasBorder(canvas map[uint]map[uint]Canvas) {
+func (g *Grids) adjustBorder(canvas map[uint]map[uint]Canvas) {
 	emptyCanvas := NewCanvas(g.maxCanvasSize)
 	for _row := uint(1); _row <= g.row; _row++ {
 		for _col := uint(1); _col <= g.col; _col++ {
@@ -160,7 +160,7 @@ func (g *Grids) SetCanvas(canvas map[uint]map[uint]Canvas) {
 		}
 	}
 	g.resize()
-	g.adjustCanvasBorder(canvas)
+	g.adjustBorder(canvas)
 }
 
 func (g *Grids) ClearGrid(gridMap map[uint]map[uint]struct{}) {
