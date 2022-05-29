@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Mericusta/go-vt100/border"
+	"github.com/Mericusta/go-vt100/character"
 	"github.com/Mericusta/go-vt100/container"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
@@ -21,7 +21,7 @@ func main() {
 	}
 	value1StrMap := map[uint]map[uint]string{
 		1: {1: "A", 2: "AB", 3: "ABC", 4: "OPERATION"},
-		2: {1: string(border.VL()), 2: string(border.HL()), 3: string(border.CT())},
+		2: {1: string(character.VL()), 2: string(character.HL()), 3: string(character.CT())},
 		4: {1: "❤", 3: "❤"},
 	}
 	value1DrawableMap := make(map[uint]map[uint]core.Drawable, len(value1StrMap))
@@ -47,7 +47,7 @@ func main() {
 	}
 	value2StrMap := map[uint]map[uint]string{
 		1: {1: "A", 2: "AB", 3: "ABC", 4: "OPERATION"},
-		2: {1: string(border.VL()), 2: string(border.HL()), 3: string(border.CT())},
+		2: {1: string(character.VL()), 2: string(character.HL()), 3: string(character.CT())},
 		4: {1: "❤", 3: "❤"},
 	}
 	value2DrawableMap := make(map[uint]map[uint]core.Drawable, len(value2StrMap))
@@ -64,7 +64,7 @@ func main() {
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 1, Y: 6},
-		shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal), 5),
+		shape.NewRectangle(shape.NewLine(shape.NewPoint(character.CT()), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 2, Y: 12},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),

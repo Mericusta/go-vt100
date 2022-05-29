@@ -1,4 +1,4 @@
-package border
+package character
 
 type BorderType int
 
@@ -16,7 +16,3 @@ func SpaceWidth() int { return 1 }
 func EndLine() rune { return '\n' }
 
 func EndLineWidth() uint { return 1 }
-
-func TabWidth() uint { return 1 }
-
-func TabHeight() uint { return 1 }

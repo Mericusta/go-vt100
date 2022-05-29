@@ -1,7 +1,7 @@
 package container
 
 import (
-	"github.com/Mericusta/go-vt100/border"
+	"github.com/Mericusta/go-vt100/character"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
 )
@@ -23,10 +23,10 @@ type Canvas struct {
 func NewCanvas(s core.Size, withBoundry bool) Canvas {
 	c := Canvas{withBoundry: withBoundry}
 	if withBoundry {
-		c.LeftTop = shape.NewPoint(border.TL())
-		c.RightTop = shape.NewPoint(border.TR())
-		c.LeftBottom = shape.NewPoint(border.BL())
-		c.RightBottom = shape.NewPoint(border.BR())
+		c.LeftTop = shape.NewPoint(character.TL())
+		c.RightTop = shape.NewPoint(character.TR())
+		c.LeftBottom = shape.NewPoint(character.BL())
+		c.RightBottom = shape.NewPoint(character.BR())
 	}
 	c.Resize(s)
 	return c
@@ -37,11 +37,11 @@ func NewCanvas(s core.Size, withBoundry bool) Canvas {
 func (c *Canvas) Resize(s core.Size) {
 	if c.withBoundry {
 		c.HorizontalLine = shape.NewLine(
-			shape.NewPoint(border.HL()),
+			shape.NewPoint(character.HL()),
 			s.Width, core.Horizontal,
 		)
 		c.VerticalLine = shape.NewLine(
-			shape.NewPoint(border.VL()),
+			shape.NewPoint(character.VL()),
 			s.Height, core.Vertical,
 		)
 		c.BasicContext = core.NewBasicContext(core.Size{

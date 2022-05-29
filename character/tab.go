@@ -1,4 +1,4 @@
-package border
+package character
 
 // ┌────┬────┐
 // │    │    │
@@ -38,3 +38,7 @@ func LT() rune { return '├' }
 
 // RT '┤'
 func RT() rune { return '┤' }
+
+func TabWidth() uint { return 1 }
+
+func TabHeight() uint { return 1 }

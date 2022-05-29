@@ -1,7 +1,7 @@
 package container
 
 import (
-	"github.com/Mericusta/go-vt100/border"
+	"github.com/Mericusta/go-vt100/character"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
 )
@@ -21,7 +21,7 @@ func NewContainerContext(s core.Size) ContainerContext {
 func (ctx *ContainerContext) Clear() {
 	r := shape.NewRectangle(
 		shape.NewLine(
-			shape.NewPoint(border.Space()),
+			shape.NewPoint(character.Space()),
 			ctx.Width(),
 			core.Horizontal,
 		),

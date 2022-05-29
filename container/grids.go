@@ -1,7 +1,7 @@
 package container
 
 import (
-	"github.com/Mericusta/go-vt100/border"
+	"github.com/Mericusta/go-vt100/character"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
 )
@@ -40,11 +40,11 @@ func NewGrids(canvas map[uint]map[uint]Canvas) Grids {
 			if g.col < col {
 				g.col = col
 			}
-			if g.maxCanvasSize.Width < (c.Width() - border.TabWidth()*2) {
-				g.maxCanvasSize.Width = c.Width() - border.TabWidth()*2
+			if g.maxCanvasSize.Width < (c.Width() - character.TabWidth()*2) {
+				g.maxCanvasSize.Width = c.Width() - character.TabWidth()*2
 			}
-			if g.maxCanvasSize.Height < (c.Height() - border.TabHeight()*2) {
-				g.maxCanvasSize.Height = c.Height() - border.TabHeight()*2
+			if g.maxCanvasSize.Height < (c.Height() - character.TabHeight()*2) {
+				g.maxCanvasSize.Height = c.Height() - character.TabHeight()*2
 			}
 		}
 	}
@@ -55,8 +55,8 @@ func NewGrids(canvas map[uint]map[uint]Canvas) Grids {
 
 func (g *Grids) resize() {
 	g.BasicContext = core.NewBasicContext(core.Size{
-		Width:  g.row*(g.maxCanvasSize.Width+border.TabWidth()) + border.TabWidth(),
-		Height: g.col*(g.maxCanvasSize.Height+border.TabHeight()) + border.TabHeight(),
+		Width:  g.row*(g.maxCanvasSize.Width+character.TabWidth()) + character.TabWidth(),
+		Height: g.col*(g.maxCanvasSize.Height+character.TabHeight()) + character.TabHeight(),
 	})
 }
 
@@ -83,58 +83,58 @@ func (g *Grids) adjustBorder(canvas map[uint]map[uint]Canvas) {
 			case _row == 1 && _row != g.row:
 				switch {
 				case _col == 1 && _col != g.col:
-					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.TT())
-					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.LT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(character.TT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(character.LT())
 				case _col != 1 && _col != g.col:
-					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.TT())
-					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.TT())
-					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(character.TT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(character.TT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(character.CT())
 				case _col != 1 && _col == g.col:
-					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.TT())
-					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.RT())
-					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(character.TT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(character.RT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(character.CT())
 				}
 			case _row != 1 && _row != g.row:
 				switch {
 				case _col == 1 && _col != g.col:
-					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.LT())
-					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.LT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(character.LT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(character.LT())
 				case _col != 1 && _col != g.col:
-					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(character.CT())
 				case _col != 1 && _col == g.col:
-					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.RT())
-					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.RT())
-					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(character.RT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(character.RT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(character.CT())
 				}
 			case _row != 1 && _row == g.row:
 				switch {
 				case _col == 1 && _col != g.col:
-					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.LT())
-					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.BT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(character.LT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(character.BT())
 				case _col != 1 && _col != g.col:
-					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(border.BT())
-					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.BT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).RightBottom = shape.NewPoint(character.BT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(character.BT())
 				case _col != 1 && _col == g.col:
-					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.(*Canvas).RightTop = shape.NewPoint(border.RT())
-					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(border.BT())
+					drawCanvas.(*Canvas).LeftTop = shape.NewPoint(character.CT())
+					drawCanvas.(*Canvas).RightTop = shape.NewPoint(character.RT())
+					drawCanvas.(*Canvas).LeftBottom = shape.NewPoint(character.BT())
 				}
 			}
 			g.objects[_row][_col] = core.NewObject(
 				core.Coordinate{
-					X: int((_col - 1) * (drawCanvas.Width() - border.TabWidth())),
-					Y: int((_row - 1) * (drawCanvas.Height() - border.TabHeight())),
+					X: int((_col - 1) * (drawCanvas.Width() - character.TabWidth())),
+					Y: int((_row - 1) * (drawCanvas.Height() - character.TabHeight())),
 				},
 				drawCanvas,
 			)

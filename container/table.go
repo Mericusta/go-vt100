@@ -1,7 +1,7 @@
 package container
 
 import (
-	"github.com/Mericusta/go-vt100/border"
+	"github.com/Mericusta/go-vt100/character"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
 )
@@ -59,14 +59,14 @@ func (t *Table) resize() {
 	totalWidth := uint(0)
 	totalHeight := uint(0)
 	for _, width := range t.columnMaxWidth {
-		totalWidth += uint(border.TabWidth()) + width
+		totalWidth += uint(character.TabWidth()) + width
 	}
 	for _, height := range t.rowMaxHeight {
-		totalHeight += uint(border.TabHeight()) + height
+		totalHeight += uint(character.TabHeight()) + height
 	}
 	t.BasicContext = core.NewBasicContext(core.Size{
-		Width:  totalWidth + uint(border.TabWidth()),
-		Height: totalHeight + uint(border.TabHeight()),
+		Width:  totalWidth + uint(character.TabWidth()),
+		Height: totalHeight + uint(character.TabHeight()),
 	})
 }
 
@@ -99,66 +99,66 @@ func (t *Table) adjustBorder(headerSlice []core.Drawable, valueMap map[uint]map[
 				switch {
 				case _col == 0 && _col == colCount-1:
 				case _col == 0 && _col != colCount-1:
-					drawCanvas.RightTop = shape.NewPoint(border.TT())
-					drawCanvas.RightBottom = shape.NewPoint(border.BT())
+					drawCanvas.RightTop = shape.NewPoint(character.TT())
+					drawCanvas.RightBottom = shape.NewPoint(character.BT())
 				case _col != 0 && _col != colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.TT())
-					drawCanvas.RightTop = shape.NewPoint(border.TT())
-					drawCanvas.RightBottom = shape.NewPoint(border.BT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.BT())
+					drawCanvas.LeftTop = shape.NewPoint(character.TT())
+					drawCanvas.RightTop = shape.NewPoint(character.TT())
+					drawCanvas.RightBottom = shape.NewPoint(character.BT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.BT())
 				case _col != 0 && _col == colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.TT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.BT())
+					drawCanvas.LeftTop = shape.NewPoint(character.TT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.BT())
 				}
 			case _row == 0 && _row != t.rowCount:
 				switch {
 				case _col == 0 && _col != colCount-1:
-					drawCanvas.RightTop = shape.NewPoint(border.TT())
-					drawCanvas.RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.LT())
+					drawCanvas.RightTop = shape.NewPoint(character.TT())
+					drawCanvas.RightBottom = shape.NewPoint(character.CT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.LT())
 				case _col != 0 && _col != colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.TT())
-					drawCanvas.RightTop = shape.NewPoint(border.TT())
-					drawCanvas.RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.LeftTop = shape.NewPoint(character.TT())
+					drawCanvas.RightTop = shape.NewPoint(character.TT())
+					drawCanvas.RightBottom = shape.NewPoint(character.CT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.CT())
 				case _col != 0 && _col == colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.TT())
-					drawCanvas.RightBottom = shape.NewPoint(border.RT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.LeftTop = shape.NewPoint(character.TT())
+					drawCanvas.RightBottom = shape.NewPoint(character.RT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.CT())
 				}
 			case _row != 0 && _row != t.rowCount:
 				switch {
 				case _col == 0 && _col != colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.LT())
-					drawCanvas.RightTop = shape.NewPoint(border.CT())
-					drawCanvas.RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.LT())
+					drawCanvas.LeftTop = shape.NewPoint(character.LT())
+					drawCanvas.RightTop = shape.NewPoint(character.CT())
+					drawCanvas.RightBottom = shape.NewPoint(character.CT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.LT())
 				case _col != 0 && _col != colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.RightTop = shape.NewPoint(border.CT())
-					drawCanvas.RightBottom = shape.NewPoint(border.CT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.LeftTop = shape.NewPoint(character.CT())
+					drawCanvas.RightTop = shape.NewPoint(character.CT())
+					drawCanvas.RightBottom = shape.NewPoint(character.CT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.CT())
 				case _col != 0 && _col == colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.RightTop = shape.NewPoint(border.RT())
-					drawCanvas.RightBottom = shape.NewPoint(border.RT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.CT())
+					drawCanvas.LeftTop = shape.NewPoint(character.CT())
+					drawCanvas.RightTop = shape.NewPoint(character.RT())
+					drawCanvas.RightBottom = shape.NewPoint(character.RT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.CT())
 				}
 			case _row != 0 && _row == t.rowCount:
 				switch {
 				case _col == 0 && _col != colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.LT())
-					drawCanvas.RightTop = shape.NewPoint(border.CT())
-					drawCanvas.RightBottom = shape.NewPoint(border.BT())
+					drawCanvas.LeftTop = shape.NewPoint(character.LT())
+					drawCanvas.RightTop = shape.NewPoint(character.CT())
+					drawCanvas.RightBottom = shape.NewPoint(character.BT())
 				case _col != 0 && _col != colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.RightTop = shape.NewPoint(border.CT())
-					drawCanvas.RightBottom = shape.NewPoint(border.BT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.BT())
+					drawCanvas.LeftTop = shape.NewPoint(character.CT())
+					drawCanvas.RightTop = shape.NewPoint(character.CT())
+					drawCanvas.RightBottom = shape.NewPoint(character.BT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.BT())
 				case _col != 0 && _col == colCount-1:
-					drawCanvas.LeftTop = shape.NewPoint(border.CT())
-					drawCanvas.RightTop = shape.NewPoint(border.RT())
-					drawCanvas.LeftBottom = shape.NewPoint(border.BT())
+					drawCanvas.LeftTop = shape.NewPoint(character.CT())
+					drawCanvas.RightTop = shape.NewPoint(character.RT())
+					drawCanvas.LeftBottom = shape.NewPoint(character.BT())
 				}
 			}
 			t.objects[uint(_row)][uint(_col+1)] = core.NewObject(
@@ -166,7 +166,7 @@ func (t *Table) adjustBorder(headerSlice []core.Drawable, valueMap map[uint]map[
 			)
 			objX += int(drawCanvas.Width()) - 1
 		}
-		objY += int(t.rowMaxHeight[_row] + border.TabWidth())
+		objY += int(t.rowMaxHeight[_row] + character.TabWidth())
 	}
 }
 

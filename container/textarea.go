@@ -3,7 +3,7 @@ package container
 import (
 	"strings"
 
-	"github.com/Mericusta/go-vt100/border"
+	"github.com/Mericusta/go-vt100/character"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
 )
@@ -15,7 +15,7 @@ type Textarea struct {
 }
 
 func NewTextarea(s string, d core.Direction) Textarea {
-	lineTextSlice := strings.Split(s, string(border.EndLine()))
+	lineTextSlice := strings.Split(s, string(character.EndLine()))
 	t := Textarea{
 		objects: make([][]core.Object, 0, len(s)),
 	}

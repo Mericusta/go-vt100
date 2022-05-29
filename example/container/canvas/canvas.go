@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Mericusta/go-vt100/border"
+	"github.com/Mericusta/go-vt100/character"
 	"github.com/Mericusta/go-vt100/container"
 	"github.com/Mericusta/go-vt100/core"
 	"github.com/Mericusta/go-vt100/shape"
@@ -18,7 +18,7 @@ func main() {
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 1, Y: 6},
-		shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal), 5),
+		shape.NewRectangle(shape.NewLine(shape.NewPoint(character.CT()), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 2, Y: 12},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
@@ -35,7 +35,7 @@ func main() {
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 61, Y: 6},
-		shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal), 5),
+		shape.NewRectangle(shape.NewLine(shape.NewPoint(character.CT()), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 50, Y: 14},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
@@ -52,7 +52,7 @@ func main() {
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 71, Y: 6},
-		shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal), 5),
+		shape.NewRectangle(shape.NewLine(shape.NewPoint(character.CT()), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 50, Y: 19},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
@@ -85,7 +85,7 @@ func main() {
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 1, Y: 6},
-		shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal), 5),
+		shape.NewRectangle(shape.NewLine(shape.NewPoint(character.CT()), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 2, Y: 12},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
@@ -97,7 +97,7 @@ func main() {
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('❤'), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 1, Y: 6},
-		shape.NewRectangle(shape.NewLine(shape.NewPoint(border.CT()), 5, core.Horizontal), 5),
+		shape.NewRectangle(shape.NewLine(shape.NewPoint(character.CT()), 5, core.Horizontal), 5),
 	), core.NewObject(
 		core.Coordinate{X: 2, Y: 12},
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
