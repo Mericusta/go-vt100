@@ -79,7 +79,7 @@ func (t *Table) adjustBorder(headerSlice []core.Drawable, valueMap map[uint]map[
 			drawCanvas := NewCanvas(core.Size{
 				Width:  t.columnMaxWidth[uint(_col)+1],
 				Height: t.rowMaxHeight[uint(_row)],
-			})
+			}, true)
 			if _row == 0 {
 				drawCanvas.AppendObjects(core.NewObject(
 					core.Coordinate{},

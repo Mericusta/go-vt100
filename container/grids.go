@@ -61,7 +61,7 @@ func (g *Grids) resize() {
 }
 
 func (g *Grids) adjustBorder(canvas map[uint]map[uint]Canvas) {
-	emptyCanvas := NewCanvas(g.maxCanvasSize)
+	emptyCanvas := NewCanvas(g.maxCanvasSize, true)
 	for _row := uint(1); _row <= g.row; _row++ {
 		for _col := uint(1); _col <= g.col; _col++ {
 			var drawCanvas core.Drawable
