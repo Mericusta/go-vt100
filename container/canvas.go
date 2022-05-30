@@ -7,7 +7,7 @@ import (
 )
 
 // Canvas is a rectangular area surrounded by standard tab borders
-// Canvas area can hold some shapes or other containers instead of Canvas
+// Canvas area can hold some shapes or other containers
 type Canvas struct {
 	ContainerContext
 	objects        []core.Object
@@ -17,12 +17,12 @@ type Canvas struct {
 	RightBottom    shape.Point
 	HorizontalLine shape.Line
 	VerticalLine   shape.Line
-	withBoundry    bool
+	withBoundary   bool
 }
 
-func NewCanvas(s core.Size, withBoundry bool) Canvas {
-	c := Canvas{withBoundry: withBoundry}
-	if withBoundry {
+func NewCanvas(s core.Size, withBoundary bool) Canvas {
+	c := Canvas{withBoundary: withBoundary}
+	if withBoundary {
 		c.LeftTop = shape.NewPoint(character.TL())
 		c.RightTop = shape.NewPoint(character.TR())
 		c.LeftBottom = shape.NewPoint(character.BL())
@@ -35,7 +35,7 @@ func NewCanvas(s core.Size, withBoundry bool) Canvas {
 // Resize calculate and change new canvas size, include border and context
 // @param s new canvas size info
 func (c *Canvas) Resize(s core.Size) {
-	if c.withBoundry {
+	if c.withBoundary {
 		c.HorizontalLine = shape.NewLine(
 			shape.NewPoint(character.HL()),
 			s.Width, core.Horizontal,
@@ -76,7 +76,7 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 	}
 
 	// border
-	if c.withBoundry {
+	if c.withBoundary {
 		c.LeftTop.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X, Y: coordinate.Y})
 		c.HorizontalLine.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.LeftTop.Width()), Y: coordinate.Y})
 		c.RightTop.Draw(coincidenceCtx, core.Coordinate{X: coordinate.X + int(c.LeftTop.Width()) + int(c.HorizontalLine.Width()), Y: coordinate.Y})
@@ -89,7 +89,7 @@ func (c *Canvas) Draw(ctx core.RenderContext, coordinate core.Coordinate) {
 }
 
 func (c Canvas) Size() core.Size {
-	if c.withBoundry {
+	if c.withBoundary {
 		return core.Size{
 			Width:  c.Width() - c.VerticalLine.Width()*2,
 			Height: c.Height() - c.HorizontalLine.Height()*2,

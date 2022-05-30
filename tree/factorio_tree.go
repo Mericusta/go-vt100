@@ -95,9 +95,9 @@ func NewFactorioTreeWithRootNode(rootNode treeInterface, margin int) Tree {
 // |   ├─ F0   |    |      ├─ F0|
 // |   └─ G1   |    |      └─ G1|
 // align to the bottom rules:
-// rule 1: same element
-// rule 2: no-subnode element
-// rule 3: the element which its subnode satisfied rule2
+// rule 1: no-subnode element
+// rule 2: the element which its subnode satisfied rule2
+// rule 3: same elements A0~A9 align to their max level
 func rightAlign(t treeInterface) (int, int, map[treeInterface]int) {
 	treeMaxDepth := 0
 	nodeDepthMap := make(map[treeInterface]int)
