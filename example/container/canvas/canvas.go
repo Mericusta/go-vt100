@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/Mericusta/go-vt100/character"
 	"github.com/Mericusta/go-vt100/container"
 	"github.com/Mericusta/go-vt100/core"
@@ -91,6 +93,10 @@ func main() {
 		shape.NewRectangle(shape.NewLine(shape.NewPoint('*'), 5, core.Horizontal), 5),
 	))
 	c.Draw(core.Context(), core.Coordinate{X: 0, Y: 0})
+	<-core.ControlSignal
+	c.Clear()
+	c.ClearObjects()
+	<-core.ControlSignal
 	c = container.NewCanvas(core.Size{Width: 64, Height: 17}, true)
 	c.AppendObjects(core.NewObject(
 		core.Coordinate{X: 0, Y: 0},
@@ -107,4 +113,19 @@ func main() {
 	c.Clear()
 	c.ClearObjects()
 	<-core.ControlSignal
+
+	pokerSuits := []rune{character.Spade(), character.Heart(), character.Club(), character.Diamond()}
+	pokerPoints := []string{"A", "2", "3", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"}
+	for _, suit := range pokerSuits {
+		for _, point := range pokerPoints {
+			poker := container.NewCanvas(core.Size{Width: 10, Height: 5}, true)
+			t := container.NewTextarea(fmt.Sprintf("%v\n%v", point, string(suit)), core.Horizontal)
+			poker.AppendObjects(core.NewObject(core.Coordinate{X: 1, Y: 0}, &t))
+			poker.Draw(core.Context(), core.Coordinate{X: 0, Y: 0})
+			<-core.ControlSignal
+			poker.Clear()
+			poker.ClearObjects()
+			<-core.ControlSignal
+		}
+	}
 }
