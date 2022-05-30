@@ -20,7 +20,6 @@ func main() {
 	<-core.ControlSignal
 
 	// example 2
-	rootDrawable = container.NewTextarea("root node", core.Horizontal)
 	subDrawable1 := shape.NewPoint('❤')
 	subDrawable2 := shape.NewLine(subDrawable1, 5, core.Horizontal)
 	subDrawable3 := shape.NewRectangle(subDrawable2, 5)
@@ -38,5 +37,13 @@ func main() {
 	rootNode.Draw(core.Context(), core.Coordinate{})
 	<-core.ControlSignal
 	rootNode.Clear()
+	<-core.ControlSignal
+
+	// example 3
+	newRootDrawable := container.NewTextarea("new root node", core.Horizontal)
+	newRootNode := container.NewTree(&newRootDrawable, []core.Drawable{&rootNode})
+	newRootNode.Draw(core.Context(), core.Coordinate{})
+	<-core.ControlSignal
+	newRootNode.Clear()
 	<-core.ControlSignal
 }
