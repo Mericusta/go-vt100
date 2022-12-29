@@ -9,18 +9,22 @@ import (
 // MoveCursorToAndPrint
 // @param x column index in vt100, absolute coordinate of terminal
 // @param y row index in vt100, absolute coordinate of terminal
-func MoveCursorToAndPrint(x, y uint, c string) {
+func MoveCursorToAndPrint(x, y int, c string) {
 	// DebugOutput(func() {
 	// 	fmt.Printf("c = %v, x = %v, y = %v\n", c, x, y)
 	// }, nil)
-	fmt.Printf("\033[%d;%dH%v", y+uint(Origin().X), x+uint(Origin().Y), c)
+	fmt.Printf("\033[%d;%dH%v", y+Origin().X, x+Origin().Y, c)
+}
+
+func MoveCursorTo(x, y int) {
+	fmt.Printf("\033[%d;%d", y, x)
 }
 
 func MoveCursorToHome() {
 	fmt.Printf("\033[H")
 }
 
-func MoveCursorToLine(y uint) {
+func MoveCursorToLine(y int) {
 	fmt.Printf("\033[%df\n", y)
 }
 

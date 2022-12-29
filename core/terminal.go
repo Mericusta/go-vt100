@@ -45,7 +45,7 @@ func DebugOutput(outFunc func(), conditionFunc ...func() bool) {
 		CursorVisible()
 		SaveScreen()
 		ClearScreen()
-		MoveCursorToLine(terminal.Height() / 2)
+		MoveCursorToLine(int(terminal.Height() / 2))
 		outFunc()
 		<-ControlSignal
 		RestoreScreen()

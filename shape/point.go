@@ -28,7 +28,7 @@ func (p Point) Draw(ctx core.RenderContext, c core.Coordinate) {
 	if !has {
 		return
 	}
-	core.MoveCursorToAndPrint(uint(coincidenceCtx.Coordinate().X), uint(coincidenceCtx.Coordinate().Y), string(p.r))
+	core.MoveCursorToAndPrint(coincidenceCtx.Coordinate().X, coincidenceCtx.Coordinate().Y, string(p.r))
 }
 
 func (p Point) Width() uint {

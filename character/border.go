@@ -10,6 +10,8 @@ const (
 // Space ' '
 func Space() rune { return ' ' }
 
+func SpaceString() string { return " " }
+
 func SpaceWidth() uint { return 1 }
 
 // EndLine
