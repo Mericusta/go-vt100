@@ -19,9 +19,9 @@ func init() {
 }
 
 func (t unixTerminal) Width() uint {
-	return int(t.Col)
+	return uint(t.Col)
 }
 
 func (t unixTerminal) Height() uint {
-	return int(t.Row)
+	return uint(t.Row)
 }

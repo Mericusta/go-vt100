@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func MoveCursorToAndPrint(x, y int, c string) {
+func MoveCursorToAndPrint(x, y uint, c string) {
 	fmt.Printf("\033[%d;%dH%v", y, x, c)
 }
 
@@ -12,7 +12,7 @@ func MoveCursorToHome() {
 	fmt.Printf("\033[H")
 }
 
-func MoveCursorToLine(y int) {
+func MoveCursorToLine(y uint) {
 	fmt.Printf("\033[%df\n", y)
 }
 
