@@ -16,7 +16,7 @@ func MoveCursorToHome() {
 	fmt.Printf("\033[H")
 }
 
-func MoveCursorToLine(y uint) {
+func MoveCursorToLine(y int) {
 	fmt.Printf("\033[%df\n", y)
 }
 
