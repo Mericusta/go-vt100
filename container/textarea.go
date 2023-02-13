@@ -92,6 +92,7 @@ func (t *Textarea) Draw(ctx core.RenderContext, c core.Coordinate) {
 
 	for _, os := range t.objects {
 		for _, o := range os {
+			// <-core.ControlSignal
 			o.D.Draw(coincidenceCtx, core.Coordinate{X: c.X + o.C.X, Y: c.Y + o.C.Y})
 		}
 	}

@@ -9,6 +9,7 @@ import (
 
 func main() {
 	defer core.Destruct()
+	core.Init()
 	core.ClearScreen()
 	core.CursorInvisible()
 

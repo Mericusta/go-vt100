@@ -8,6 +8,7 @@ import (
 
 func main() {
 	defer core.Destruct()
+	core.Init()
 	core.ClearScreen()
 	core.CursorInvisible()
 	// 3 point expand to 2x2 grid, each grid size is 2x1

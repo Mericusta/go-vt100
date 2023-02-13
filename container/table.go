@@ -22,7 +22,7 @@ func NewTable(headerSlice []core.Drawable, valueMap map[uint]map[uint]core.Drawa
 		rowMaxHeight:   make(map[uint]uint, 1+len(valueMap)),
 	}
 	for i, h := range headerSlice {
-		if t.columnMaxWidth[uint(i)] == 0 || t.columnMaxWidth[uint(i)] < h.Width() {
+		if t.columnMaxWidth[uint(i)+1] == 0 || t.columnMaxWidth[uint(i)+1] < h.Width() {
 			t.columnMaxWidth[uint(i)+1] = h.Width()
 		}
 		if t.rowMaxHeight[0] == 0 || t.rowMaxHeight[0] < h.Height() {

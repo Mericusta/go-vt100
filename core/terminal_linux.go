@@ -10,7 +10,7 @@ import (
 
 type unixTerminal unix.Winsize
 
-func init() {
+func initTerminal() {
 	unixWinSize, err := unix.IoctlGetWinsize(syscall.Stdout, unix.TIOCGWINSZ)
 	if err != nil {
 		panic(err.Error())

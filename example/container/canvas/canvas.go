@@ -11,6 +11,7 @@ import (
 
 func main() {
 	defer core.Destruct()
+	core.Init()
 	core.ClearScreen()
 	core.CursorInvisible()
 	c := container.NewCanvas(core.Size{Width: 64, Height: 17}, true)

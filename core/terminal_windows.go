@@ -8,7 +8,7 @@ type windowsTerminal windows.ConsoleScreenBufferInfo
 
 var csbInfo windows.ConsoleScreenBufferInfo
 
-func init() {
+func initTerminal() {
 	var stdoutMode, stdinMode uint32
 	if err := windows.GetConsoleMode(windows.Stdout, &stdoutMode); err != nil {
 		panic(err.Error())

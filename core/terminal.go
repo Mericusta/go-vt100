@@ -7,9 +7,10 @@ import (
 
 var ControlSignal chan os.Signal
 
-func init() {
+func Init() {
 	ControlSignal = make(chan os.Signal)
 	signal.Notify(ControlSignal, os.Interrupt)
+	initTerminal()
 }
 
 type Terminal Unit

@@ -4,7 +4,7 @@ package core
 
 type debugTerminal struct{}
 
-func init() {
+func initTerminal() {
 	terminal = debugTerminal{}
 }
 
